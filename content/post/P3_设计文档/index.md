@@ -3,7 +3,7 @@ title: P3_设计文档
 description: logisim单周期CPU
 slug: CO_P3
 date: 2025-02-12 00:00:00+0000
-image: ../images/CO_P3_设计文档/P3_cover.jpg
+image: P3_cover.jpg
 categories:
     - BUAA-CO
 tags:
