@@ -2,8 +2,8 @@
 title: P3_设计文档
 description: logisim
 slug: hello-world
-date: 2022-03-06 00:00:00+0000
-image: /images/CO_P3_设计文档/P3_cover.jpg
+date: 2025-02-12 00:00:00+0000
+image: ../images/CO_P3_设计文档/P3_cover.jpg
 categories:
     - BUAA-CO
 tags:
