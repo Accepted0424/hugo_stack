@@ -2,7 +2,7 @@
 title: P3_设计文档
 description: logisim单周期CPU
 slug: CO_P3
-date: 2025-02-12 00:00:00+0000
+date: 2024-10-27 17:53:00+0000
 image: P3_cover.jpg
 categories:
     - BUAA-CO
@@ -22,7 +22,7 @@ weight: 1       # You can add weight to some posts to override the default sorti
 
 PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 
-![](../images/CO-P3-设计文档/IFU.png)
+![](IFU.png)
 
 | 端口         | 方向 | 描述                       |
 | ------------ | ---- | -------------------------- |
@@ -36,7 +36,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 
 用于控制信息通路中的多路选择器，选择正确的功能
 
-![](../images/CO-P3-设计文档/Controller.png)
+![](Controller.png)
 
 |              | add    | sub    | ori    | lw     | sw     | beq    | lui    | bgez   | bgtz   | blez   | bltz   | bne    | jump   | jal    |
 | ------------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
@@ -61,19 +61,19 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 
 #### GRF (General Register File)
 
-![](../images/CO-P3-设计文档/GRF.png)
+![](GRF.png)
 
 > **引用自P0_Q2**
 >
 > GRF中包含32个32位寄存器，分别对应0~31号寄存器，其中0号寄存器读取的结果恒为0。
 >
-> ![](../images/CO-P3-设计文档/GRF_signal.png)
+> ![](GRF_signal.png)
 >
-> ![](../images/CO-P3-设计文档/GRF_function.png)
+> ![](GRF_function.png)
 
 #### ALU (Arithmetic Logic Unit)
 
-![](../images/CO-P3-设计文档/ALU.png)
+![](ALU.png)
 
 | ALUOP | 描述             |
 | ----- | ---------------- |
@@ -86,7 +86,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 
 用于数据扩展
 
-![](../images/CO-P3-设计文档/ExtOp.png)
+![](ExtOp.png)
 
 | ExtOp | 操作       |
 | ----- | ---------- |
@@ -99,7 +99,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 
 用于判断是否跳转
 
-![](../images/CO-P3-设计文档/bCheck.png)
+![](bCheck.png)
 
 | 端口   | 方向 | 描述                                          |
 | ------ | ---- | --------------------------------------------- |
@@ -113,7 +113,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 
 用于实现jump和jal指令，计算 ***PC31...28 || Instr_index || 00***
 
-![](../images/CO-P3-设计文档/jump.png)
+![](jump.png)
 
 | 端口  | 方向 | 描述                              |
 | ----- | ---- | --------------------------------- |
