@@ -3,7 +3,7 @@ title: Moore与Mealy状态机辨析
 description: 认识有限状态机
 slug: 有限状态机
 date: 2024-10-05 16:58:00+0000
-image: mealy.png
+image: Automata_theory.svg.png
 categories:
     - BUAA-CO
 tags:
