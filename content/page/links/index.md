@@ -10,10 +10,6 @@ links:
     website: https://chatgpt.com/
     image: https://cdn.oaistatic.com/assets/favicon-miwirzcw.ico
   - title: 廖雪峰的官方网站
-    description: Java、Python、Git等入门教程
-    website: https://liaoxuefeng.com/
-    image: https://cdn.oaistatic.com/assets/favicon-miwirzcw.ico
-  - title: 廖雪峰的官方网站
     description: Java、python等入门教程
     website: https://liaoxuefeng.com/
     image: https://liaoxuefeng.com/static/logo.svg
