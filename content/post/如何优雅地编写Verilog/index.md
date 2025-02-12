@@ -1,15 +1,20 @@
 ---
 title: 如何优雅地编写Verilog
-cover: /images/如何优雅地编写Verilog/vscode_teros_cover.png
-thumbnail: /images/如何优雅地编写Verilog/vscode_teros_cover.png
+description: Verilog编辑工具分享
+slug: verilog_edit
+date: 2024-11-02 18:06:00+0000
+image: vscode_teros_cover.png
+categories:
+    - BUAA-CO
+tags:
+    - BUAA-CO
+    - verilog
+weight: 1       # You can add weight to some posts to override the default sorting (date descending)
 ---
-Verilog体验优化计划
 
-<!-- more -->
+# 如何优雅地编写Verilog
 
-## 如何优雅地编写Verilog
-
-### 一、替换ISE默认编辑器
+## 一、替换ISE默认编辑器
 
 ISE仿佛知道自己的默认编辑器很难用，所以允许用户自定义编辑器（
 
@@ -31,7 +36,7 @@ sublime默认并不支持verilog文件，所以我们还需要安装相关插件
 
 在编辑器编辑完保存后，我们可以返回ISE进行后续的仿真、查看波形图等功能。
 
-### 二、强大的VScode插件——TerosHDL
+## 二、强大的VScode插件——TerosHDL
 
 ![](vscode_teros.png)
 
@@ -65,7 +70,7 @@ sublime默认并不支持verilog文件，所以我们还需要安装相关插件
 
 ![](teros_settings.png)
 
-### 三、VScode + ISE命令行工具
+## 三、VScode + ISE命令行工具
 
 TerosHDL的配置比较麻烦，如果想简单一点，可以使用VScode + ISE命令行工具
 
