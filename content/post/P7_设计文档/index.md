@@ -430,13 +430,13 @@ mfc0, mtc0, eret, syscall
 
 - 需要简单处理下转发，类似lw的转发
 
-![屏幕截图 2024-12-10 223750](./P7_MIPS%E5%BE%AE%E7%B3%BB%E7%BB%9F.assets/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-12-10%20223750.png)
+![mfc0](mfc0.png)
 
 #### MTC0
 
 将grf的rt号寄存器的值存入CP0的rd号寄存器
 
-![屏幕截图 2024-12-10 223808](./P7_MIPS%E5%BE%AE%E7%B3%BB%E7%BB%9F.assets/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-12-10%20223808.png)
+![mtc0](mtc0.png)
 
 #### ERET
 
@@ -447,13 +447,13 @@ mfc0, mtc0, eret, syscall
 - 到达MA级时，需要清空CP0的EXL部分，表示当前不在处于核心状态（异常处理程序）
 - 在ID级时，如果EX或MA级是MTC0且目标寄存器为14号（EXC）则阻塞，确保返回地址正确。
 
-![屏幕截图 2024-12-10 223824](./P7_MIPS%E5%BE%AE%E7%B3%BB%E7%BB%9F.assets/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-12-10%20223824.png)
+![eret](eret.png)
 
 #### syscall
 
 在controller里发出一个异常信号（异常码为8）即可
 
-![屏幕截图 2024-12-10 223849](./P7_MIPS%E5%BE%AE%E7%B3%BB%E7%BB%9F.assets/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-12-10%20223849.png)
+![syscall](syscall.png)
 
 
 
@@ -617,13 +617,13 @@ while pc < 0x4180:
 >
 >定时产生中断信号
 >
->![timer.drawio (1)](./P7_MIPS%E5%BE%AE%E7%B3%BB%E7%BB%9F.assets/timer.drawio%20(1).png)
+>![timer_mode0](timer_mode0.png)
 >
 >**MODE 1**
 >
 >周期性产生中断信号
 >
->![timer.drawio (2)](./P7_MIPS%E5%BE%AE%E7%B3%BB%E7%BB%9F.assets/timer.drawio%20(2).png)
+>![timer_mode1](timer_mode1.png)
 
 5. 倘若中断信号流入的时候，在检测宏观 PC 的一级如果是一条空泡（你的 CPU 该级所有信息均为空）指令，此时会发生什么问题？在此例基础上请思考：在 P7 中，清空流水线产生的空泡指令应该保留原指令的哪些信息？
 
