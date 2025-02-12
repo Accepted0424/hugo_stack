@@ -1,5 +1,5 @@
 # Change baseurl before deploy
-baseurl = "https://accepted0424.github.io/hugo_stack/"
+baseurl = "https://lhy0424.top"
 languageCode = "en-us"
 title = "Az's Blog"
 
