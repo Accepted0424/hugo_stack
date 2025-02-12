@@ -14,11 +14,11 @@ weight: 1       # You can add weight to some posts to override the default sorti
 
 # P3_document
 
-### 设计草稿
+## 设计草稿
 
 本次P3搭建的CPU支持`add, sub, ori, lw, sw, beq, lui, nop，begz，bgtz，blez，bltz，bne, j, jal`
 
-#### IFU (Instruction Fetch Unit)
+### IFU (Instruction Fetch Unit)
 
 PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 
@@ -32,7 +32,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 | branch       | I    | 是否branch                 |
 | PC           | O    | 用于测试PC                 |
 
-#### Controller
+### Controller
 
 用于控制信息通路中的多路选择器，选择正确的功能
 
@@ -59,7 +59,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 | ---- | ------ | ------ | ------ | ------ | ------ | ------ |
 | bOp  | 100000 | 010000 | 001000 | 000100 | 000010 | 000001 |
 
-#### GRF (General Register File)
+### GRF (General Register File)
 
 ![](GRF.png)
 
@@ -71,7 +71,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 >
 > ![](GRF_function.png)
 
-#### ALU (Arithmetic Logic Unit)
+### ALU (Arithmetic Logic Unit)
 
 ![](ALU.png)
 
@@ -82,7 +82,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 | 10    | 或               |
 | 11    | 立即数加载到高位 |
 
-#### EXT (Extend)
+### EXT (Extend)
 
 用于数据扩展
 
@@ -95,7 +95,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 | 10    | signed扩展 |
 | 11    | 1扩展      |
 
-#### bChecker (Branch Checker)
+### bChecker (Branch Checker)
 
 用于判断是否跳转
 
@@ -109,7 +109,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 | G[rt]  | I    | 连接到GFR.RD2                                 |
 | check  | O    | 判断是否符合branch条件，连接到IFU.branch      |
 
-#### jumpEXT
+### jumpEXT
 
 用于实现jump和jal指令，计算 ***PC31...28 || Instr_index || 00***
 
@@ -123,7 +123,7 @@ PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑
 
 
 
-### 测试方案
+## 测试方案
 
 随机生成数据  -> 导出十六进制文件 -> 自动化工具生成新电路 -> 比对mars运行结果和circ运行结果
 
@@ -220,7 +220,7 @@ with open("cpu_remake.circ", "w", encoding="utf-8") as file:
 
 
 
-### 思考题
+## 思考题
 
 1. **上面我们介绍了通过 FSM 理解单周期 CPU 的基本方法。请大家指出单周期 CPU 所用到的模块中，哪些发挥状态存储功能，哪些发挥状态转移功能。**
    > - 状态存储功能：IFU、GRF
