@@ -12,7 +12,7 @@ defaultContentLanguage = "zh-cn"
 hasCJKLanguage = true
 
 # Change it to your Disqus shortname before using
-disqusShortname = "Az"
+disqusShortname = "lhy0424-disqus-com"
 
 [pagination]
 pagerSize = 5
