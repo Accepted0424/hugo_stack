@@ -1,3 +1,17 @@
+---
+title: BUAA-OO-HW1
+description: 表达式化简
+slug: OO-HW1
+date: 2025-02-27 12:26:00+0000
+image: cover.png
+categories:
+    - BUAA-OO
+tags:
+    - BUAA-OO
+    - Java
+weight: 1       # You can add weight to some posts to override the default sorting (date descending)
+---
+
 # BUAA-OO-HW1
 
 ## 题目理解
