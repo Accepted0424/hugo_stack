@@ -2,7 +2,7 @@
 title: BUAA-OO-HW1
 description: 表达式化简
 slug: OO-HW1
-date: 2025-02-27 12:26:00+0000
+date: 2024-12-31 12:26:00+0000
 image: cover.png
 categories:
     - BUAA-OO
