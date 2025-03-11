@@ -12,8 +12,6 @@ tags:
 weight: 1       # You can add weight to some posts to override the default sorting (date descending)
 ---
 
-![transformers_2b9aba81a7](transformers_2b9aba81a7.jpg)
-
 # Transformer
 
 Transformer 最早在2017年的[《Attention Is All You Need》](https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1706.03762)论文中提出，通过引入 **自注意力（Self-Attention）+ 位置编码（Positional Encoding）+ 多头注意力（Multi-Head Attention）+ 前馈网络（Feed-Forward Network）**，解决了传统 Seq2Seq 模型在处理**可变长序列**时的长距离依赖、计算效率等关键问题。
