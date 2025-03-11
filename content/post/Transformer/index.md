@@ -2,7 +2,7 @@
 title: Tansformer学习笔记
 description: 对Tansformer的简单理解
 slug: Transformer
-date: 2025-03-11 15:32:00+0000
+date: 2025-03-10 15:32:00+0000
 image: transformers_2b9aba81a7.jpg
 categories:
     - Transformer
