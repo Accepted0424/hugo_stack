@@ -12,7 +12,7 @@ tags:
 weight: 1       # You can add weight to some posts to override the default sorting (date descending)
 ---
 
-![transformers_2b9aba81a7](./transformers_2b9aba81a7.jpg)
+![transformers_2b9aba81a7](transformers_2b9aba81a7.jpg)
 
 # Transformer
 
@@ -36,11 +36,11 @@ $$
 Transfomer(我是一个学生) = I\space am\space a\space studuent
 $$
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-09%20100338.png)
+![](100338.png)
 
 ![img](https://jalammar.github.io/images/t/The_transformer_encoder_decoder_stack.png)
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-10%20221542.png)
+![](221542.png)
 
 ## Token Embedding 词嵌入
 
@@ -57,9 +57,9 @@ $$
   - 上下文长度指的即是模型每次能处理的向量数目（预测下一个token时结合的文本量）
 - Unembedding matrix 解嵌入矩阵，可以将一个向量解析为对应的单词
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-09%20100732.png)
+![](100732.png)
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-09%20102903.png)
+![](102903.png)
 
 ## Positional encoding
 
@@ -137,7 +137,7 @@ $$
 
 推理需要事实作为依据，大模型是如何存储事实的？
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-11%20155134.png)
+![](155134.png)
 
 #### Linear (up projection)
 
@@ -150,15 +150,15 @@ $$
 W_{\uparrow}\vec{E}+\vec{B_{\uparrow}}
 $$
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-11%20152128.png)
+![](152128.png)
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-11%20152234.png)
+![](152234.png)
 
 #### ReLU线性整流函数
 
 - 对得到的高维向量进行处理：非线性函数，将负值映射为0，正值不变 
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-11%20152726.png)
+![](152726.png)
 
 #### Linear (down projection)
 
@@ -168,7 +168,7 @@ $$
 W_{\downarrow}(\space ReLU(W_{\uparrow}\vec{E}+B_{\uparrow})\space) + B_{\downarrow}
 $$
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-11%20153428.png)
+![](153428.png)
 
 ### Residuals 残差
 
@@ -193,7 +193,7 @@ $$
   - 掩码：在计算 $q_i\cdot k_j$ 时将将 $j>i$ 的项置为$-\infin$，在softmax的过程中$-\infin$会被转化为0，起到屏蔽作用
 
 
-![](./%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-03-10%20221542-1741617673211-3.png)
+![](221542-1741617673211-3.png)
 
 ![transformer_decoding_2](https://jalammar.github.io/images/t/transformer_decoding_2.gif)
 
