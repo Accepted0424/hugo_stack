@@ -2,7 +2,7 @@
 title: BUAA-OS-lab0 实验报告
 description: linux指令、git、Makefile、shell
 slug: OS-lab0
-date: 2025-3-12 16:58:00+0000
+date: 2025-03-13 22:58:00+0000
 image: cover.jpg
 categories:
     - BUAA-OS
