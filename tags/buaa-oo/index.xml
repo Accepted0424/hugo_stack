@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>BUAA-OO on Az's Blog</title><link>https://lhy0424.top/tags/buaa-oo/</link><description>Recent content in BUAA-OO on Az's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 26 Feb 2025 12:26:00 +0000</lastBuildDate><atom:link href="https://lhy0424.top/tags/buaa-oo/index.xml" rel="self" type="application/rss+xml"/><item><title>BUAA-OO-HW1</title><link>https://lhy0424.top/p/oo-hw1/</link><pubDate>Wed, 26 Feb 2025 12:26:00 +0000</pubDate><guid>https://lhy0424.top/p/oo-hw1/</guid><description>&lt;img src="https://lhy0424.top/p/oo-hw1/cover.png" alt="Featured image of post BUAA-OO-HW1" />&lt;h1 id="buaa-oo-hw1">BUAA-OO-HW1
+&lt;/h1>&lt;h2 id="题目理解">题目理解
+&lt;/h2>&lt;blockquote>
+&lt;p>本次作业需要完成的任务为：读入一个包含加、减、乘、乘方以及括号（其中括号的深度&lt;strong>至多为 1 层&lt;/strong>）的&lt;strong>单变量&lt;/strong>表达式，输出&lt;strong>恒等变形展开所有括号后&lt;/strong>的表达式。&lt;/p>
+&lt;p>在本次作业中，&lt;strong>展开所有括号&lt;/strong>的定义是：对原输入表达式 &lt;em>E&lt;/em> 做&lt;strong>恒等变形&lt;/strong>，得到新表达式 &lt;em>E&lt;/em>，且 &lt;em>E&lt;/em> 中不含有字符 &lt;code>(&lt;/code> 和 &lt;code>)&lt;/code> 。&lt;/p>&lt;/blockquote>
+$$
+\sum ax^{b}
+$$&lt;p>
+所以我们可以创建一个类，把表达式分解成一个个单项式，最后合并同类项即可。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Mono&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">coe&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">//系数&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kt">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">varsPow&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">//变量x的指数&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>接着我们试着分析表达式的构成。&lt;/p>
+&lt;ul>
+&lt;li>Expr：表达式，即我们要化简的表达式&lt;/li>
+&lt;li>Term：项，Term由&amp;rsquo;+&amp;rsquo;（不被括号包裹的加号）连接即构成了Expr，对于&amp;rsquo;-&amp;lsquo;我们可以将其替换为&amp;quot;+-&amp;quot;，认为后一个元素的系数为负数。&lt;/li>
+&lt;li>Factor：因子，Factor由&amp;rsquo;*&amp;rsquo;（不被括号包裹的乘号）连接即构成了Term
+&lt;ul>
+&lt;li>ConstFactor：常数因子 (example：-125, -007, 25)&lt;/li>
+&lt;li>PowerFactor：幂函数因子 (example：x^2, x)&lt;/li>
+&lt;li>ExprFactor：表达式因子，带括号的均为表达式因子，括号内是一个Expr (example：（x+1)^2, (x-1)^0, (2*x+3))&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="设计思路">设计思路
+&lt;/h2>&lt;p>&lt;img src="https://lhy0424.top/p/oo-hw1/chart.png"
+width="923"
+height="615"
+srcset="https://lhy0424.top/p/oo-hw1/chart_hu_550c43c471a72841.png 480w, https://lhy0424.top/p/oo-hw1/chart_hu_17e24384b600d836.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="150"
+data-flex-basis="360px"
+>&lt;/p>
+&lt;h3 id="抽象类-factor">抽象类 Factor
+&lt;/h3>&lt;p>Factor由ConstFactor, PowerFactor, ExprFactor构成，让三类因子继承抽象父类Factor可以减少重复代码，统一行为。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">abstract&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">class&lt;/span> &lt;span class="nc">Factor&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">implements&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">MonoArrayConvertible&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">private&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">final&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">factor&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">Factor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">factor&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="na">factor&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">factor&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getFactor&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">return&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">factor&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="工厂模式-factorfactory">工厂模式 FactorFactory
+&lt;/h3>&lt;p>因为我们在new一个Factor的时候是不知道这个Factor的类型的，所以我们需要一个工厂，为我们提供对应的class。&lt;/p>
+&lt;p>工厂的作用就是传入一个字符串，判断其是哪一种Factor，返回相应的class。&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;em>这里用到了多态的思想：即同类型（Factor）的对象表现出不同的特征（不同Factor的方法不一样）。&lt;/em>&lt;/p>&lt;/blockquote>
+&lt;h3 id="接口-monoarrayconvertible">接口 MonoArrayConvertible
+&lt;/h3>&lt;p>对于Expr, Term, Factor都是可以对转化为单项式的，所以定义一个接口，统一方法。&lt;/p>
+&lt;p>ConstFactor, PowerFactor本身就是一个单项式，Expr, Term, ExprFactor可以分解为多个单项式。为了统一，我们规定getMono返回的是一个ArrayList。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">MonoArrayConvertible&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">ArrayList&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Mono&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nf">getMonos&lt;/span>&lt;span class="p">();&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="方法类-operate">方法类 Operate
+&lt;/h3>&lt;p>提供多种static方法，用于对ArrayList&amp;lt;Mono&amp;gt;进行处理。&lt;/p>
+&lt;ul>
+&lt;li>两个ArrayList&amp;lt;Mono&amp;gt;相乘&lt;/li>
+&lt;li>两个ArrayList&amp;lt;Mono&amp;gt;相加&lt;/li>
+&lt;li>合并ArrayList&amp;lt;Mono&amp;gt;中的同类项&lt;/li>
+&lt;/ul>
+&lt;h2 id="程序运行逻辑">程序运行逻辑
+&lt;/h2>&lt;h3 id="提取子元素">提取子元素
+&lt;/h3>&lt;p>即Expr类中用一个ArrayList存储Term，Term类中用一个ArrayList存储Factor&lt;/p>
+&lt;p>可以实现一个private方法用来提取，每次new的时候在构造函数中调用提取函数。&lt;/p>
+&lt;h3 id="获取多项式">获取多项式
+&lt;/h3>&lt;p>遍历获取所有单项式&lt;/p>
+&lt;ul>
+&lt;li>Expr.getMono() -&amp;gt; 遍历Term.getMono() -&amp;gt; 遍历Factor.getMono()
+&lt;ul>
+&lt;li>对于ExprFactor，提取subExpr，重复上述过程获得subExpr的ArrayList&amp;lt;Mono&amp;gt;，然后根据指数不断与自己相乘(Operate.mul)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="拼接单项式">拼接单项式
+&lt;/h3>&lt;p>用加号拼接即可，然后化简、合并同类相。&lt;/p>
+&lt;h2 id="tips">Tips
+&lt;/h2>&lt;ul>
+&lt;li>可根据指导书中的形式化表述构造正则表达式进行解析&lt;/li>
+&lt;li>Integer.parserInt无法解析+-, 可以处理前导零&lt;/li>
+&lt;li>如果一个类覆写了toString这个方法，那么其可以被看作一个String类，单招腹泻的toString逻辑生成字符串。覆写Mono的toString，可以起到化简单项式的作用，如$2x^0$可化简为2&lt;/li>
+&lt;li>可使用System.err.println()帮助调试&lt;/li>
+&lt;/ul></description></item></channel></rss>
