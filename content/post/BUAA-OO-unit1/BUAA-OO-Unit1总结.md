@@ -3,7 +3,7 @@ title: BUAA-OO-Unit1
 description: 表达式化简
 slug: OO-unit1
 date: 2025-03-19 12:26:00+0000
-image: cover.png
+image: https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefinedundefinedimage7-1.png
 categories:
     - BUAA-OO
 tags:
