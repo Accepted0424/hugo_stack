@@ -2,7 +2,7 @@
 title: BUAA-OO-Unit1
 description: 表达式化简
 slug: OO-unit1
-date: 2025-03-20 12:26:00+0000
+date: 2025-03-19 12:26:00+0000
 image: cover.png
 categories:
     - BUAA-OO
