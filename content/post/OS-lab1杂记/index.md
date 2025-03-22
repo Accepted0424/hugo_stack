@@ -2,7 +2,7 @@
 title: BUAA-OS-lab1杂记
 description: 初识mos内核
 slug: OS-lab1
-date: 2025-03-22 17:00:00+0000
+date: 2025-03-21 17:00:00+0000
 image: cover.jpg
 categories:
     - BUAA-OS
