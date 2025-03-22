@@ -895,7 +895,6 @@ void print_num(fmt_callback_t out, void *data, unsigned long u, int base, int ne
 ```mermaid
 graph TD
     printk --> include/printk.h --> kern/printk.c --> include/print.h --> lib/print.c
-    
 ```
 
 - include目录：目录通常包含所有的头文件，这些头文件提供了函数声明、宏、结构体定义和常量等，这些头文件为内核的各个模块提供了接口，使得不同模块之间可以共享信息和功能。
