@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Logisim on Az's Blog</title><link>https://lhy0424.top/tags/logisim/</link><description>Recent content in Logisim on Az's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 27 Oct 2024 17:53:00 +0000</lastBuildDate><atom:link href="https://lhy0424.top/tags/logisim/index.xml" rel="self" type="application/rss+xml"/><item><title>P3_设计文档</title><link>https://lhy0424.top/p/co_p3/</link><pubDate>Sun, 27 Oct 2024 17:53:00 +0000</pubDate><guid>https://lhy0424.top/p/co_p3/</guid><description>&lt;img src="https://lhy0424.top/p/co_p3/P3_cover.jpg" alt="Featured image of post P3_设计文档" />&lt;h1 id="p3_document">P3_document
+&lt;/h1>&lt;h2 id="设计草稿">设计草稿
+&lt;/h2>&lt;p>本次P3搭建的CPU支持&lt;code>add, sub, ori, lw, sw, beq, lui, nop，begz，bgtz，blez，bltz，bne, j, jal&lt;/code>&lt;/p>
+&lt;h3 id="ifu-instruction-fetch-unit">IFU (Instruction Fetch Unit)
+&lt;/h3>&lt;p>PC和nPC内置在IFU中，通过branch信号控制PC变换逻辑&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/co_p3/IFU.png"
+width="217"
+height="187"
+srcset="https://lhy0424.top/p/co_p3/IFU_hu_246762bdd93fcd81.png 480w, https://lhy0424.top/p/co_p3/IFU_hu_8edeabc3234aafda.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="116"
+data-flex-basis="278px"
+>&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>端口&lt;/th>
+&lt;th>方向&lt;/th>
+&lt;th>描述&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Instr[31:0]&lt;/td>
+&lt;td>O&lt;/td>
+&lt;td>输出32位指令二进制编码&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>offset[31:0]&lt;/td>
+&lt;td>I&lt;/td>
+&lt;td>输入branch指令的地址偏移量&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>reset&lt;/td>
+&lt;td>I&lt;/td>
+&lt;td>复位信号&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>branch&lt;/td>
+&lt;td>I&lt;/td>
+&lt;td>是否branch&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>PC&lt;/td>
+&lt;td>O&lt;/td>
+&lt;td>用于测试PC&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="controller">Controller
+&lt;/h3>&lt;p>用于控制信息通路中的多路选择器，选择正确的功能&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/co_p3/Controller.png"
+width="237"
+height="293"
+srcset="https://lhy0424.top/p/co_p3/Controller_hu_637e88a6f8be578b.png 480w, https://lhy0424.top/p/co_p3/Controller_hu_34a96c4feeda354e.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="80"
+data-flex-basis="194px"
+>&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;/th>
+&lt;th>add&lt;/th>
+&lt;th>sub&lt;/th>
+&lt;th>ori&lt;/th>
+&lt;th>lw&lt;/th>
+&lt;th>sw&lt;/th>
+&lt;th>beq&lt;/th>
+&lt;th>lui&lt;/th>
+&lt;th>bgez&lt;/th>
+&lt;th>bgtz&lt;/th>
+&lt;th>blez&lt;/th>
+&lt;th>bltz&lt;/th>
+&lt;th>bne&lt;/th>
+&lt;th>jump&lt;/th>
+&lt;th>jal&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>&lt;strong>OpCode&lt;/strong>&lt;/td>
+&lt;td>000000&lt;/td>
+&lt;td>000000&lt;/td>
+&lt;td>001101&lt;/td>
+&lt;td>100011&lt;/td>
+&lt;td>101011&lt;/td>
+&lt;td>000100&lt;/td>
+&lt;td>001111&lt;/td>
+&lt;td>000001&lt;/td>
+&lt;td>000111&lt;/td>
+&lt;td>000110&lt;/td>
+&lt;td>000001&lt;/td>
+&lt;td>000101&lt;/td>
+&lt;td>000010&lt;/td>
+&lt;td>000011&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>&lt;strong>Function&lt;/strong>&lt;/td>
+&lt;td>100000&lt;/td>
+&lt;td>100010&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;td>00001&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;td>00000&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;td>xxxxxx&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;/th>
+&lt;th>add&lt;/th>
+&lt;th>sub&lt;/th>
+&lt;th>ori&lt;/th>
+&lt;th>lw&lt;/th>
+&lt;th>sw&lt;/th>
+&lt;th>branch&lt;/th>
+&lt;th>lui&lt;/th>
+&lt;th>jump&lt;/th>
+&lt;th>jal&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>RegDst&lt;/td>
+&lt;td>01&lt;/td>
+&lt;td>01&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>11(const31)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>ALUSrc&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Mem2Reg&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>01&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>10(PC + 4)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>RegWrite&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>1&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>MemWrite&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>nPC_Sel&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>ExtOp&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>01(zero)&lt;/td>
+&lt;td>10(signed)&lt;/td>
+&lt;td>10(signed)&lt;/td>
+&lt;td>10(signed)&lt;/td>
+&lt;td>10(signed)&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>0&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>ALUOP&amp;lt;1,0&amp;gt;&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>01&lt;/td>
+&lt;td>10&lt;/td>
+&lt;td>00(+)&lt;/td>
+&lt;td>00(+)&lt;/td>
+&lt;td>00(+)&lt;/td>
+&lt;td>11&lt;/td>
+&lt;td>00&lt;/td>
+&lt;td>0&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>jump&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>0&lt;/td>
+&lt;td>1&lt;/td>
+&lt;td>1&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;/th>
+&lt;th>beq&lt;/th>
+&lt;th>bgez&lt;/th>
+&lt;th>bgtz&lt;/th>
+&lt;th>blez&lt;/th>
+&lt;th>bltz&lt;/th>
+&lt;th>bne&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>bOp&lt;/td>
+&lt;td>100000&lt;/td>
+&lt;td>010000&lt;/td>
+&lt;td>001000&lt;/td>
+&lt;td>000100&lt;/td>
+&lt;td>000010&lt;/td>
+&lt;td>000001&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="grf-general-register-file">GRF (General Register File)
+&lt;/h3>&lt;p>&lt;img src="https://lhy0424.top/p/co_p3/GRF.png"
+width="153"
+height="189"
+srcset="https://lhy0424.top/p/co_p3/GRF_hu_eb7f16537f4c59f2.png 480w, https://lhy0424.top/p/co_p3/GRF_hu_89a3424de69e6891.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="80"
+data-flex-basis="194px"
+>&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>引用自P0_Q2&lt;/strong>&lt;/p>
+&lt;p>GRF中包含32个32位寄存器，分别对应0~31号寄存器，其中0号寄存器读取的结果恒为0。&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/co_p3/GRF_signal.png"
+width="745"
+height="512"
+srcset="https://lhy0424.top/p/co_p3/GRF_signal_hu_ad9e30dc0d93fe33.png 480w, https://lhy0424.top/p/co_p3/GRF_signal_hu_b9950bfe607dc030.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="145"
+data-flex-basis="349px"
+>&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/co_p3/GRF_function.png"
+width="744"
+height="185"
+srcset="https://lhy0424.top/p/co_p3/GRF_function_hu_f739ed04f5634ca4.png 480w, https://lhy0424.top/p/co_p3/GRF_function_hu_b6bc04b00c322bb2.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="402"
+data-flex-basis="965px"
+>&lt;/p>&lt;/blockquote>
+&lt;h3 id="alu-arithmetic-logic-unit">ALU (Arithmetic Logic Unit)
+&lt;/h3>&lt;p>&lt;img src="https://lhy0424.top/p/co_p3/ALU.png"
+width="141"
+height="143"
+srcset="https://lhy0424.top/p/co_p3/ALU_hu_98f1645a0857296b.png 480w, https://lhy0424.top/p/co_p3/ALU_hu_39fa86313d2598e7.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="98"
+data-flex-basis="236px"
+>&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>ALUOP&lt;/th>
+&lt;th>描述&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>00&lt;/td>
+&lt;td>加法&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>01&lt;/td>
+&lt;td>减法&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>10&lt;/td>
+&lt;td>或&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>11&lt;/td>
+&lt;td>立即数加载到高位&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="ext-extend">EXT (Extend)
+&lt;/h3>&lt;p>用于数据扩展&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/co_p3/ExtOp.png"
+width="200"
+height="102"
+srcset="https://lhy0424.top/p/co_p3/ExtOp_hu_81fec8418b7be79.png 480w, https://lhy0424.top/p/co_p3/ExtOp_hu_5fb2d3520595f292.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="196"
+data-flex-basis="470px"
+>&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>ExtOp&lt;/th>
+&lt;th>操作&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>00&lt;/td>
+&lt;td>无操作&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>01&lt;/td>
+&lt;td>0扩展&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>10&lt;/td>
+&lt;td>signed扩展&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>11&lt;/td>
+&lt;td>1扩展&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="bchecker-branch-checker">bChecker (Branch Checker)
+&lt;/h3>&lt;p>用于判断是否跳转&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/co_p3/bCheck.png"
+width="240"
+height="156"
+srcset="https://lhy0424.top/p/co_p3/bCheck_hu_f5f69a4f47ea413d.png 480w, https://lhy0424.top/p/co_p3/bCheck_hu_db5c5a13ef869db6.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="153"
+data-flex-basis="369px"
+>&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>端口&lt;/th>
+&lt;th>方向&lt;/th>
+&lt;th>描述&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>bOp&lt;/td>
+&lt;td>I&lt;/td>
+&lt;td>连接到Controller.bOp，获取branch类型&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>branch&lt;/td>
+&lt;td>I&lt;/td>
+&lt;td>连接到Controller.branch，判断是否是branch信号&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>G[rs]&lt;/td>
+&lt;td>I&lt;/td>
+&lt;td>连接到GRF.RD1&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>G[rt]&lt;/td>
+&lt;td>I&lt;/td>
+&lt;td>连接到GFR.RD2&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>check&lt;/td>
+&lt;td>O&lt;/td>
+&lt;td>判断是否符合branch条件，连接到IFU.branch&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h3 id="jumpext">jumpEXT
+&lt;/h3>&lt;p>用于实现jump和jal指令，计算 &lt;em>&lt;strong>PC31&amp;hellip;28 || Instr_index || 00&lt;/strong>&lt;/em>&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/co_p3/jump.png"
+width="152"
+height="107"
+srcset="https://lhy0424.top/p/co_p3/jump_hu_583c9b61f0be0644.png 480w, https://lhy0424.top/p/co_p3/jump_hu_48fb96d38eed6c7e.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="142"
+data-flex-basis="340px"
+>&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>端口&lt;/th>
+&lt;th>方向&lt;/th>
+&lt;th>描述&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>index&lt;/td>
+&lt;td>I&lt;/td>
+&lt;td>获取Instr_index，即机器码的后26位&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>PC&lt;/td>
+&lt;td>I&lt;/td>
+&lt;td>获取PC的值&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>ext32&lt;/td>
+&lt;td>O&lt;/td>
+&lt;td>下一个PC的值（nPC）&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="测试方案">测试方案
+&lt;/h2>&lt;p>随机生成数据 -&amp;gt; 导出十六进制文件 -&amp;gt; 自动化工具生成新电路 -&amp;gt; 比对mars运行结果和circ运行结果&lt;/p>
+&lt;p>&lt;strong>randomMipsCmd.py&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">random&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">time&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">generate_register&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;生成一个随机寄存器编号（0-31）。&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">randint&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">31&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">generate_immediate&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;生成一个随机立即数（0-65535）。&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">randint&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">65535&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">generate_memory_address&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;生成一个随机内存地址（0-3071，左移2位）。&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">randint&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3071&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;&amp;lt;&lt;/span> &lt;span class="mi">2&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">instruction&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;将指令写入文件。&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">file&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">write&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">instruction&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="se">\n&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">seed&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">time&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">time&lt;/span>&lt;span class="p">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">length&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">input&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;请输入要生成的指令数量：&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">label_count&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">with&lt;/span> &lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;result.asm&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;w&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">file&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="n">_&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">length&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tmp&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">randint&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">match&lt;/span> &lt;span class="n">tmp&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;add $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;sub $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;ori $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, &lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_immediate&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;lw $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, &lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_memory_address&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">($0)&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;sw $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, &lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_memory_address&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">($0)&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="mi">5&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="n">label_count&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">num1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">num2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="n">num2&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">num1&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">num2&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;ori $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">num1&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">num1&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, &lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_immediate&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;beq $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">num1&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">num2&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, label&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">random&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">randint&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">label_count&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;lui $&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_register&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">, &lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">generate_immediate&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="mi">7&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;nop&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="mi">8&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">write_instruction&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">file&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="sa">f&lt;/span>&lt;span class="s2">&amp;#34;label&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">label_count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">:&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">label_count&lt;/span> &lt;span class="o">+=&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="vm">__name__&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s1">&amp;#39;__main__&amp;#39;&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">main&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>autoWrite2Rom.py&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">re&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 读取 ROM 文件内容&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">with&lt;/span> &lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;python&lt;/span>&lt;span class="se">\\&lt;/span>&lt;span class="s2">autoTest_P3&lt;/span>&lt;span class="se">\\&lt;/span>&lt;span class="s2">rom.txt&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;r&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">encoding&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;utf-8&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">f&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">rom_content&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">f&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">strip&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="c1"># 去掉前后空白字符&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 读取电路文件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">with&lt;/span> &lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;python&lt;/span>&lt;span class="se">\\&lt;/span>&lt;span class="s2">autoTest_P3&lt;/span>&lt;span class="se">\\&lt;/span>&lt;span class="s2">cpu.circ&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;r&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">encoding&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;utf-8&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">cur_file&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">cur_content&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cur_file&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">read&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 使用正则表达式替换 ROM 内容&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">cur_content&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sub&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="sa">r&lt;/span>&lt;span class="s1">&amp;#39;addr/data: 12 32([\s\S]*?)&amp;lt;/a&amp;gt;&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1"># 使用非贪婪模式匹配&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="sa">f&lt;/span>&lt;span class="s1">&amp;#39;addr/data: 12 32&lt;/span>&lt;span class="se">\n&lt;/span>&lt;span class="si">{&lt;/span>&lt;span class="n">rom_content&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="se">\n&lt;/span>&lt;span class="s1">&amp;lt;/a&amp;gt;&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">cur_content&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">flags&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">re&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">DOTALL&lt;/span> &lt;span class="c1"># 允许 . 匹配换行符&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 写入新的电路文件&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">with&lt;/span> &lt;span class="nb">open&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;cpu_remake.circ&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;w&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">encoding&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;utf-8&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="n">file&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">file&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">write&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">cur_content&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="思考题">思考题
+&lt;/h2>&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>上面我们介绍了通过 FSM 理解单周期 CPU 的基本方法。请大家指出单周期 CPU 所用到的模块中，哪些发挥状态存储功能，哪些发挥状态转移功能。&lt;/strong>&lt;/p>
+&lt;blockquote>
+&lt;ul>
+&lt;li>状态存储功能：IFU、GRF&lt;/li>
+&lt;li>状态转移功能：Controller、ALU、EXT、bCheckTT&lt;/li>
+&lt;/ul>&lt;/blockquote>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>现在我们的模块中 IM 使用 ROM， DM 使用 RAM， GRF 使用 Register，这种做法合理吗？ 请给出分析，若有改进意见也请一并给出。&lt;/strong>&lt;/p>
+&lt;blockquote>
+&lt;p>合理&lt;/p>
+&lt;ul>
+&lt;li>ROM是只读存储器，不会被写入，内部数据不会被修改，适合用来储存指令。&lt;/li>
+&lt;li>RAM可以存取存储器，可以被写入可以被读取，适合用来读取数据。&lt;/li>
+&lt;li>GRF是寄存器堆，Register具有较高的读写速度，适合用来存储指令中的数据。&lt;/li>
+&lt;/ul>&lt;/blockquote>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>在上述提示的模块之外，你是否在实际实现时设计了其他的模块？如果是的话，请给出介绍和设计的思路。&lt;/strong>&lt;/p>
+&lt;blockquote>
+&lt;p>额外设计了Branch Checker，用于判断是否branch，设计思路见&amp;quot;设计草稿&amp;quot;&lt;/p>&lt;/blockquote>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>事实上，实现 &lt;code>nop&lt;/code> 空指令，我们并不需要将它加入控制信号真值表，为什么？&lt;/strong>&lt;/p>
+&lt;blockquote>
+&lt;p>nop的指令码是0x00000000，会被翻译为*** sll $0, $0 0***，即把$0的值左移0位存入$0，因为$0的值始终为零不会被改变，所以nop不会带来电路的任何改变。&lt;/p>&lt;/blockquote>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>阅读 Pre 的 &lt;a class="link" href="http://cscore.buaa.edu.cn/tutorial/mips/mips-6/mips6-1/" target="_blank" rel="noopener"
+>“MIPS 指令集及汇编语言”&lt;/a> 一节中给出的测试样例，评价其强度（可从各个指令的覆盖情况，单一指令各种行为的覆盖情况等方面分析），并指出具体的不足之处。&lt;/strong>&lt;/p>
+&lt;blockquote>
+&lt;p>强度一般&lt;/p>
+&lt;p>没有测试到所有的寄存器，也没有考虑到数据溢出的情况&lt;/p>&lt;/blockquote>
+&lt;/li>
+&lt;/ol></description></item><item><title>Moore与Mealy状态机辨析</title><link>https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/</link><pubDate>Sat, 05 Oct 2024 16:58:00 +0000</pubDate><guid>https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/</guid><description>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/Automata_theory.svg.png" alt="Featured image of post Moore与Mealy状态机辨析" />&lt;h4 id="有限状态机">有限状态机
+&lt;/h4>&lt;p>表示有限个状态以及在这些状态之间的转移和动作等行为的&lt;strong>数学统计模型&lt;/strong>。&lt;/p>
+&lt;h4 id="有限状态机fsm组成部分">有限状态机（FSM）组成部分
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>State&lt;/strong> : 系统可能处于的状态。每个状态反映的是系统的某个模式或环节。有限状态机的状态是有限的。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Input&lt;/strong> : 外部输入的信号，会影响状态的转换。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Output&lt;/strong> : 状态机在特定条件下输出的信号。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Transitions&lt;/strong> : 系统根据状态转移函数从一个状态转移到另一个状态。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>Initial State&lt;/strong> : 系统的初始状态。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="例题字符串匹配">例题（字符串匹配）
+&lt;/h4>&lt;p>在了解有限状态机的两种类型前，我们先来看一道例题（选自BUAA_CO_P0）&lt;/p>
+&lt;blockquote>
+&lt;p>使用Logisim搭建一个有限状态机检测串行输入字符串中的能匹配正则表达式b{1,2}[ac]{2}的子串并输出。即我们要得到这样一个字符串：开头有一个或两个b，接着要出现两次a/c。&lt;/p>
+&lt;p>**注意：**每当匹配到一个子串时，需要输出一次1。例如对字符串bacbacac,模块应当在第1个c输入和第2个c输入时输出1,而在其他时刻保持输出为0。&lt;/p>&lt;/blockquote>
+&lt;h4 id="moore-machine">Moore Machine
+&lt;/h4>&lt;p>我们先通过Moore状态机来实现题目要求。Moore状态机是有限状态机的一种，其输出仅依赖于当前状态。即只要系统处于某个特定状态，无论当前输入是什么，都会有对应的输出。&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore.png"
+width="593"
+height="185"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_hu_a0dfd89ec93ac608.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_hu_d0425ae1602f2bbd.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="320"
+data-flex-basis="769px"
+>&lt;/p>
+&lt;p>首先我们先画出&lt;strong>状态转移图&lt;/strong>&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_transition.png"
+width="701"
+height="233"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_transition_hu_c8e35ce45212ce20.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_transition_hu_bd834bbc6277a871.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="300"
+data-flex-basis="722px"
+>&lt;/p>
+&lt;p>根据上图我们可以轻松地在&lt;strong>logisim&lt;/strong>中搭出相应的电路&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_table.png"
+width="643"
+height="420"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_table_hu_a576e50aa1a57b13.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_table_hu_b32c45cd15ee5ee7.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="153"
+data-flex-basis="367px"
+>&lt;/p>
+&lt;p align = "center">&lt;i>&lt;font color = "gray">利用真值表构建状态转移模块&lt;/font>&lt;/i>&lt;p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_logisim.png"
+width="623"
+height="229"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_logisim_hu_19dba5df5ff99878.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/moore_logisim_hu_dd6b173fbd2a0ec9.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="272"
+data-flex-basis="652px"
+>&lt;/p>
+&lt;h4 id="mealy-machine">Mealy Machine
+&lt;/h4>&lt;p>再利用Mealy状态机实现题目要求。Mealy状态机是有限状态机的另外一种，其输出结果不仅和当前状态有关，还和当前输出有关。&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy.png"
+width="593"
+height="201"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_hu_b227e79b60b799f7.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_hu_797c9108c2bb94b7.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="295"
+data-flex-basis="708px"
+>&lt;/p>
+&lt;p>我们仍然是先画出&lt;strong>状态转移图&lt;/strong>&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_transition.png"
+width="701"
+height="233"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_transition_hu_afe6e998c107cd85.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_transition_hu_30415e718ab41b09.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="300"
+data-flex-basis="722px"
+>&lt;/p>
+&lt;p>在&lt;strong>logisim&lt;/strong>中搭建相应电路&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_table.png"
+width="735"
+height="416"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_table_hu_9404a3165c6ba825.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_table_hu_1aed7ce11eba17e1.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="176"
+data-flex-basis="424px"
+>&lt;/p>
+&lt;p align = "center">&lt;i>&lt;font color = "gray">利用真值表构建状态转移模块&lt;/font>&lt;/i>&lt;p>
+&lt;p>由于Mealy状态机的输出Z由状态和输出共同决定，所以可以在构建真值表时直接根据状态和输入给出Z的值。&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_logisim.png"
+width="555"
+height="211"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_logisim_hu_a937017219dbd312.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/mealy_logisim_hu_111bb1fc4d2ac999.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="263"
+data-flex-basis="631px"
+>&lt;/p>
+&lt;h4 id="moore--mealy">Moore &amp;amp; Mealy
+&lt;/h4>&lt;p>下面我们通过波形图的方式分析两种有限状态机的差别。&lt;/p>
+&lt;ul>
+&lt;li>上升沿输入一个字符，且输入在一个周期内保持不变&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_posedge.png"
+width="452"
+height="237"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_posedge_hu_359ba7a370f56290.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_posedge_hu_2e0a0be18a5989db.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="190"
+data-flex-basis="457px"
+>&lt;/p>
+&lt;p>Moore状态机在读入字符c后状态变为11，经过判断符合置位条件，输入变为1，非常符合我们的直觉。&lt;/p>
+&lt;p>Mealy状态机则在读入字符a后输入就变为1，因为读入a之后状态变为10，此时输入仍为a，状态机识别到字符序列baa，符合置位条件，输入变为1，而在读入c之后状态变为00，不再符合置位条件。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>下降沿输入一个字符，且输入在一个周期内保持不变&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_negedge.png"
+width="452"
+height="237"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_negedge_hu_999d69a74283a5d0.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_negedge_hu_fa0c1b2dc415861f.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="190"
+data-flex-basis="457px"
+>&lt;/p>
+&lt;p>虽然是下降沿读入一个字符，但是状态机的状态在上升沿时才会更新，所以对于Moore状态机，其实就等于上一种情况滞后一个周期。&lt;/p>
+&lt;p>对于Mealy状态机，在状态更新为10后，输入仍为a，检测序列为baa，符合置位条件，在之后的下降沿输入变为c，此时检测序列为bac，仍符合置位条件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>异步输入&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_async_true.png"
+width="452"
+height="237"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_async_true_hu_63ec90afc72bd0cb.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_async_true_hu_6221b091fc98f9d5.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="190"
+data-flex-basis="457px"
+>&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_async_fal.png"
+width="452"
+height="237"
+srcset="https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_async_fal_hu_f3e809c7ad84454e.png 480w, https://lhy0424.top/p/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA/wave_async_fal_hu_84a489208c734f57.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="190"
+data-flex-basis="457px"
+>&lt;/p>
+&lt;p>在接收到字符a后的一个周期内任意时刻输入c，Mealy状态机的输出都会立刻发生变化，而Moore状态机则需要等到下一个时钟上沿到来输出才会变化。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="总结">总结
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>对于本题来说，Moore状态机和Mealy状态机实现的功能有所差异。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>**Moore状态机同步输出，Mealy状态机异步输出。**Mealy对输入的反应更快。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>实现相同功能，Mealy所需要的状态数比Moore型少，Moore需要状态稳定才能输出。（对于异步输入来说，因为同步输入时结果并不相同）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>并非所有时许电路都可以用Mealy状态机实现，一些时序逻辑电路只能通过Moore状态机实现。&lt;/p>
+&lt;/li>
+&lt;/ul></description></item></channel></rss>

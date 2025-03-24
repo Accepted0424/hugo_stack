@@ -1,0 +1,351 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="verilog单周期CPU"><title>P4_设计文档</title>
+<link rel=canonical href=https://lhy0424.top/p/co_p4/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="P4_设计文档"><meta property='og:description' content="verilog单周期CPU"><meta property='og:url' content='https://lhy0424.top/p/co_p4/'><meta property='og:site_name' content="Az's Blog"><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='BUAA-CO'><meta property='article:tag' content='verilog'><meta property='article:published_time' content='2024-11-02T18:06:00+00:00'><meta property='article:modified_time' content='2024-11-02T18:06:00+00:00'><meta property='og:image' content='https://lhy0424.top/p/co_p4/P4_cover.jpg'><meta name=twitter:title content="P4_设计文档"><meta name=twitter:description content="verilog单周期CPU"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://lhy0424.top/p/co_p4/P4_cover.jpg'><link rel="shortcut icon" href=/img/az.jpg></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/az_hu_2167c1e5a8cad978.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>Az's Blog</a></h1><h2 class=site-description>Stay hungry, Stay foolish.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Accepted0424 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#信号解释>信号解释</a></li><li><a href=#设计草稿>设计草稿</a><ol><li><a href=#mipsv-top>mips.v (Top)</a><ol><li><a href=#ports>Ports</a></li><li><a href=#signals>Signals</a></li><li><a href=#instantiations>Instantiations</a></li></ol></li><li><a href=#ifuv>IFU.v</a><ol><li><a href=#ports-1>Ports</a></li></ol></li><li><a href=#controllerv>Controller.v</a><ol><li><a href=#ports-2>Ports</a></li><li><a href=#信号映射表>信号映射表</a></li></ol></li><li><a href=#grfv>GRF.v</a><ol><li><a href=#ports-3>Ports</a></li></ol></li><li><a href=#dmv>DM.v</a><ol><li><a href=#ports-4>Ports</a></li></ol></li><li><a href=#aluv>ALU.v</a><ol><li><a href=#ports-5>Ports</a></li></ol></li><li><a href=#bcheckv>bCheck.v</a><ol><li><a href=#ports-6>Ports</a></li></ol></li><li><a href=#extv>EXT.v</a><ol><li><a href=#ports-7>Ports</a></li></ol></li><li><a href=#jumpextv>jumpEXT.v</a><ol><li><a href=#ports-8>Ports</a></li></ol></li></ol></li><li><a href=#测试方案>测试方案</a><ol><li><a href=#思考题>思考题</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/co_p4/><img src=/p/co_p4/P4_cover_hu_e2c502b89ec4b028.jpg srcset="/p/co_p4/P4_cover_hu_e2c502b89ec4b028.jpg 800w, /p/co_p4/P4_cover_hu_fc143a3ae977d106.jpg 1600w" width=800 height=533 loading=lazy alt="Featured image of post P4_设计文档"></a></div><div class=article-details><header class=article-category><a href=/categories/buaa-co/>BUAA-CO</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/co_p4/>P4_设计文档</a></h2><h3 class=article-subtitle>verilog单周期CPU</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Nov 02, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><h1 id=p4_l0_document>P4_L0_document</h1><h2 id=信号解释>信号解释</h2><ul><li><strong>RegDst（寄存器写入地址）</strong><ul><li>2&rsquo;b00: RT</li><li>2&rsquo;b01: RD</li><li>2&rsquo;b11: 5&rsquo;h1f</li><li>default: 5&rsquo;b0</li></ul></li><li><strong>Mem2Reg（寄存器写入数据）</strong><ul><li>2&rsquo;b00: alu_c</li><li>2&rsquo;b01: dm_data</li><li>2&rsquo;b10: pc + 32&rsquo;d4</li><li>default: 32&rsquo;b0</li></ul></li><li><strong>ALUSrc（alu的b操作数选择）</strong><ul><li>1&rsquo;b0: grf_RD2</li><li>1&rsquo;b1: ext_ext32</li><li>default: 32&rsquo;b0</li></ul></li><li><strong>ALU_F（ALU计算方式）</strong><ul><li>4&rsquo;b0000: add</li><li>4&rsquo;b0001: sub</li><li>4&rsquo;b0010: or</li><li>4&rsquo;b0011: SL16 (lui)</li><li>4&rsquo;b0100: SLL (补0逻辑左移)</li><li>4’b0101: SRL (补0逻辑右移)</li><li>4‘b0110: SRA (算数右移)</li></ul></li><li><strong>ExtOp (扩展操作)</strong><ul><li>2’b01: 0扩展</li><li>2‘b10: 算术扩展（符号位）</li><li>2’b11: 1扩展</li></ul></li></ul><h2 id=设计草稿>设计草稿</h2><p>本次CPU支持<code>add, sub, or, ori, lw, sw, lb, lbu, lh, sb, sh, beq, lui, nop，begz，bgtz，blez，bltz，bne, j, jal, jr</code>共23条指令。</p><h3 id=mipsv-top>mips.v (Top)</h3><p><img src=/p/co_p4/logisim_CPU.png width=2204 height=1156 srcset="/p/co_p4/logisim_CPU_hu_b6e1a89de386ea01.png 480w, /p/co_p4/logisim_CPU_hu_e38151aba6a13c1f.png 1024w" loading=lazy class=gallery-image data-flex-grow=190 data-flex-basis=457px></p><p><img src=/p/co_p4/mips.svg loading=lazy alt=mips></p><h4 id=ports>Ports</h4><div class=table-wrapper><table><thead><tr><th>Port name</th><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>clk</td><td>input</td><td></td><td></td></tr><tr><td>reset</td><td>input</td><td></td><td></td></tr></tbody></table></div><h4 id=signals>Signals</h4><div class=table-wrapper><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>pc</td><td>wire [31:0]</td><td></td></tr><tr><td>if_jump</td><td>wire</td><td></td></tr><tr><td>if_branch</td><td>wire</td><td></td></tr><tr><td>instr_out</td><td>wire [31:0]</td><td></td></tr><tr><td>ifu_offset</td><td>wire [31:0]</td><td></td></tr><tr><td>OPCODE</td><td>wire [5:0]</td><td></td></tr><tr><td>FUNCT</td><td>wire [5:0]</td><td></td></tr><tr><td>RS</td><td>wire [4:0]</td><td></td></tr><tr><td>RT</td><td>wire [4:0]</td><td></td></tr><tr><td>RD</td><td>wire [4:0]</td><td></td></tr><tr><td>SHAMT</td><td>wire [4:0]</td><td></td></tr><tr><td>IMM</td><td>wire [15:0]</td><td></td></tr><tr><td>INDEX</td><td>wire [25:0]</td><td></td></tr><tr><td>bOp_out</td><td>wire [5:0]</td><td></td></tr><tr><td>RegDst_out</td><td>wire [1:0]</td><td></td></tr><tr><td>ALUSrc_out</td><td>wire</td><td></td></tr><tr><td>Mem2Reg_out</td><td>wire [1:0]</td><td></td></tr><tr><td>RegWrite_out</td><td>wire</td><td></td></tr><tr><td>MemWrite_out</td><td>wire</td><td></td></tr><tr><td>branch_out</td><td>wire</td><td></td></tr><tr><td>ExtOp_out</td><td>wire [1:0]</td><td></td></tr><tr><td>ALUOP_out</td><td>wire [1:0]</td><td></td></tr><tr><td>jumpSrc_out</td><td>wire [1:0]</td><td></td></tr><tr><td>dm_data</td><td>wire [31:0]</td><td></td></tr><tr><td>ext_ext32</td><td>wire [31:0]</td><td></td></tr><tr><td>grf_RD1</td><td>wire [31:0]</td><td></td></tr><tr><td>grf_RD2</td><td>wire [31:0]</td><td></td></tr><tr><td>alu_B</td><td>wire [31:0]</td><td></td></tr><tr><td>alu_C</td><td>wire [31:0]</td><td></td></tr><tr><td>grf_WA</td><td>wire [4:0]</td><td></td></tr><tr><td>grf_WD</td><td>wire [31:0]</td><td></td></tr><tr><td>jumpext_ext32</td><td>wire [31:0]</td><td></td></tr></tbody></table></div><h4 id=instantiations>Instantiations</h4><ul><li><p>ifu: IFU</p></li><li><p>controller: Controller</p></li><li><p>grf: GRF</p></li><li><p>alu: ALU</p></li><li><p>dm: DM</p></li><li><p>ext: EXT</p></li><li><p>jumpext: jumpEXT</p></li><li><p>bcheck: bCheck</p></li></ul><h3 id=ifuv>IFU.v</h3><p><img src=/p/co_p4/IFU.png width=969 height=630 srcset="/p/co_p4/IFU_hu_260e60f83d2f88f4.png 480w, /p/co_p4/IFU_hu_a676316910adf921.png 1024w" loading=lazy alt=IFU class=gallery-image data-flex-grow=153 data-flex-basis=369px></p><p><img src=/p/co_p4/IFU.svg loading=lazy alt=IFU></p><h4 id=ports-1>Ports</h4><div class=table-wrapper><table><thead><tr><th>Port name</th><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>clk</td><td>input</td><td></td><td></td></tr><tr><td>reset</td><td>input</td><td></td><td></td></tr><tr><td>jump</td><td>input</td><td></td><td></td></tr><tr><td>branch</td><td>input</td><td></td><td></td></tr><tr><td>offset</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>PC</td><td>output</td><td>[31:0]</td><td></td></tr><tr><td>Instr</td><td>output</td><td>[31:0]</td><td></td></tr></tbody></table></div><h3 id=controllerv>Controller.v</h3><p><img src=/p/co_p4/Controller.png width=2203 height=1236 srcset="/p/co_p4/Controller_hu_feed0c1cd3ba30b1.png 480w, /p/co_p4/Controller_hu_c24e85860a631164.png 1024w" loading=lazy alt=Controller class=gallery-image data-flex-grow=178 data-flex-basis=427px></p><p><img src=/p/co_p4/Controller.svg loading=lazy alt=Controller></p><h4 id=ports-2>Ports</h4><div class=table-wrapper><table><thead><tr><th>Port name</th><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>OpCode</td><td>input</td><td>[5:0]</td><td></td></tr><tr><td>Funct</td><td>input</td><td>[5:0]</td><td></td></tr><tr><td>rt</td><td>input</td><td>[4:0]</td><td></td></tr><tr><td>jump</td><td>output</td><td></td><td></td></tr><tr><td>jumpSrc</td><td>output</td><td>[1:0]</td><td></td></tr><tr><td>bOp</td><td>output</td><td>[5:0]</td><td></td></tr><tr><td>RegDst</td><td>output</td><td>[1:0]</td><td></td></tr><tr><td>ALUSrc</td><td>output</td><td></td><td></td></tr><tr><td>Mem2Reg</td><td>output</td><td>[1:0]</td><td></td></tr><tr><td>RegWrite</td><td>output</td><td></td><td></td></tr><tr><td>MemWrite</td><td>output</td><td></td><td></td></tr><tr><td>branch</td><td>output</td><td></td><td></td></tr><tr><td>ExtOp</td><td>output</td><td>[1:0]</td><td></td></tr><tr><td>ALUOP</td><td>output</td><td>[1:0]</td><td></td></tr></tbody></table></div><h4 id=信号映射表>信号映射表</h4><div class=table-wrapper><table><thead><tr><th></th><th>OpCode</th><th>Funct</th><th>RT</th></tr></thead><tbody><tr><td>add</td><td>000000</td><td>100000</td><td></td></tr><tr><td>sub</td><td>000000</td><td>100010</td><td></td></tr><tr><td>or</td><td>000000</td><td>100101</td><td></td></tr><tr><td><strong>SLL</strong></td><td>000000</td><td>000000</td><td></td></tr><tr><td><strong>SRL</strong></td><td>000000</td><td>000010</td><td></td></tr><tr><td><strong>SRA</strong></td><td>000000</td><td>000011</td><td></td></tr><tr><td>ori</td><td>001101</td><td></td><td></td></tr><tr><td>lw</td><td>100011</td><td></td><td></td></tr><tr><td>sw</td><td>101011</td><td></td><td></td></tr><tr><td><strong>lb</strong></td><td>100000</td><td></td><td></td></tr><tr><td><strong>lbu</strong></td><td>100100</td><td></td><td></td></tr><tr><td><strong>lh</strong></td><td>100001</td><td></td><td></td></tr><tr><td><strong>sb</strong></td><td>101000</td><td></td><td></td></tr><tr><td><strong>sh</strong></td><td>101001</td><td></td><td></td></tr><tr><td>beq</td><td>000100</td><td></td><td></td></tr><tr><td>lui</td><td>001111</td><td></td><td></td></tr><tr><td>bgez</td><td>000001</td><td></td><td>00001</td></tr><tr><td>bgtz</td><td>000111</td><td></td><td></td></tr><tr><td>blez</td><td>000110</td><td></td><td></td></tr><tr><td>bltz</td><td>000001</td><td></td><td></td></tr><tr><td>bne</td><td>000101</td><td></td><td>00000</td></tr><tr><td>jump</td><td>000010</td><td></td><td></td></tr><tr><td>jal</td><td>000011</td><td></td><td></td></tr><tr><td>jr</td><td>000000</td><td>001000</td><td></td></tr></tbody></table></div><div class=table-wrapper><table><thead><tr><th></th><th>add</th><th>sub</th><th>ori</th><th>SLL</th><th>SRL</th><th>SRA</th><th>or</th><th>lw</th><th>sw</th><th>lb</th><th>lbu</th><th>lh</th><th>sb</th><th>sh</th><th>branch</th><th>lui</th><th>jump</th><th>jal</th><th>jr</th></tr></thead><tbody><tr><td>RegDst</td><td>01</td><td>01</td><td>00</td><td>01</td><td>01</td><td>01</td><td>01</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>11(const31)</td><td>00</td></tr><tr><td>ALUSrc</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Mem2Reg</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>01</td><td>00</td><td>01</td><td>01</td><td>01</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>10(PC + 4)</td><td>00</td></tr><tr><td>RegWrite</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td></tr><tr><td>MemWrite</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>branch</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>ExtOp</td><td>00</td><td>00</td><td>01(zero)</td><td>0</td><td>0</td><td>0</td><td>00</td><td>]10(signed)</td><td>10(signed)</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10(signed)</td><td>10(signed)</td><td>00</td><td>0</td><td>0</td></tr><tr><td>ALUOP&lt;3,0></td><td>0000</td><td>0001</td><td>0010</td><td>0100</td><td>0101</td><td>0110</td><td>0010</td><td>0000(+)</td><td>0000(+)</td><td>0000</td><td>0000</td><td>0000</td><td>0000</td><td>0000</td><td>0000(+)</td><td>0011</td><td>0000</td><td>0000</td><td>0000</td></tr><tr><td>jumpSrc</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>01</td><td>01</td><td>10</td></tr><tr><td>jump</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td></tr><tr><td>ls_type</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>00</td><td>00</td><td>01</td><td>10</td><td>11</td><td>01</td><td>11</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div><h3 id=grfv>GRF.v</h3><p><img src=/p/co_p4/GRF.png width=2217 height=941 srcset="/p/co_p4/GRF_hu_1cbaf3b4dd8768d9.png 480w, /p/co_p4/GRF_hu_466543eef7e3b78b.png 1024w" loading=lazy alt=GRF class=gallery-image data-flex-grow=235 data-flex-basis=565px></p><p><img src=/p/co_p4/GRF.svg loading=lazy alt=GRF></p><h4 id=ports-3>Ports</h4><div class=table-wrapper><table><thead><tr><th>Port name</th><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>A1</td><td>input</td><td>[4:0]</td><td></td></tr><tr><td>A2</td><td>input</td><td>[4:0]</td><td></td></tr><tr><td>A3</td><td>input</td><td>[4:0]</td><td></td></tr><tr><td>WD</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>clk</td><td>input</td><td></td><td></td></tr><tr><td>reset</td><td>input</td><td></td><td></td></tr><tr><td>WE</td><td>input</td><td></td><td></td></tr><tr><td>pc</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>RD1</td><td>output</td><td>[31:0]</td><td></td></tr><tr><td>RD2</td><td>output</td><td>[31:0]</td><td></td></tr></tbody></table></div><h3 id=dmv>DM.v</h3><p><img src=/p/co_p4/DM.svg loading=lazy alt=DM></p><h4 id=ports-4>Ports</h4><div class=table-wrapper><table><thead><tr><th>Port name</th><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>A</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>D_input</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>str</td><td>input</td><td></td><td></td></tr><tr><td>clk</td><td>input</td><td></td><td></td></tr><tr><td>pc</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>D_output</td><td>output</td><td>[31:0]</td><td></td></tr></tbody></table></div><h3 id=aluv>ALU.v</h3><p><img src=/p/co_p4/ALU.svg loading=lazy alt=ALU></p><h4 id=ports-5>Ports</h4><div class=table-wrapper><table><thead><tr><th>Port name</th><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>A</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>B</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>shamt</td><td>input</td><td>[4:0]</td><td></td></tr><tr><td>F</td><td>input</td><td>[3:0]</td><td></td></tr><tr><td>C</td><td>output</td><td>[31:0]</td><td></td></tr></tbody></table></div><h3 id=bcheckv>bCheck.v</h3><p><img src=/p/co_p4/bCheck.png width=1652 height=745 srcset="/p/co_p4/bCheck_hu_713d380c5af825c6.png 480w, /p/co_p4/bCheck_hu_7ef70c1026195de.png 1024w" loading=lazy alt=bCheck class=gallery-image data-flex-grow=221 data-flex-basis=532px></p><p><img src=/p/co_p4/bCheck.svg loading=lazy alt=bCheck></p><h4 id=ports-6>Ports</h4><div class=table-wrapper><table><thead><tr><th>Port name</th><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>Grs</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>Grt</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>bOp</td><td>input</td><td>[5:0]</td><td></td></tr><tr><td>branch</td><td>input</td><td></td><td></td></tr><tr><td>check</td><td>output</td><td></td><td></td></tr></tbody></table></div><h3 id=extv>EXT.v</h3><p><img src=/p/co_p4/EXT.png width=798 height=334 srcset="/p/co_p4/EXT_hu_12e1b4a627f3f351.png 480w, /p/co_p4/EXT_hu_27593ea1fdf31eba.png 1024w" loading=lazy alt=EXT class=gallery-image data-flex-grow=238 data-flex-basis=573px></p><p><img src=/p/co_p4/EXT.svg loading=lazy alt=EXT></p><h4 id=ports-7>Ports</h4><div class=table-wrapper><table><thead><tr><th>Port name</th><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>imm16</td><td>input</td><td>[15:0]</td><td></td></tr><tr><td>ExtOp</td><td>input</td><td>[1:0]</td><td></td></tr><tr><td>ext32</td><td>output</td><td>[31:0]</td><td></td></tr></tbody></table></div><h3 id=jumpextv>jumpEXT.v</h3><p><img src=/p/co_p4/jumpEXT.png width=912 height=398 srcset="/p/co_p4/jumpEXT_hu_4625e878bc2a25ae.png 480w, /p/co_p4/jumpEXT_hu_b20552e79e0fef33.png 1024w" loading=lazy alt=jumpEXT class=gallery-image data-flex-grow=229 data-flex-basis=549px></p><p><img src=/p/co_p4/jumpEXT.svg loading=lazy alt=jumpEXT></p><h4 id=ports-8>Ports</h4><div class=table-wrapper><table><thead><tr><th>Port name</th><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>index</td><td>input</td><td>[25:0]</td><td></td></tr><tr><td>pc</td><td>input</td><td>[31:0]</td><td></td></tr><tr><td>ext32</td><td>output</td><td>[31:0]</td><td></td></tr></tbody></table></div><h2 id=测试方案>测试方案</h2><ul><li><p><em><strong>利用魔改Mars：</strong></em> 直接比较ISE得输出和Mars的输出</p></li><li><p>***课上环境：***在Isim中将32个Reg和内存添加到波形图中，对比最终结果</p></li></ul><p>简单的测试代码：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span><span class=lnt>77
+</span><span class=lnt>78
+</span><span class=lnt>79
+</span><span class=lnt>80
+</span><span class=lnt>81
+</span><span class=lnt>82
+</span><span class=lnt>83
+</span><span class=lnt>84
+</span><span class=lnt>85
+</span><span class=lnt>86
+</span><span class=lnt>87
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1>#GRF REG_WRITE TEST</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$1</span>, <span class=m>125</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$2</span>, <span class=m>300</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$3</span>, <span class=nv>$0</span>, <span class=m>5</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$4</span>, <span class=nv>$0</span>, <span class=m>1024</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$5</span>, <span class=nv>$0</span>, <span class=m>56</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$6</span>, <span class=nv>$0</span>,125
+</span></span><span class=line><span class=cl>ori <span class=nv>$7</span>, <span class=nv>$0</span>, <span class=m>525</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$8</span>, <span class=nv>$0</span>, <span class=m>10086</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$9</span>, <span class=nv>$0</span>,14514
+</span></span><span class=line><span class=cl>ori <span class=nv>$10</span>, <span class=nv>$0</span>, <span class=m>625</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$11</span>, <span class=nv>$0</span>, <span class=m>168</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$12</span>, <span class=nv>$0</span>, <span class=m>576</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$13</span>, <span class=nv>$0</span>, <span class=m>2048</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$14</span>, <span class=nv>$0</span>, <span class=m>6666</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$15</span>, <span class=nv>$0</span>, <span class=m>424</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$16</span>, <span class=nv>$0</span>, <span class=m>2024</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$16</span>, <span class=nv>$0</span>, <span class=m>1101</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$17</span>, <span class=nv>$0</span>, <span class=m>2203</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$18</span>, <span class=nv>$0</span>, <span class=m>2306</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$19</span>, <span class=nv>$0</span>, <span class=m>999</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$20</span>, <span class=nv>$0</span>, <span class=m>2005</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$21</span>, <span class=nv>$0</span>, <span class=m>0</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$22</span>, <span class=nv>$0</span>, <span class=m>176</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$23</span>, <span class=nv>$0</span>, <span class=m>616</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$24</span>, <span class=nv>$0</span>, <span class=m>1213</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$25</span>, <span class=nv>$0</span>, <span class=m>1314</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$26</span>, <span class=nv>$0</span>, <span class=m>888</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$27</span>, <span class=nv>$0</span>, <span class=m>545</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$28</span>, <span class=nv>$0</span>, <span class=m>28</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#LUI TEST</span>
+</span></span><span class=line><span class=cl>lui <span class=nv>$1</span>, <span class=m>424</span>
+</span></span><span class=line><span class=cl>lui <span class=nv>$12</span>, <span class=m>500</span>
+</span></span><span class=line><span class=cl>lui <span class=nv>$24</span>, <span class=m>233</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#ADD or SUB TEST</span>
+</span></span><span class=line><span class=cl>add <span class=nv>$21</span>, <span class=nv>$27</span>, <span class=nv>$28</span> 
+</span></span><span class=line><span class=cl>sub <span class=nv>$21</span>, <span class=nv>$27</span>, <span class=nv>$28</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#MEMORY TEST</span>
+</span></span><span class=line><span class=cl>sw <span class=nv>$21</span>, 0<span class=o>(</span><span class=nv>$0</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>lw <span class=nv>$28</span>, 0<span class=o>(</span><span class=nv>$0</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#BRANCH TEST</span>
+</span></span><span class=line><span class=cl>beq <span class=nv>$24</span>, <span class=nv>$25</span>, beq_label_false
+</span></span><span class=line><span class=cl>ori <span class=nv>$24</span>, <span class=nv>$0</span>, <span class=m>1314</span>
+</span></span><span class=line><span class=cl>beq <span class=nv>$24</span>, <span class=nv>$25</span>, beq_label_true
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>beq_label_false:
+</span></span><span class=line><span class=cl>ori <span class=nv>$5</span>, <span class=nv>$0</span>, <span class=m>666</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>beq_label_true:
+</span></span><span class=line><span class=cl>ori <span class=nv>$5</span>, <span class=nv>$0</span>, <span class=m>667</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#JUMP TEST</span>
+</span></span><span class=line><span class=cl>jal <span class=k>function</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$5</span>, <span class=nv>$0</span>, <span class=m>0</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$5</span>, <span class=nv>$0</span>, <span class=m>1</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$5</span>, <span class=nv>$0</span>, <span class=m>9</span>
+</span></span><span class=line><span class=cl>j jump_label
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span>:
+</span></span><span class=line><span class=cl>ori <span class=nv>$5</span>, <span class=nv>$0</span>, <span class=m>1111</span>
+</span></span><span class=line><span class=cl>jr <span class=nv>$ra</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>jump_label:
+</span></span><span class=line><span class=cl>nop
+</span></span><span class=line><span class=cl>nop
+</span></span><span class=line><span class=cl>nop
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>bgez <span class=nv>$0</span>, bgez_label
+</span></span><span class=line><span class=cl>ori <span class=nv>$1</span>, <span class=nv>$0</span>, <span class=m>11451</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>bgez_label:
+</span></span><span class=line><span class=cl>ori <span class=nv>$1</span>, <span class=nv>$0</span>, -10
+</span></span><span class=line><span class=cl>bltz <span class=nv>$1</span>, bltz_label
+</span></span><span class=line><span class=cl>ori <span class=nv>$5</span>, <span class=nv>$0</span>, <span class=m>1314</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$6</span>, <span class=nv>$0</span>, <span class=m>156</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>bltz_label:
+</span></span><span class=line><span class=cl>bne <span class=nv>$0</span>, <span class=nv>$1</span>, bne_label
+</span></span><span class=line><span class=cl>ori <span class=nv>$5</span>, <span class=nv>$0</span>, <span class=m>131</span>
+</span></span><span class=line><span class=cl>ori <span class=nv>$6</span>, <span class=nv>$0</span>, <span class=m>15</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>bne_label:
+</span></span><span class=line><span class=cl>lui <span class=nv>$12</span>, <span class=m>2333</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>//STDOUT
+</span></span><span class=line><span class=cl>@00003000: $ <span class=m>1</span> &lt;<span class=o>=</span> 0000007d
+</span></span><span class=line><span class=cl>@00003004: $ <span class=m>2</span> &lt;<span class=o>=</span> 0000012c
+</span></span><span class=line><span class=cl>@00003008: $ <span class=m>3</span> &lt;<span class=o>=</span> <span class=m>00000005</span>
+</span></span><span class=line><span class=cl>@0000300c: $ <span class=m>4</span> &lt;<span class=o>=</span> <span class=m>00000400</span>
+</span></span><span class=line><span class=cl>@00003010: $ <span class=m>5</span> &lt;<span class=o>=</span> <span class=m>00000038</span>
+</span></span><span class=line><span class=cl>@00003014: $ <span class=m>6</span> &lt;<span class=o>=</span> 0000007d
+</span></span><span class=line><span class=cl>@00003018: $ <span class=m>7</span> &lt;<span class=o>=</span> 0000020d
+</span></span><span class=line><span class=cl>@0000301c: $ <span class=m>8</span> &lt;<span class=o>=</span> <span class=m>00002766</span>
+</span></span><span class=line><span class=cl>@00003020: $ <span class=m>9</span> &lt;<span class=o>=</span> 000038b2
+</span></span><span class=line><span class=cl>@00003024: <span class=nv>$10</span> &lt;<span class=o>=</span> <span class=m>00000271</span>
+</span></span><span class=line><span class=cl>@00003028: <span class=nv>$11</span> &lt;<span class=o>=</span> 000000a8
+</span></span><span class=line><span class=cl>@0000302c: <span class=nv>$12</span> &lt;<span class=o>=</span> <span class=m>00000240</span>
+</span></span><span class=line><span class=cl>@00003030: <span class=nv>$13</span> &lt;<span class=o>=</span> <span class=m>00000800</span>
+</span></span><span class=line><span class=cl>@00003034: <span class=nv>$14</span> &lt;<span class=o>=</span> 00001a0a
+</span></span><span class=line><span class=cl>@00003038: <span class=nv>$15</span> &lt;<span class=o>=</span> 000001a8
+</span></span><span class=line><span class=cl>@0000303c: <span class=nv>$16</span> &lt;<span class=o>=</span> 000007e8
+</span></span><span class=line><span class=cl>@00003040: <span class=nv>$16</span> &lt;<span class=o>=</span> 0000044d
+</span></span><span class=line><span class=cl>@00003044: <span class=nv>$17</span> &lt;<span class=o>=</span> 0000089b
+</span></span><span class=line><span class=cl>@00003048: <span class=nv>$18</span> &lt;<span class=o>=</span> <span class=m>00000902</span>
+</span></span><span class=line><span class=cl>@0000304c: <span class=nv>$19</span> &lt;<span class=o>=</span> 000003e7
+</span></span><span class=line><span class=cl>@00003050: <span class=nv>$20</span> &lt;<span class=o>=</span> 000007d5
+</span></span><span class=line><span class=cl>@00003054: <span class=nv>$21</span> &lt;<span class=o>=</span> <span class=m>00000000</span>
+</span></span><span class=line><span class=cl>@00003058: <span class=nv>$22</span> &lt;<span class=o>=</span> 000000b0
+</span></span><span class=line><span class=cl>@0000305c: <span class=nv>$23</span> &lt;<span class=o>=</span> <span class=m>00000268</span>
+</span></span><span class=line><span class=cl>@00003060: <span class=nv>$24</span> &lt;<span class=o>=</span> 000004bd
+</span></span><span class=line><span class=cl>@00003064: <span class=nv>$25</span> &lt;<span class=o>=</span> <span class=m>00000522</span>
+</span></span><span class=line><span class=cl>@00003068: <span class=nv>$26</span> &lt;<span class=o>=</span> <span class=m>00000378</span>
+</span></span><span class=line><span class=cl>@0000306c: <span class=nv>$27</span> &lt;<span class=o>=</span> <span class=m>00000221</span>
+</span></span><span class=line><span class=cl>@00003070: <span class=nv>$28</span> &lt;<span class=o>=</span> 0000001c
+</span></span><span class=line><span class=cl>@00003074: $ <span class=m>1</span> &lt;<span class=o>=</span> 01a80000
+</span></span><span class=line><span class=cl>@00003078: <span class=nv>$12</span> &lt;<span class=o>=</span> 01f40000
+</span></span><span class=line><span class=cl>@0000307c: <span class=nv>$24</span> &lt;<span class=o>=</span> 00e90000
+</span></span><span class=line><span class=cl>@00003080: <span class=nv>$21</span> &lt;<span class=o>=</span> 0000023d
+</span></span><span class=line><span class=cl>@00003084: <span class=nv>$21</span> &lt;<span class=o>=</span> <span class=m>00000205</span>
+</span></span><span class=line><span class=cl>@00003088: *00000000 &lt;<span class=o>=</span> <span class=m>00000205</span>
+</span></span><span class=line><span class=cl>@0000308c: <span class=nv>$28</span> &lt;<span class=o>=</span> <span class=m>00000205</span>
+</span></span><span class=line><span class=cl>@00003094: <span class=nv>$24</span> &lt;<span class=o>=</span> <span class=m>00000522</span>
+</span></span><span class=line><span class=cl>@000030a0: $ <span class=m>5</span> &lt;<span class=o>=</span> 0000029b
+</span></span><span class=line><span class=cl>@000030a4: <span class=nv>$31</span> &lt;<span class=o>=</span> 000030a8
+</span></span><span class=line><span class=cl>@000030b8: $ <span class=m>5</span> &lt;<span class=o>=</span> <span class=m>00000457</span>
+</span></span><span class=line><span class=cl>@000030a8: $ <span class=m>5</span> &lt;<span class=o>=</span> <span class=m>00000000</span>
+</span></span><span class=line><span class=cl>@000030ac: $ <span class=m>5</span> &lt;<span class=o>=</span> <span class=m>00000001</span>
+</span></span><span class=line><span class=cl>@000030b0: $ <span class=m>5</span> &lt;<span class=o>=</span> <span class=m>00000009</span>
+</span></span><span class=line><span class=cl>@000030d4: $ <span class=m>1</span> &lt;<span class=o>=</span> ffff0000
+</span></span><span class=line><span class=cl>@000030d8: $ <span class=m>1</span> &lt;<span class=o>=</span> fffffff6
+</span></span><span class=line><span class=cl>@000030dc: $ <span class=m>1</span> &lt;<span class=o>=</span> fffffff6
+</span></span><span class=line><span class=cl>@000030f8: <span class=nv>$12</span> &lt;<span class=o>=</span> 091d0000
+</span></span></code></pre></td></tr></table></div></div><h3 id=思考题>思考题</h3><ol><li><p>阅读下面给出的 DM 的输入示例中（示例 DM 容量为 4KB，即 32bit × 1024字），根据你的理解回答，这个 addr 信号又是从哪里来的？地址信号 addr 位数为什么是 [11:2] 而不是 [9:0] ？</p><blockquote><p>addr信号来源于ALU的结果输出端。</p><p>输入信号为按字节索引的地址，而DM的存储方式为按字索引，取<em><strong>addr[11:2]<em><strong>即等于</strong></em>addr[9:0] &#171; 2</strong></em></p></blockquote></li><li><p>思考上述两种控制器设计的译码方式，给出代码示例，并尝试对比各方式的优劣。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=k>always</span> <span class=p>@(</span><span class=o>*</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>OpCode</span> <span class=o>==</span> <span class=mh>6</span><span class=mb>&#39;b000000</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>Funct</span> <span class=o>==</span> <span class=mh>6</span><span class=mb>&#39;b100000</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=c1>//add
+</span></span></span><span class=line><span class=cl><span class=c1></span>				<span class=n>RegDst</span> 	<span class=o>&lt;=</span> <span class=mh>2</span><span class=mb>&#39;b01</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>ALUSrc</span> 	<span class=o>&lt;=</span> <span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>Mem2Reg</span> 	<span class=o>&lt;=</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>RegWrite</span> <span class=o>&lt;=</span> <span class=mh>1</span><span class=mb>&#39;b1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>MemWrite</span> <span class=o>&lt;=</span> <span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>branch</span> 	<span class=o>&lt;=</span> <span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>ExtOp</span> 	<span class=o>&lt;=</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>ALUOP</span> 	<span class=o>&lt;=</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>jumpSrc</span> 	<span class=o>&lt;=</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>jump</span>  	<span class=o>&lt;=</span> <span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=k>always</span> <span class=p>@(</span><span class=o>*</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>OpCode</span> <span class=o>==</span> <span class=mh>6</span><span class=mb>&#39;b100011</span> <span class=o>||</span>
+</span></span><span class=line><span class=cl>        <span class=n>OpCode</span> <span class=o>==</span> <span class=mh>6</span><span class=mb>&#39;b101011</span> <span class=o>||</span> 
+</span></span><span class=line><span class=cl>        <span class=n>OpCode</span> <span class=o>==</span> <span class=mh>6</span><span class=mb>&#39;b000100</span> <span class=o>||</span> 
+</span></span><span class=line><span class=cl>        <span class=n>OpCode</span> <span class=o>==</span> <span class=mh>6</span><span class=mb>&#39;b001111</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>    	<span class=n>ExtOp</span> <span class=o>&lt;=</span> <span class=mh>2</span><span class=mb>&#39;b10</span><span class=p>;</span> 
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>OpCode</span> <span class=o>==</span> <span class=mh>6</span><span class=mb>&#39;b001101</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>       <span class=n>ExtOp</span> <span class=o>&lt;=</span> <span class=mh>2</span><span class=mb>&#39;b01</span><span class=p>;</span> 
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>        <span class=n>ExtOp</span> <span class=o>&lt;=</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><ul><li><strong>记录指令对应的控制信号如何取值</strong>：方便添加新指令。</li><li><strong>记录控制信号每种取值所对应的指令</strong>：方便添加控制信号。</li></ul></blockquote></li><li><p>在相应的部件中，复位信号的设计都是<strong>同步复位</strong>，这与 P3 中的设计要求不同。请对比<strong>同步复位</strong>与<strong>异步复位</strong>这两种方式的 reset 信号与 clk 信号优先级的关系。</p><blockquote><p>异步复位reset信号优先，同步复位clk信号优先。</p></blockquote></li><li><p>C 语言是一种弱类型程序设计语言。C 语言中不对计算结果溢出进行处理，这意味着 C 语言要求程序员必须很清楚计算结果是否会导致溢出。因此，如果仅仅支持 C 语言，MIPS 指令的所有计算指令均可以忽略溢出。 请说明为什么在忽略溢出的前提下，addi 与 addiu 是等价的，add 与 addu 是等价的。提示：阅读《MIPS32® Architecture For Programmers Volume II: The MIPS32® Instruction Set》中相关指令的 Operation 部分。</p><blockquote><p><em>The term “unsigned” in the instruction name is a misnomer; this operation is 32-bit modulo arithmetic that does not trap on overflow. This instruction is appropriate for unsigned arithmetic, such as address arithmetic, or integer arithmetic environments that ignore overflow, such as C language arithmetic.</em></p><p>addu和add的区别、addi和addiu的区别均仅在与是否有溢出判断，故忽略溢出时效果是一样的。</p></blockquote></li></ol></section><footer class=article-footer><section class=article-tags><a href=/tags/buaa-co/>BUAA-CO</a>
+<a href=/tags/verilog/>Verilog</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 Nov 02, 2024 18:06 UTC</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".main-article");renderMathInElement(e,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/co_p7/><div class=article-image><img src=/p/co_p7/P7_cover.bdc06a609150e10b68c73b4ba75ae3e4_hu_53ce9d08b382bce0.jpg width=250 height=150 loading=lazy alt="Featured image of post P7_设计文档" data-key=CO_P7 data-hash="md5-vcBqYJFQ4QtoxztLp1rj5A=="></div><div class=article-details><h2 class=article-title>P7_设计文档</h2></div></a></article><article class=has-image><a href=/p/co_p6/><div class=article-image><img src=/p/co_p6/P6_cover.64816edce6ec3d5591052dc64cddd19e_hu_27ea656168fc6a97.jpg width=250 height=150 loading=lazy alt="Featured image of post P6_设计文档" data-key=CO_P6 data-hash="md5-ZIFu3ObsPVWRBS3GTN3Rng=="></div><div class=article-details><h2 class=article-title>P6_设计文档</h2></div></a></article><article class=has-image><a href=/p/co_p5/><div class=article-image><img src=/p/co_p5/P5_cover.08253d42d84b55ea6f34da88673df9fc_hu_7d2b01ab03f41c54.jpg width=250 height=150 loading=lazy alt="Featured image of post P5_设计文档" data-key=CO_P5 data-hash="md5-CCU9QthLVepvNNqIZz35/A=="></div><div class=article-details><h2 class=article-title>P5_设计文档</h2></div></a></article><article class=has-image><a href=/p/verilog_edit/><div class=article-image><img src=/p/verilog_edit/vscode_teros_cover.50a936646666751c04c55ff217d84989_hu_f56521ebdc394b3c.png width=250 height=150 loading=lazy alt="Featured image of post 如何优雅地编写Verilog" data-key=verilog_edit data-hash="md5-UKk2ZGZmdRwExV/yF9hJiQ=="></div><div class=article-details><h2 class=article-title>如何优雅地编写Verilog</h2></div></a></article><article class=has-image><a href=/p/co_p3/><div class=article-image><img src=/p/co_p3/P3_cover.44f04a18e8947ae58695e587af0e52e5_hu_a04db9cc4433ec2c.jpg width=250 height=150 loading=lazy alt="Featured image of post P3_设计文档" data-key=CO_P3 data-hash="md5-RPBKGOiUeuWGleWHrw5S5Q=="></div><div class=article-details><h2 class=article-title>P3_设计文档</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//lhy0424-disqus-com.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 Az's Blog</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
