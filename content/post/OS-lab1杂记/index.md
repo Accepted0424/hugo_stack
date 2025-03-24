@@ -593,7 +593,7 @@ typedef 定义了一个名为 `fmt_callback_t` 的类型，它是一个函数指
 
 截止又是只声明了vprintfmt函数但是没有实现，我们继续找，在lib目录下的print.c文件中我们终于找到了vprintfmt的实现，也正是我们需要填空的部分。
 
-先解释下函数名vprintfmt，v代表"variadic"（可变参数），fmt代表format格式好，即这是一个支持可变参数并且进行格式化输出的函数。
+先解释下函数名vprintfmt，v代表"variadic"（可变参数），fmt代表format格式化，即这是一个支持可变参数并且进行格式化输出的函数。
 
 再来看vprintfmt的传入参数
 
