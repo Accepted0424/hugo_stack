@@ -2,7 +2,7 @@
 title: BUAA-OO-Unit2
 description: 电梯调度
 slug: OO-unit2
-date: 2025-04-19 18:28:00+0000
+date: 2025-04-18 18:28:00+0000
 image: cover.jpg
 categories:
     - BUAA-OO
