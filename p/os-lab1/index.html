@@ -1,0 +1,1297 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="初识mos内核"><title>BUAA-OS-lab1杂记</title>
+<link rel=canonical href=https://lhy0424.top/p/os-lab1/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="BUAA-OS-lab1杂记"><meta property='og:description' content="初识mos内核"><meta property='og:url' content='https://lhy0424.top/p/os-lab1/'><meta property='og:site_name' content="Az's Blog"><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='BUAA-OS'><meta property='article:tag' content='mos'><meta property='article:tag' content='elf'><meta property='article:published_time' content='2025-03-21T17:00:00+00:00'><meta property='article:modified_time' content='2025-03-21T17:00:00+00:00'><meta property='og:image' content='https://lhy0424.top/p/os-lab1/cover.jpg'><meta name=twitter:title content="BUAA-OS-lab1杂记"><meta name=twitter:description content="初识mos内核"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://lhy0424.top/p/os-lab1/cover.jpg'><link rel="shortcut icon" href=/img/az.jpg></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/az_hu_2167c1e5a8cad978.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>Az's Blog</a></h1><h2 class=site-description>Stay hungry, Stay foolish.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Accepted0424 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#字节序byte-order>字节序（byte order）</a></li><li><a href=#elf>ELF</a></li><li><a href=#readelf>readelf</a></li><li><a href=#加载内核文件>加载内核文件</a></li><li><a href=#内核入口>内核入口</a></li><li><a href=#printk>printk</a><ol><li><a href=#调用链>调用链</a></li><li><a href=#可变参数>可变参数</a></li></ol></li><li><a href=#结语>结语</a></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/os-lab1/><img src=/p/os-lab1/cover_hu_c0cb4f9a8daee39a.jpg srcset="/p/os-lab1/cover_hu_c0cb4f9a8daee39a.jpg 800w, /p/os-lab1/cover_hu_a0ced871348c3353.jpg 1600w" width=800 height=533 loading=lazy alt="Featured image of post BUAA-OS-lab1杂记"></a></div><div class=article-details><header class=article-category><a href=/categories/buaa-os/>BUAA-OS</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/os-lab1/>BUAA-OS-lab1杂记</a></h2><h3 class=article-subtitle>初识mos内核</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Mar 21, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 18 分钟</time></div></footer></div></header><section class=article-content><h1 id=buaa-os-lab1杂记>BUAA-OS-lab1杂记</h1><h2 id=字节序byte-order>字节序（byte order）</h2><p>Little endian(小端)与Big endian(大端)</p><blockquote><p>“endian”这个词出自 Jonathan Swin 在 1726 年写的讽刺小说《格列佛游记》( Guliver&rsquo;s Travels )，小人国的内战就源于吃水煮鸡蛋时究竟是从大头(Big-Endian)敲开还是从小头(Little-Endian)敲开，由此曾发生过 6 次叛乱，其中一个皇帝送了命，另一个丢了王位。</p></blockquote><p>MSB（most significant bit/byte）LSB（least significant bit/byte）</p><p>Little-endian 把MSB存放在高地址，Big-endian把MSB存放在低地址</p><p>例如0x12345678</p><div class=table-wrapper><table><thead><tr><th></th><th>0字节</th><th>1字节</th><th>2字节</th><th>3字节</th></tr></thead><tbody><tr><td>EL</td><td>0x78</td><td>0x56</td><td>0x34</td><td>0x12</td></tr><tr><td>EB</td><td>0x12</td><td>0x34</td><td>0x56</td><td>0x78</td></tr></tbody></table></div><p>Big-endian在内存中的顺序比较符合数字的书写习惯，而Little-endian可以确保在变量指针转换的时候地址保持不变。比如<code>uint32*</code>转换为<code>char*</code>，只需要取0字节即可。</p><p>使用readelf -h可以查看elf header信息，可以看到mos操作系统是Little-endian的。</p><p><img src=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefined%E6%88%AA%E5%B1%8F2025-03-17%2011.10.35.png loading=lazy></p><h2 id=elf>ELF</h2><p>程序代码被编译和链接成包含二进制计算机指令的可执行文件。而可执行文件是有格式规范的，在 Linux 中，这个规范叫 Executable and Linkable format (ELF)。ELF 中包含二进制计算机指令、静态数据、元信息。</p><p>从ELF的全称可以看出，ELF文件有两个特性Executable可执行的和Linkable可链接的，对应的ELF文件有两种视角。</p><ul><li>Linking view链接视角，节头表（section header table）包含了链接时所需的信息，告诉操作系统如何链接可执行文件，完成进程内存的初始化。</li><li>Execution view执行视角，段头表（program header table）包含了运行时加载程序所需的信息，告诉操作系统如何加载可执行文件，完成进程内存的初始化。一个可执行的ELF一定有program header table。</li></ul><p><img src=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefinedtypical_elf.jpg loading=lazy></p><p>ELF有三种类型</p><ul><li>relocatable 可重定位文件</li><li>executable 可执行文件</li><li>shared object 共享对象文件</li></ul><h2 id=readelf>readelf</h2><p>c语言中结构体就是一片连续的内存，elf.h文件里的结构体实际上是对内存的一种映射。</p><p>我们在main.c中获得了一个指向ELF文件二进制数据的指针p，接着我们要实现的就是根据ELF文件的结构去解析这些二进制数据。</p><p>解析之前我们需要先判断这些二进制数据是不是ELF文件。</p><p>先假设这些数据是ELF格式的（将指针转换为我们定义的Elf32_Ehdr去读取ELF的文件头），ELF文件头里的e_ident就是用于告诉外界这是一个ELF文件的，我们只需要判断e_ident里是不是特定内容即可。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=kt>int</span> <span class=nf>is_elf_format</span><span class=p>(</span><span class=k>const</span> <span class=kt>void</span> <span class=o>*</span><span class=n>binary</span><span class=p>,</span> <span class=kt>size_t</span> <span class=n>size</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Ehdr</span> <span class=o>*</span><span class=n>ehdr</span> <span class=o>=</span> <span class=p>(</span><span class=n>Elf32_Ehdr</span> <span class=o>*</span><span class=p>)</span><span class=n>binary</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=n>size</span> <span class=o>&gt;=</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>Elf32_Ehdr</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=n>ehdr</span><span class=o>-&gt;</span><span class=n>e_ident</span><span class=p>[</span><span class=n>EI_MAG0</span><span class=p>]</span> <span class=o>==</span> <span class=n>ELFMAG0</span> <span class=o>&amp;&amp;</span>
+</span></span><span class=line><span class=cl>	       <span class=n>ehdr</span><span class=o>-&gt;</span><span class=n>e_ident</span><span class=p>[</span><span class=n>EI_MAG1</span><span class=p>]</span> <span class=o>==</span> <span class=n>ELFMAG1</span> <span class=o>&amp;&amp;</span> <span class=n>ehdr</span><span class=o>-&gt;</span><span class=n>e_ident</span><span class=p>[</span><span class=n>EI_MAG2</span><span class=p>]</span> <span class=o>==</span> <span class=n>ELFMAG2</span> <span class=o>&amp;&amp;</span>
+</span></span><span class=line><span class=cl>	       <span class=n>ehdr</span><span class=o>-&gt;</span><span class=n>e_ident</span><span class=p>[</span><span class=n>EI_MAG3</span><span class=p>]</span> <span class=o>==</span> <span class=n>ELFMAG3</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=k>typedef</span> <span class=k>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>char</span> <span class=n>e_ident</span><span class=p>[</span><span class=n>EI_NIDENT</span><span class=p>];</span> <span class=cm>/* Magic number and other info */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>e_type</span><span class=p>;</span>		  <span class=cm>/* Object file type */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>e_machine</span><span class=p>;</span>		  <span class=cm>/* Architecture */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>e_version</span><span class=p>;</span>		  <span class=cm>/* Object file version */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Addr</span> <span class=n>e_entry</span><span class=p>;</span>		  <span class=cm>/* Entry point virtual address */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Off</span> <span class=n>e_phoff</span><span class=p>;</span>		  <span class=cm>/* Program header table file offset */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Off</span> <span class=n>e_shoff</span><span class=p>;</span>		  <span class=cm>/* Section header table file offset */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>e_flags</span><span class=p>;</span>		  <span class=cm>/* Processor-specific flags */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>e_ehsize</span><span class=p>;</span>		  <span class=cm>/* ELF header size in bytes */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>e_phentsize</span><span class=p>;</span>		  <span class=cm>/* Program header table entry size */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>e_phnum</span><span class=p>;</span>		  <span class=cm>/* Program header table entry count */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>e_shentsize</span><span class=p>;</span>		  <span class=cm>/* Section header table entry size */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>e_shnum</span><span class=p>;</span>		  <span class=cm>/* Section header table entry count */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>e_shstrndx</span><span class=p>;</span>		  <span class=cm>/* Section header string table index */</span>
+</span></span><span class=line><span class=cl><span class=p>}</span> <span class=n>Elf32_Ehdr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/* Fields in the e_ident array.  The EI_* macros are indices into the
+</span></span></span><span class=line><span class=cl><span class=cm>   array.  The macros under each EI_* macro are the values the byte
+</span></span></span><span class=line><span class=cl><span class=cm>   may have.  */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#define EI_MAG0 0    </span><span class=cm>/* File identification byte 0 index */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#define ELFMAG0 0x7f </span><span class=cm>/* Magic number byte 0 */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#define EI_MAG1 1   </span><span class=cm>/* File identification byte 1 index */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#define ELFMAG1 &#39;E&#39; </span><span class=cm>/* Magic number byte 1 */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#define EI_MAG2 2   </span><span class=cm>/* File identification byte 2 index */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#define ELFMAG2 &#39;L&#39; </span><span class=cm>/* Magic number byte 2 */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#define EI_MAG3 3   </span><span class=cm>/* File identification byte 3 index */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#define ELFMAG3 &#39;F&#39; </span><span class=cm>/* Magic number byte 3 */</span><span class=cp>
+</span></span></span></code></pre></td></tr></table></div></div><p>知道了这些二进制数据是一个ELF格式的文件之后我们就可以解析了。课程组需要我们实现的是解析section header table，我们该如何找到section header table呢？显然ELF文件头里已经告诉我们了，且还告诉了我们tabel里有几个header，每个header有多大，我们只需要在当前指针加上一个偏移量即可找到section header table。</p><blockquote><p>为什么要把binary转换为char类型的指针？</p><p>假设偏移量为1，const void类型的指针不知道1指的是1字节还是1比特，而转换为char类型的指针指示就明确了偏移量的单位是一个char，即一字节。</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl>	<span class=c1>// Get the address of the section table, the number of section headers and the size of a
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// section header.
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>const</span> <span class=kt>void</span> <span class=o>*</span><span class=n>sh_table</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>sh_entry_count</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Half</span> <span class=n>sh_entry_size</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* Exercise 1.1: Your code here. (1/2) */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Off</span> <span class=n>sh_off</span> <span class=o>=</span> <span class=n>ehdr</span><span class=o>-&gt;</span><span class=n>e_shoff</span><span class=p>;</span> <span class=c1>// section header table file offset
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>sh_entry_count</span> <span class=o>=</span> <span class=n>ehdr</span><span class=o>-&gt;</span><span class=n>e_shnum</span><span class=p>;</span> <span class=c1>// table entry num
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>sh_entry_size</span> <span class=o>=</span> <span class=n>ehdr</span><span class=o>-&gt;</span><span class=n>e_shentsize</span><span class=p>;</span> <span class=c1>// size of each table entry 
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>sh_table</span> <span class=o>=</span> <span class=p>(</span><span class=k>const</span> <span class=kt>void</span> <span class=o>*</span><span class=p>)((</span><span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=n>binary</span> <span class=o>+</span> <span class=n>sh_off</span><span class=p>);</span> <span class=c1>// move to section header
+</span></span></span></code></pre></td></tr></table></div></div><p>找到section header table之后输出每个header的地址即可。需要注意的是结构体Elf32_Shdr映射的是一个section header，移动指针的时候需要转换指针类型确保每次移动一个header的长度。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl>	<span class=c1>// For each section header, output its index and the section address.
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// The index should start from 0.
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>sh_entry_count</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>const</span> <span class=n>Elf32_Shdr</span> <span class=o>*</span><span class=n>shdr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=cm>/* Exercise 1.1: Your code here. (2/2) */</span>
+</span></span><span class=line><span class=cl>		<span class=n>shdr</span> <span class=o>=</span> <span class=p>(</span><span class=k>const</span> <span class=n>Elf32_Shdr</span> <span class=o>*</span><span class=p>)</span><span class=n>sh_table</span> <span class=o>+</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=n>addr</span> <span class=o>=</span> <span class=n>shdr</span><span class=o>-&gt;</span><span class=n>sh_addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=nf>printf</span><span class=p>(</span><span class=s>&#34;%d:0x%x</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>i</span><span class=p>,</span> <span class=n>addr</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cm>/* Section segment header.  */</span>
+</span></span><span class=line><span class=cl><span class=k>typedef</span> <span class=k>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>sh_name</span><span class=p>;</span>	 <span class=cm>/* Section name */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>sh_type</span><span class=p>;</span>	 <span class=cm>/* Section type */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>sh_flags</span><span class=p>;</span>	 <span class=cm>/* Section flags */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Addr</span> <span class=n>sh_addr</span><span class=p>;</span>	 <span class=cm>/* Section addr */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Off</span> <span class=n>sh_offset</span><span class=p>;</span>	 <span class=cm>/* Section offset */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>sh_size</span><span class=p>;</span>	 <span class=cm>/* Section size */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>sh_link</span><span class=p>;</span>	 <span class=cm>/* Section link */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>sh_info</span><span class=p>;</span>	 <span class=cm>/* Section extra info */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>sh_addralign</span><span class=p>;</span> <span class=cm>/* Section alignment */</span>
+</span></span><span class=line><span class=cl>	<span class=n>Elf32_Word</span> <span class=n>sh_entsize</span><span class=p>;</span>	 <span class=cm>/* Section entry size */</span>
+</span></span><span class=line><span class=cl><span class=p>}</span> <span class=n>Elf32_Shdr</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=加载内核文件>加载内核文件</h2><p>了解了ELF格式之后，我们就要开始学习如何我们的mos操作系统内核了。</p><p>对于32位处理器，MIPS体系结构中的虚拟内存为4GB。</p><p>课程组已经贴心地给出了内存图，我们只需要把各部分放到正确的地址即可。</p><p>根据内存图，我们把.text放到kernel text处（0x80020000），.data和.bss依次放置即可。</p><ul><li><p>.text 保存可执行文件的操作指令。</p></li><li><p>.data 保存已初始化的全局变量和静态变量。</p></li><li><p>.bss 保存未初始化的全局变量和静态变量。</p></li></ul><p>.text .data .bss是ELF中比较重要的三个section。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm> o     4G -----------&gt;  +----------------------------+------------0x100000000
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |       ...                  |  kseg2
+</span></span></span><span class=line><span class=cl><span class=cm> o      KSEG2    -----&gt; +----------------------------+------------0xc000 0000
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |          Devices           |  kseg1
+</span></span></span><span class=line><span class=cl><span class=cm> o      KSEG1    -----&gt; +----------------------------+------------0xa000 0000
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |      Invalid Memory        |   /|\
+</span></span></span><span class=line><span class=cl><span class=cm> o                      +----------------------------+----|-------Physical Memory Max
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |       ...                  |  kseg0
+</span></span></span><span class=line><span class=cl><span class=cm> o      KSTACKTOP-----&gt; +----------------------------+----|-------0x8040 0000-------end
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |       Kernel Stack         |    | KSTKSIZE            /|\
+</span></span></span><span class=line><span class=cl><span class=cm> o                      +----------------------------+----|------                |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |       Kernel Text          |    |                    PDMAP
+</span></span></span><span class=line><span class=cl><span class=cm> o      KERNBASE -----&gt; +----------------------------+----|-------0x8002 0000    |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |      Exception Entry       |   \|/                    \|/
+</span></span></span><span class=line><span class=cl><span class=cm> o      ULIM     -----&gt; +----------------------------+------------0x8000 0000-------
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |         User VPT           |     PDMAP                /|\
+</span></span></span><span class=line><span class=cl><span class=cm> o      UVPT     -----&gt; +----------------------------+------------0x7fc0 0000    |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |           pages            |     PDMAP                 |
+</span></span></span><span class=line><span class=cl><span class=cm> o      UPAGES   -----&gt; +----------------------------+------------0x7f80 0000    |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |           envs             |     PDMAP                 |
+</span></span></span><span class=line><span class=cl><span class=cm> o  UTOP,UENVS   -----&gt; +----------------------------+------------0x7f40 0000    |
+</span></span></span><span class=line><span class=cl><span class=cm> o  UXSTACKTOP -/       |     user exception stack   |     PTMAP                 |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      +----------------------------+------------0x7f3f f000    |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |                            |     PTMAP                 |
+</span></span></span><span class=line><span class=cl><span class=cm> o      USTACKTOP ----&gt; +----------------------------+------------0x7f3f e000    |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |     normal user stack      |     PTMAP                 |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      +----------------------------+------------0x7f3f d000    |
+</span></span></span><span class=line><span class=cl><span class=cm> a                      |                            |                           |
+</span></span></span><span class=line><span class=cl><span class=cm> a                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                           |
+</span></span></span><span class=line><span class=cl><span class=cm> a                      .                            .                           |
+</span></span></span><span class=line><span class=cl><span class=cm> a                      .                            .                         kuseg
+</span></span></span><span class=line><span class=cl><span class=cm> a                      .                            .                           |
+</span></span></span><span class=line><span class=cl><span class=cm> a                      |~~~~~~~~~~~~~~~~~~~~~~~~~~~~|                           |
+</span></span></span><span class=line><span class=cl><span class=cm> a                      |                            |                           |
+</span></span></span><span class=line><span class=cl><span class=cm> o       UTEXT   -----&gt; +----------------------------+------------0x0040 0000    |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |      reserved for COW      |     PTMAP                 |
+</span></span></span><span class=line><span class=cl><span class=cm> o       UCOW    -----&gt; +----------------------------+------------0x003f f000    |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |   reversed for temporary   |     PTMAP                 |
+</span></span></span><span class=line><span class=cl><span class=cm> o       UTEMP   -----&gt; +----------------------------+------------0x003f e000    |
+</span></span></span><span class=line><span class=cl><span class=cm> o                      |       invalid memory       |                          \|/
+</span></span></span><span class=line><span class=cl><span class=cm> a     0 ------------&gt;  +----------------------------+ ----------------------------
+</span></span></span><span class=line><span class=cl><span class=cm> o
+</span></span></span><span class=line><span class=cl><span class=cm>*/</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>SECTIONS {
+	/* Exercise 3.10: Your code here. */
+
+	/* fill in the correct address of the key sections: text, data, bss. */
+	/* Hint: The loading address can be found in the memory layout. And the data section
+	 *       and bss section are right after the text section, so you can just define
+	 *       them after the text section.
+	 */
+	/* Step 1: Set the loading address of the text section to the location counter &quot;.&quot;. */
+	/* Exercise 1.2: Your code here. (1/4) */
+	. = 0x80020000;
+	/* Step 2: Define the text section. */
+	/* Exercise 1.2: Your code here. (2/4) */
+	.text : { *(.text) }
+	/* Step 3: Define the data section. */
+	/* Exercise 1.2: Your code here. (3/4) */
+	.data : { *(.data) }
+	bss_start = .;
+	/* Step 4: Define the bss section. */
+	/* Exercise 1.2: Your code here. (4/4) */
+	.bss : { *(.bss) }
+	bss_end = .;
+	. = 0x80400000;
+	end = . ;
+}
+</code></pre><p>其实内存布局并不像内存图画的那样界限分明，.text放到其他地方也是可以正常运行的，比如把.text放到0x80010000也是可以正常运行的，不过最好遵循课程组的要求。</p><p><img src=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefined%E6%88%AA%E5%B1%8F2025-03-17%2020.48.42.png loading=lazy></p><h2 id=内核入口>内核入口</h2><p>在把对应的section加载到正确的位置后，我们需要考虑如何启动内核。第一步当然是找到内核的入口了。</p><p>打开init目录下的start.S，补全我们的代码，将 sp 寄存器设置到内核栈空间的位置上，随后跳转到 mips_init 函数。</p><p>在kernel.lds文件中我们看到这样一行，其作用是告诉链接器程序的入口地址，即程序执行的第一条指令的地址。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>ENTRY(_start)
+</span></span></code></pre></td></tr></table></div></div><p>那么这个_start在哪呢？在start.S文件中我们看到这样一行，其作用是声明一个全局符号_start，使链接器能找到_start。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>EXPORT(_start)
+</span></span></code></pre></td></tr></table></div></div><p>在include/asm/asm.h文件下我们可以看到EXPORT宏的展开形式。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#define EXPORT(symbol)                                                                             \
+</span></span></span><span class=line><span class=cl><span class=cp>	.globl symbol;                                                                             \
+</span></span></span><span class=line><span class=cl><span class=cp>	symbol:
+</span></span></span></code></pre></td></tr></table></div></div><p>继续往下看，我们看到以下两行代码</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>.set at
+</span></span><span class=line><span class=cl>.set reorder
+</span></span></code></pre></td></tr></table></div></div><p>在上学期的co中，我们在mars里一定看到过一个叫$at的寄存器，其全称是<strong>Assembler Temporary</strong>，即临时寄存器。</p><p>在mips中有一些指令本身并不是 MIPS 硬件支持的原生指令，而是由汇编器自动翻译成一条或多条真正的 MIPS 指令。比如<code>li</code>指令。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>li $t0, 0x12345678  # 伪指令
+</span></span></code></pre></td></tr></table></div></div><p>这条指令会被汇编器翻译为</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>lui $at, 0x1234
+</span></span><span class=line><span class=cl>ori $t0, $at, 0x5678
+</span></span></code></pre></td></tr></table></div></div><p>这里就用到了at寄存器。<code>.set at</code>指令就是告诉汇编器允许使用at寄存器进行伪指令展开。如果使用了<code>.set noat</code>，那么汇编器再遇到需要使用到at寄存器的伪指令时会报错。</p><p>在co中我们对流水线印象深刻。我们知道一些指令会在不影响结果的情况下被放到延迟槽里执行，这项工作也是由汇编器来完成的，<code>.set reorder</code>指令就是允许汇编器对指令进行重排的，我们也可以使用<code>.set noreorder</code>来禁止汇编器的重排行为。</p><p>完成了一些初始化设置之后，start.S文件会先对.bss区域进行清零操作，即未初始化的全局变量和静态变量初始值为0。这里我们回顾一下c语言中的变量类型。</p><ul><li>static类型的int变量存储在.bss（未初始化）和.data（已初始化）生命周期是从主程序的开始到结束，我们每次调用func函数变量c和d都会自增1。需要注意的是，虽然它们的生命周期是整个程序的运行周期，但它们只在其定义的函数内可访问。</li><li>普通类型的int变量存储在栈上，其生命周期是从函数的开始到结束，每次进入 <code>func()</code> 时会重新分配内存，并在函数返回时销毁。</li><li>普通类型的变量如何没有初始化其数值是不确定的，static类型的变量如果未初始化其数值默认为0。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#include</span><span class=cpf>&lt;stdio.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=kt>int</span> <span class=n>a</span> <span class=o>=</span> <span class=mi>5</span><span class=p>;</span>	<span class=c1>// staged in .data
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>int</span> <span class=n>b</span><span class=p>;</span>		<span class=c1>// staged in .bss
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>func</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>static</span> <span class=kt>int</span> <span class=n>c</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>	<span class=c1>// staged in .data
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>c</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>static</span> <span class=kt>int</span> <span class=n>d</span><span class=p>;</span>		<span class=c1>// staged in .bss
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>d</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>e</span> <span class=o>=</span> <span class=mi>7</span><span class=p>;</span>		<span class=c1>// staged in stack
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>e</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>f</span><span class=p>;</span>			<span class=c1>// staged in stack
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>f</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printf</span><span class=p>(</span><span class=s>&#34;c is %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>c</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printf</span><span class=p>(</span><span class=s>&#34;d is %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>d</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printf</span><span class=p>(</span><span class=s>&#34;e is %d</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>e</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printf</span><span class=p>(</span><span class=s>&#34;f is %d</span><span class=se>\n\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>f</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nf>func</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>	<span class=nf>func</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>	<span class=nf>func</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>	<span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>git@23373112:~/learnClang $ gcc main.c -o main <span class=o>&amp;&amp;</span> ./main
+</span></span><span class=line><span class=cl>c is <span class=m>2</span>
+</span></span><span class=line><span class=cl>d is <span class=m>1</span>
+</span></span><span class=line><span class=cl>e is <span class=m>8</span>
+</span></span><span class=line><span class=cl>f is <span class=m>32677</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>c is <span class=m>3</span>
+</span></span><span class=line><span class=cl>d is <span class=m>2</span>
+</span></span><span class=line><span class=cl>e is <span class=m>8</span>
+</span></span><span class=line><span class=cl>f is <span class=m>32678</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>c is <span class=m>4</span>
+</span></span><span class=line><span class=cl>d is <span class=m>3</span>
+</span></span><span class=line><span class=cl>e is <span class=m>8</span>
+</span></span><span class=line><span class=cl>f is <span class=m>32679</span>
+</span></span></code></pre></td></tr></table></div></div><p>.bss清零结束之后，程序会先把CP0状态置为0禁用中断，确保内核的初始化不会被打断，然后把栈指针放到正确的位置，最后跳转到mips_init（init/init.c文件中），对于lab1，mips_init只有打印的功能。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=kt>void</span> <span class=nf>mips_init</span><span class=p>(</span><span class=n>u_int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>**</span><span class=n>argv</span><span class=p>,</span> <span class=kt>char</span> <span class=o>**</span><span class=n>penv</span><span class=p>,</span> <span class=n>u_int</span> <span class=n>ram_low_size</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printk</span><span class=p>(</span><span class=s>&#34;init.c:</span><span class=se>\t</span><span class=s>mips_init() is called</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// lab2:
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// mips_detect_memory(ram_low_size);
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// mips_vm_init();
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// page_init();
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=c1>// lab3:
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// env_init();
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=c1>// lab3:
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ENV_CREATE_PRIORITY(user_bare_loop, 1);
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ENV_CREATE_PRIORITY(user_bare_loop, 2);
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=c1>// lab4:
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ENV_CREATE(user_tltest);
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ENV_CREATE(user_fktest);
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ENV_CREATE(user_pingpong);
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=c1>// lab6:
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ENV_CREATE(user_icode);  // This must be the first env!
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=c1>// lab5:
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ENV_CREATE(user_fstest);
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ENV_CREATE(fs_serv);  // This must be the second env!
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// ENV_CREATE(user_devtst);
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=c1>// lab3:
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=c1>// schedule(0);
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nf>halt</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>我们在内存图中可以找到kernel stack的位置，但是为什么栈帧要设置在kernel stack的栈顶（KSTACKTOP = 0x8004000）？</p><p>进程地址的分布取决于操作系统，栈向什么方向增长取决于操作系统与CPU的组合。</p><p>是否还记得上学期计算机组成原理中mips是如何在调用函数前保护和恢复寄存器的，是先$sp自减再$sp自增，表明对于mips指令集栈的生长方向是由高地址向低地址生长的。</p><p>至于为什么要这样设定，更多的是历史原因，许多早期处理器在基址寄存器寻址时仅支持无符号偏移，因此如果栈向低地址增长，相对栈指针的地址计算更高效。</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;asm/asm.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;mmu.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=p>.</span><span class=n>text</span>
+</span></span><span class=line><span class=cl><span class=nf>EXPORT</span><span class=p>(</span><span class=n>_start</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>.</span><span class=n>set</span> <span class=n>at</span>
+</span></span><span class=line><span class=cl><span class=p>.</span><span class=n>set</span> <span class=n>reorder</span>
+</span></span><span class=line><span class=cl><span class=cm>/* Lab 1 Key Code &#34;enter-kernel&#34; */</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* clear .bss segment */</span>
+</span></span><span class=line><span class=cl>	<span class=n>la</span>      <span class=n>v0</span><span class=p>,</span> <span class=n>bss_start</span>
+</span></span><span class=line><span class=cl>	<span class=n>la</span>      <span class=n>v1</span><span class=p>,</span> <span class=n>bss_end</span>
+</span></span><span class=line><span class=cl><span class=nl>clear_bss_loop</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>	<span class=n>beq</span>     <span class=n>v0</span><span class=p>,</span> <span class=n>v1</span><span class=p>,</span> <span class=n>clear_bss_done</span>
+</span></span><span class=line><span class=cl>	<span class=n>sb</span>      <span class=n>zero</span><span class=p>,</span> <span class=mi>0</span><span class=p>(</span><span class=n>v0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=n>addiu</span>   <span class=n>v0</span><span class=p>,</span> <span class=n>v0</span><span class=p>,</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>	<span class=n>j</span>       <span class=n>clear_bss_loop</span>
+</span></span><span class=line><span class=cl><span class=cm>/* End of Key Code &#34;enter-kernel&#34; */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nl>clear_bss_done</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* disable interrupts */</span>
+</span></span><span class=line><span class=cl>	<span class=n>mtc0</span>    <span class=n>zero</span><span class=p>,</span> <span class=n>CP0_STATUS</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/* hint: you can refer to the memory layout in include/mmu.h */</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* set up the kernel stack */</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* Exercise 1.3: Your code here. (1/2) */</span>
+</span></span><span class=line><span class=cl>	<span class=n>la</span> <span class=n>sp</span><span class=p>,</span> <span class=n>KSTACKTOP</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* jump to mips_init */</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* Exercise 1.3: Your code here. (2/2) */</span>
+</span></span><span class=line><span class=cl>	<span class=n>j</span> <span class=n>mips_init</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=printk>printk</h2><h3 id=调用链>调用链</h3><p>完成了之前的工作，我们的内核已经能正常启动了，现在要做的是实现打印功能，即完成printk函数，使mips_init中的printk函数能正确被调用。</p><p>观察init.c的头文件声明部分。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;asm/asm.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;env.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;pmap.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;printk.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;sched.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;trap.h&gt;</span><span class=cp>
+</span></span></span></code></pre></td></tr></table></div></div><p>显然printk函数的声明在printk.h文件中，下面我们来分析printk.h代码。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp># include/printk.h
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#ifndef _printk_h_
+</span></span></span><span class=line><span class=cl><span class=cp>#define _printk_h_
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;machine.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdarg.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>printk</span><span class=p>(</span><span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>fmt</span><span class=p>,</span> <span class=p>...);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>_panic</span><span class=p>(</span><span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=p>,</span> <span class=kt>int</span><span class=p>,</span> <span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=p>,</span> <span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=p>,</span> <span class=p>...)</span>
+</span></span><span class=line><span class=cl><span class=cp>#ifdef MOS_HANG_ON_PANIC
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=nf>__attribute__</span><span class=p>((</span><span class=n>noreturn</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#define panic(...) _panic(__FILE__, __LINE__, __func__, __VA_ARGS__)
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#define panic_on(expr)                                                                             \
+</span></span></span><span class=line><span class=cl><span class=cp>	do {                                                                                       \
+</span></span></span><span class=line><span class=cl><span class=cp>		int _r = (expr);                                                                   \
+</span></span></span><span class=line><span class=cl><span class=cp>		if (_r != 0) {                                                                     \
+</span></span></span><span class=line><span class=cl><span class=cp>			panic(&#34;&#39;&#34; #expr &#34;&#39; returned %d&#34;, _r);                                      \
+</span></span></span><span class=line><span class=cl><span class=cp>		}                                                                                  \
+</span></span></span><span class=line><span class=cl><span class=cp>	} while (0)
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#endif </span><span class=cm>/* _printk_h_ */</span><span class=cp>
+</span></span></span></code></pre></td></tr></table></div></div><p>头文件声明部分</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp>#ifndef _printk_h_
+</span></span></span><span class=line><span class=cl><span class=cp>#define _printk_h_
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1>// 头文件内容
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=cp>#endif </span><span class=cm>/* _printk_h_ */</span><span class=cp>
+</span></span></span></code></pre></td></tr></table></div></div><p>如果_printk_h_没有被定义则定义_printk_h_，避免重复头文件被重复包含。</p><p>函数声明部分，panic函数是用来处理错误的函数，这里不做过多的解释。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=kt>void</span> <span class=nf>printk</span><span class=p>(</span><span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>fmt</span><span class=p>,</span> <span class=p>...);</span>
+</span></span></code></pre></td></tr></table></div></div><p>在开发与操作系统内核相关的项目，<code>printk</code> 是内核提供的函数（其中k就是kernel的意思）。此处只有声明没有实现，具体实现在kern/printk.c中。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp># kern/printk.c
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;print.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;printk.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;trap.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cm>/* Lab 1 Key Code &#34;outputk&#34; */</span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>outputk</span><span class=p>(</span><span class=kt>void</span> <span class=o>*</span><span class=n>data</span><span class=p>,</span> <span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>buf</span><span class=p>,</span> <span class=kt>size_t</span> <span class=n>len</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nf>printcharc</span><span class=p>(</span><span class=n>buf</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/* End of Key Code &#34;outputk&#34; */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/* Lab 1 Key Code &#34;printk&#34; */</span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>printk</span><span class=p>(</span><span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>fmt</span><span class=p>,</span> <span class=p>...)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=n>va_list</span> <span class=n>ap</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=nf>va_start</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=n>fmt</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>vprintfmt</span><span class=p>(</span><span class=n>outputk</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=n>fmt</span><span class=p>,</span> <span class=n>ap</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>va_end</span><span class=p>(</span><span class=n>ap</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cm>/* End of Key Code &#34;printk&#34; */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>print_tf</span><span class=p>(</span><span class=k>struct</span> <span class=n>Trapframe</span> <span class=o>*</span><span class=n>tf</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>tf</span><span class=o>-&gt;</span><span class=n>regs</span><span class=p>)</span> <span class=o>/</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>tf</span><span class=o>-&gt;</span><span class=n>regs</span><span class=p>[</span><span class=mi>0</span><span class=p>]);</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nf>printk</span><span class=p>(</span><span class=s>&#34;$%2d = %08x</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>i</span><span class=p>,</span> <span class=n>tf</span><span class=o>-&gt;</span><span class=n>regs</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printk</span><span class=p>(</span><span class=s>&#34;HI  = %08x</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>tf</span><span class=o>-&gt;</span><span class=n>hi</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printk</span><span class=p>(</span><span class=s>&#34;LO  = %08x</span><span class=se>\n\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>tf</span><span class=o>-&gt;</span><span class=n>lo</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printk</span><span class=p>(</span><span class=s>&#34;CP0.SR    = %08x</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>tf</span><span class=o>-&gt;</span><span class=n>cp0_status</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printk</span><span class=p>(</span><span class=s>&#34;CP0.BadV  = %08x</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>tf</span><span class=o>-&gt;</span><span class=n>cp0_badvaddr</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printk</span><span class=p>(</span><span class=s>&#34;CP0.Cause = %08x</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>tf</span><span class=o>-&gt;</span><span class=n>cp0_cause</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>printk</span><span class=p>(</span><span class=s>&#34;CP0.EPC   = %08x</span><span class=se>\n</span><span class=s>&#34;</span><span class=p>,</span> <span class=n>tf</span><span class=o>-&gt;</span><span class=n>cp0_epc</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>然后我们发现printk函数又调用了vprintfmt函数，继续跳转到vprintfmt的实现（include/print.h）。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp># include/print.h
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#ifndef _print_h_
+</span></span></span><span class=line><span class=cl><span class=cp>#define _print_h_
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;stdarg.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;types.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=k>typedef</span> <span class=nf>void</span> <span class=p>(</span><span class=o>*</span><span class=kt>fmt_callback_t</span><span class=p>)(</span><span class=kt>void</span> <span class=o>*</span><span class=n>data</span><span class=p>,</span> <span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>buf</span><span class=p>,</span> <span class=kt>size_t</span> <span class=n>len</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/* Lab 1 Key Code &#34;vprintfmt-overview&#34; */</span>
+</span></span><span class=line><span class=cl><span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm> * &#39;vprintfmt&#39; is a formatting function that allows different backends (i.e., output sinks)
+</span></span></span><span class=line><span class=cl><span class=cm> * to be used for printing. It takes four arguments:
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * - &#39;fmt_callback_t out&#39;: a function pointer to the output sink that receives the
+</span></span></span><span class=line><span class=cl><span class=cm> *   formatted output generated by &#39;vprintfmt&#39;.
+</span></span></span><span class=line><span class=cl><span class=cm> * - &#39;void *data&#39;: a context pointer passed to the &#39;out&#39; callback function. It can be used
+</span></span></span><span class=line><span class=cl><span class=cm> *   to store additional output sink-specific data.
+</span></span></span><span class=line><span class=cl><span class=cm> * - &#39;const char *fmt&#39;: the format string, similar to the format string in &#39;printf&#39;.
+</span></span></span><span class=line><span class=cl><span class=cm> * - &#39;va_list ap&#39;: a variadic argument list that provides the arguments to be formatted.
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * The format callback function &#39;out&#39; receives the following arguments:
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * - &#39;void *data&#39;: the same &#39;data&#39; pointer passed to &#39;vprintfmt&#39;.
+</span></span></span><span class=line><span class=cl><span class=cm> * - &#39;const char *buf&#39;: a pointer to a buffer containing the formatted output.
+</span></span></span><span class=line><span class=cl><span class=cm> * - &#39;size_t len&#39;: the number of bytes in the buffer.
+</span></span></span><span class=line><span class=cl><span class=cm> *
+</span></span></span><span class=line><span class=cl><span class=cm> * Note that the buffer may not be null-terminated and may contain embedded null bytes,
+</span></span></span><span class=line><span class=cl><span class=cm> * so the output sink should treat &#39;len&#39; as the actual length of the buffer to print.
+</span></span></span><span class=line><span class=cl><span class=cm> */</span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>vprintfmt</span><span class=p>(</span><span class=kt>fmt_callback_t</span> <span class=n>out</span><span class=p>,</span> <span class=kt>void</span> <span class=o>*</span><span class=n>data</span><span class=p>,</span> <span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>fmt</span><span class=p>,</span> <span class=n>va_list</span> <span class=n>ap</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cm>/* End of Key Code &#34;vprintfmt-overview&#34; */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span></code></pre></td></tr></table></div></div><p>typedef 定义了一个名为 <code>fmt_callback_t</code> 的类型，它是一个函数指针类型，指向一个接受 <code>void *data</code>、<code>const char *buf</code> 和 <code>size_t len</code> 作为参数的函数。</p><p>截止又是只声明了vprintfmt函数但是没有实现，我们继续找，在lib目录下的print.c文件中我们终于找到了vprintfmt的实现，也正是我们需要填空的部分。</p><p>先解释下函数名vprintfmt，v代表"variadic"（可变参数），fmt代表format格式化，即这是一个支持可变参数并且进行格式化输出的函数。</p><p>再来看vprintfmt的传入参数</p><ul><li><code>fmt_callback_t out</code>回调函数，往前追溯我们发现这个参数在调用时传入的是outputk函数，即遍历buf，每次输出一个char。我们可以理解为一个无格式好打印字符串的函数。</li><li><code>void *data</code>指向任意类型的指针，可以用于传递给回调函数的上下文信息。在回调函数中，<code>data</code> 可以用来存储或传递与输出相关的附加数据（比如输出目的地、日志上下文等），但是在lab1中并没有涉及相关处理。</li><li><code>const char *fmt</code>格式化字符串，也就是类似"a is %d"这样带有%d等占位符的字符串。</li><li><code>va_list ap</code>可变参数列表，包含我们用来替换占位符的数据。</li></ul><p>我们要做的就是解析格式化字符串fmt，将其中<code>%[flags][width][length]&lt;specifier></code>形式的格式符替换为正确的字符串，具体代码如下，遇到<code>%</code>就将之前的字符串输出，然后解析格式符利用已有函数输出（print_num、print_char等等），直到遇到<code>\0</code>结束循环。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span><span class=lnt>203
+</span><span class=lnt>204
+</span><span class=lnt>205
+</span><span class=lnt>206
+</span><span class=lnt>207
+</span><span class=lnt>208
+</span><span class=lnt>209
+</span><span class=lnt>210
+</span><span class=lnt>211
+</span><span class=lnt>212
+</span><span class=lnt>213
+</span><span class=lnt>214
+</span><span class=lnt>215
+</span><span class=lnt>216
+</span><span class=lnt>217
+</span><span class=lnt>218
+</span><span class=lnt>219
+</span><span class=lnt>220
+</span><span class=lnt>221
+</span><span class=lnt>222
+</span><span class=lnt>223
+</span><span class=lnt>224
+</span><span class=lnt>225
+</span><span class=lnt>226
+</span><span class=lnt>227
+</span><span class=lnt>228
+</span><span class=lnt>229
+</span><span class=lnt>230
+</span><span class=lnt>231
+</span><span class=lnt>232
+</span><span class=lnt>233
+</span><span class=lnt>234
+</span><span class=lnt>235
+</span><span class=lnt>236
+</span><span class=lnt>237
+</span><span class=lnt>238
+</span><span class=lnt>239
+</span><span class=lnt>240
+</span><span class=lnt>241
+</span><span class=lnt>242
+</span><span class=lnt>243
+</span><span class=lnt>244
+</span><span class=lnt>245
+</span><span class=lnt>246
+</span><span class=lnt>247
+</span><span class=lnt>248
+</span><span class=lnt>249
+</span><span class=lnt>250
+</span><span class=lnt>251
+</span><span class=lnt>252
+</span><span class=lnt>253
+</span><span class=lnt>254
+</span><span class=lnt>255
+</span><span class=lnt>256
+</span><span class=lnt>257
+</span><span class=lnt>258
+</span><span class=lnt>259
+</span><span class=lnt>260
+</span><span class=lnt>261
+</span><span class=lnt>262
+</span><span class=lnt>263
+</span><span class=lnt>264
+</span><span class=lnt>265
+</span><span class=lnt>266
+</span><span class=lnt>267
+</span><span class=lnt>268
+</span><span class=lnt>269
+</span><span class=lnt>270
+</span><span class=lnt>271
+</span><span class=lnt>272
+</span><span class=lnt>273
+</span><span class=lnt>274
+</span><span class=lnt>275
+</span><span class=lnt>276
+</span><span class=lnt>277
+</span><span class=lnt>278
+</span><span class=lnt>279
+</span><span class=lnt>280
+</span><span class=lnt>281
+</span><span class=lnt>282
+</span><span class=lnt>283
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=cp># lib/print.c
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;print.h&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cm>/* forward declaration */</span>
+</span></span><span class=line><span class=cl><span class=k>static</span> <span class=kt>void</span> <span class=nf>print_char</span><span class=p>(</span><span class=kt>fmt_callback_t</span><span class=p>,</span> <span class=kt>void</span> <span class=o>*</span><span class=p>,</span> <span class=kt>char</span><span class=p>,</span> <span class=kt>int</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=k>static</span> <span class=kt>void</span> <span class=nf>print_str</span><span class=p>(</span><span class=kt>fmt_callback_t</span><span class=p>,</span> <span class=kt>void</span> <span class=o>*</span><span class=p>,</span> <span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=p>,</span> <span class=kt>int</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=k>static</span> <span class=kt>void</span> <span class=nf>print_num</span><span class=p>(</span><span class=kt>fmt_callback_t</span><span class=p>,</span> <span class=kt>void</span> <span class=o>*</span><span class=p>,</span> <span class=kt>unsigned</span> <span class=kt>long</span><span class=p>,</span> <span class=kt>int</span><span class=p>,</span> <span class=kt>int</span><span class=p>,</span> <span class=kt>int</span><span class=p>,</span> <span class=kt>int</span><span class=p>,</span> <span class=kt>char</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>vprintfmt</span><span class=p>(</span><span class=kt>fmt_callback_t</span> <span class=n>out</span><span class=p>,</span> <span class=kt>void</span> <span class=o>*</span><span class=n>data</span><span class=p>,</span> <span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>fmt</span><span class=p>,</span> <span class=n>va_list</span> <span class=n>ap</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=kt>char</span> <span class=n>c</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>s</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>long</span> <span class=n>num</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>width</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>long_flag</span><span class=p>;</span> <span class=c1>// output is long (rather than int)
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=kt>int</span> <span class=n>neg_flag</span><span class=p>;</span>  <span class=c1>// output is negative
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=kt>int</span> <span class=n>ladjust</span><span class=p>;</span>   <span class=c1>// output is left-aligned
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=kt>char</span> <span class=n>padc</span><span class=p>;</span>     <span class=c1>// padding char
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=k>for</span> <span class=p>(;;)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=cm>/* scan for the next &#39;%&#39; */</span>
+</span></span><span class=line><span class=cl>		<span class=cm>/* Exercise 1.4: Your code here. (1/8) */</span>
+</span></span><span class=line><span class=cl>		<span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>p</span> <span class=o>=</span> <span class=n>fmt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>while</span> <span class=p>(</span><span class=o>*</span><span class=n>p</span> <span class=o>!=</span> <span class=sc>&#39;%&#39;</span> <span class=o>&amp;&amp;</span> <span class=o>*</span><span class=n>p</span> <span class=o>!=</span> <span class=sc>&#39;\0&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=n>p</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=cm>/* flush the string found so far */</span>
+</span></span><span class=line><span class=cl>		<span class=cm>/* Exercise 1.4: Your code here. (2/8) */</span>
+</span></span><span class=line><span class=cl>		<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=n>fmt</span><span class=p>,</span> <span class=n>p</span> <span class=o>-</span> <span class=n>fmt</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=n>fmt</span> <span class=o>=</span> <span class=n>p</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=cm>/* check &#34;are we hitting the end?&#34; */</span>
+</span></span><span class=line><span class=cl>		<span class=cm>/* Exercise 1.4: Your code here. (3/8) */</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=o>*</span><span class=n>fmt</span> <span class=o>==</span> <span class=sc>&#39;\0&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=cm>/* we found a &#39;%&#39; */</span>
+</span></span><span class=line><span class=cl>		<span class=cm>/* Exercise 1.4: Your code here. (4/8) */</span>
+</span></span><span class=line><span class=cl>		<span class=n>fmt</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=cm>/* check format flag */</span>
+</span></span><span class=line><span class=cl>		<span class=cm>/* Exercise 1.4: Your code here. (5/8) */</span>
+</span></span><span class=line><span class=cl>		<span class=n>ladjust</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=n>padc</span> <span class=o>=</span> <span class=sc>&#39; &#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=o>*</span><span class=n>fmt</span> <span class=o>==</span> <span class=sc>&#39;-&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=n>ladjust</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=n>fmt</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=o>*</span><span class=n>fmt</span> <span class=o>==</span> <span class=sc>&#39;0&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=n>padc</span> <span class=o>=</span> <span class=sc>&#39;0&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=n>fmt</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=cm>/* get width */</span>
+</span></span><span class=line><span class=cl>		<span class=cm>/* Exercise 1.4: Your code here. (6/8) */</span>
+</span></span><span class=line><span class=cl>		<span class=n>width</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>while</span> <span class=p>(</span><span class=o>*</span><span class=n>fmt</span> <span class=o>&gt;=</span> <span class=sc>&#39;0&#39;</span> <span class=o>&amp;&amp;</span> <span class=o>*</span><span class=n>fmt</span> <span class=o>&lt;=</span> <span class=sc>&#39;9&#39;</span> <span class=o>&amp;&amp;</span> <span class=o>*</span><span class=n>fmt</span> <span class=o>!=</span> <span class=sc>&#39;\0&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=n>width</span> <span class=o>*=</span> <span class=mi>10</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=n>width</span> <span class=o>+=</span> <span class=o>*</span><span class=n>fmt</span> <span class=o>-</span> <span class=sc>&#39;0&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=n>fmt</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=cm>/* check for long */</span>
+</span></span><span class=line><span class=cl>		<span class=cm>/* Exercise 1.4: Your code here. (7/8) */</span>
+</span></span><span class=line><span class=cl>		<span class=n>long_flag</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=o>*</span><span class=n>fmt</span> <span class=o>==</span> <span class=sc>&#39;l&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=n>long_flag</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=n>fmt</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=n>neg_flag</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>switch</span> <span class=p>(</span><span class=o>*</span><span class=n>fmt</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;b&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>long_flag</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>long</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>			<span class=nf>print_num</span><span class=p>(</span><span class=n>out</span><span class=p>,</span> <span class=n>data</span><span class=p>,</span> <span class=n>num</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>width</span><span class=p>,</span> <span class=n>ladjust</span><span class=p>,</span> <span class=n>padc</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;d&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;D&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>long_flag</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>long</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>			<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>			 * Refer to other parts (case &#39;b&#39;, case &#39;o&#39;, etc.) and func &#39;print_num&#39; to
+</span></span></span><span class=line><span class=cl><span class=cm>			 * complete this part. Think the differences between case &#39;d&#39; and the
+</span></span></span><span class=line><span class=cl><span class=cm>			 * others. (hint: &#39;neg_flag&#39;).
+</span></span></span><span class=line><span class=cl><span class=cm>			 */</span>
+</span></span><span class=line><span class=cl>			<span class=cm>/* Exercise 1.4: Your code here. (8/8) */</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>num</span> <span class=o>&lt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>neg_flag</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=o>-</span><span class=n>num</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>			<span class=nf>print_num</span><span class=p>(</span><span class=n>out</span><span class=p>,</span> <span class=n>data</span><span class=p>,</span> <span class=n>num</span><span class=p>,</span> <span class=mi>10</span><span class=p>,</span> <span class=n>neg_flag</span><span class=p>,</span> <span class=n>width</span><span class=p>,</span> <span class=n>ladjust</span><span class=p>,</span> <span class=n>padc</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;o&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;O&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>long_flag</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>long</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>			<span class=nf>print_num</span><span class=p>(</span><span class=n>out</span><span class=p>,</span> <span class=n>data</span><span class=p>,</span> <span class=n>num</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>width</span><span class=p>,</span> <span class=n>ladjust</span><span class=p>,</span> <span class=n>padc</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;u&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;U&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>long_flag</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>long</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>			<span class=nf>print_num</span><span class=p>(</span><span class=n>out</span><span class=p>,</span> <span class=n>data</span><span class=p>,</span> <span class=n>num</span><span class=p>,</span> <span class=mi>10</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>width</span><span class=p>,</span> <span class=n>ladjust</span><span class=p>,</span> <span class=n>padc</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;x&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>long_flag</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>long</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>			<span class=nf>print_num</span><span class=p>(</span><span class=n>out</span><span class=p>,</span> <span class=n>data</span><span class=p>,</span> <span class=n>num</span><span class=p>,</span> <span class=mi>16</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>width</span><span class=p>,</span> <span class=n>ladjust</span><span class=p>,</span> <span class=n>padc</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;X&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>long_flag</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>long</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>				<span class=n>num</span> <span class=o>=</span> <span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=p>}</span>
+</span></span><span class=line><span class=cl>			<span class=nf>print_num</span><span class=p>(</span><span class=n>out</span><span class=p>,</span> <span class=n>data</span><span class=p>,</span> <span class=n>num</span><span class=p>,</span> <span class=mi>16</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>width</span><span class=p>,</span> <span class=n>ladjust</span><span class=p>,</span> <span class=n>padc</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;c&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=n>c</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span><span class=p>)</span><span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>int</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=nf>print_char</span><span class=p>(</span><span class=n>out</span><span class=p>,</span> <span class=n>data</span><span class=p>,</span> <span class=n>c</span><span class=p>,</span> <span class=n>width</span><span class=p>,</span> <span class=n>ladjust</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;s&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=n>s</span> <span class=o>=</span> <span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=p>)</span><span class=nf>va_arg</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=kt>char</span> <span class=o>*</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=nf>print_str</span><span class=p>(</span><span class=n>out</span><span class=p>,</span> <span class=n>data</span><span class=p>,</span> <span class=n>s</span><span class=p>,</span> <span class=n>width</span><span class=p>,</span> <span class=n>ladjust</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>case</span> <span class=sc>&#39;\0&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=n>fmt</span><span class=o>--</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=k>default</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			<span class=cm>/* output this char as it is */</span>
+</span></span><span class=line><span class=cl>			<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=n>fmt</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=n>fmt</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cm>/* --------------- local help functions --------------------- */</span>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>print_char</span><span class=p>(</span><span class=kt>fmt_callback_t</span> <span class=n>out</span><span class=p>,</span> <span class=kt>void</span> <span class=o>*</span><span class=n>data</span><span class=p>,</span> <span class=kt>char</span> <span class=n>c</span><span class=p>,</span> <span class=kt>int</span> <span class=n>length</span><span class=p>,</span> <span class=kt>int</span> <span class=n>ladjust</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=n>length</span> <span class=o>&lt;</span> <span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=n>length</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>const</span> <span class=kt>char</span> <span class=n>space</span> <span class=o>=</span> <span class=sc>&#39; &#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=n>ladjust</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>c</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>length</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>space</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>space</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>c</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>print_str</span><span class=p>(</span><span class=kt>fmt_callback_t</span> <span class=n>out</span><span class=p>,</span> <span class=kt>void</span> <span class=o>*</span><span class=n>data</span><span class=p>,</span> <span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>s</span><span class=p>,</span> <span class=kt>int</span> <span class=n>length</span><span class=p>,</span> <span class=kt>int</span> <span class=n>ladjust</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>len</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>s1</span> <span class=o>=</span> <span class=n>s</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>while</span> <span class=p>(</span><span class=o>*</span><span class=n>s1</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=n>len</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=n>length</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=n>length</span> <span class=o>=</span> <span class=n>len</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=n>ladjust</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=n>s</span><span class=p>,</span> <span class=n>len</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=n>len</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>length</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=s>&#34; &#34;</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>length</span> <span class=o>-</span> <span class=n>len</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=s>&#34; &#34;</span><span class=p>,</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=n>s</span><span class=p>,</span> <span class=n>len</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>void</span> <span class=nf>print_num</span><span class=p>(</span><span class=kt>fmt_callback_t</span> <span class=n>out</span><span class=p>,</span> <span class=kt>void</span> <span class=o>*</span><span class=n>data</span><span class=p>,</span> <span class=kt>unsigned</span> <span class=kt>long</span> <span class=n>u</span><span class=p>,</span> <span class=kt>int</span> <span class=n>base</span><span class=p>,</span> <span class=kt>int</span> <span class=n>neg_flag</span><span class=p>,</span> <span class=kt>int</span> <span class=n>length</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>	       <span class=kt>int</span> <span class=n>ladjust</span><span class=p>,</span> <span class=kt>char</span> <span class=n>padc</span><span class=p>,</span> <span class=kt>int</span> <span class=n>upcase</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* algorithm :
+</span></span></span><span class=line><span class=cl><span class=cm>	 *  1. prints the number from left to right in reverse form.
+</span></span></span><span class=line><span class=cl><span class=cm>	 *  2. fill the remaining spaces with padc if length is longer than
+</span></span></span><span class=line><span class=cl><span class=cm>	 *     the actual length
+</span></span></span><span class=line><span class=cl><span class=cm>	 *     TRICKY : if left adjusted, no &#34;0&#34; padding.
+</span></span></span><span class=line><span class=cl><span class=cm>	 *		    if negtive, insert  &#34;0&#34; padding between &#34;0&#34; and number.
+</span></span></span><span class=line><span class=cl><span class=cm>	 *  3. if (!ladjust) we reverse the whole string including paddings
+</span></span></span><span class=line><span class=cl><span class=cm>	 *  4. otherwise we only reverse the actual string representing the num.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>actualLength</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>char</span> <span class=n>buf</span><span class=p>[</span><span class=n>length</span> <span class=o>+</span> <span class=mi>70</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>	<span class=kt>char</span> <span class=o>*</span><span class=n>p</span> <span class=o>=</span> <span class=n>buf</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>do</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=kt>int</span> <span class=n>tmp</span> <span class=o>=</span> <span class=n>u</span> <span class=o>%</span> <span class=n>base</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>tmp</span> <span class=o>&lt;=</span> <span class=mi>9</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=o>*</span><span class=n>p</span><span class=o>++</span> <span class=o>=</span> <span class=sc>&#39;0&#39;</span> <span class=o>+</span> <span class=n>tmp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>upcase</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=o>*</span><span class=n>p</span><span class=o>++</span> <span class=o>=</span> <span class=sc>&#39;A&#39;</span> <span class=o>+</span> <span class=n>tmp</span> <span class=o>-</span> <span class=mi>10</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=o>*</span><span class=n>p</span><span class=o>++</span> <span class=o>=</span> <span class=sc>&#39;a&#39;</span> <span class=o>+</span> <span class=n>tmp</span> <span class=o>-</span> <span class=mi>10</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=n>u</span> <span class=o>/=</span> <span class=n>base</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span> <span class=k>while</span> <span class=p>(</span><span class=n>u</span> <span class=o>!=</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=n>neg_flag</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=o>*</span><span class=n>p</span><span class=o>++</span> <span class=o>=</span> <span class=sc>&#39;-&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/* figure out actual length and adjust the maximum length */</span>
+</span></span><span class=line><span class=cl>	<span class=n>actualLength</span> <span class=o>=</span> <span class=n>p</span> <span class=o>-</span> <span class=n>buf</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=n>length</span> <span class=o>&lt;</span> <span class=n>actualLength</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=n>length</span> <span class=o>=</span> <span class=n>actualLength</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/* add padding */</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=n>ladjust</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=n>padc</span> <span class=o>=</span> <span class=sc>&#39; &#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=n>neg_flag</span> <span class=o>&amp;&amp;</span> <span class=o>!</span><span class=n>ladjust</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>padc</span> <span class=o>==</span> <span class=sc>&#39;0&#39;</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=n>actualLength</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=n>buf</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=n>padc</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>		<span class=n>buf</span><span class=p>[</span><span class=n>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]</span> <span class=o>=</span> <span class=sc>&#39;-&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=n>actualLength</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>length</span><span class=p>;</span> <span class=n>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>			<span class=n>buf</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=n>padc</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>}</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/* prepare to reverse the string */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>begin</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span> <span class=n>end</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>if</span> <span class=p>(</span><span class=n>ladjust</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=n>end</span> <span class=o>=</span> <span class=n>actualLength</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=n>end</span> <span class=o>=</span> <span class=n>length</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/* adjust the string pointer */</span>
+</span></span><span class=line><span class=cl>	<span class=k>while</span> <span class=p>(</span><span class=n>end</span> <span class=o>&gt;</span> <span class=n>begin</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=kt>char</span> <span class=n>tmp</span> <span class=o>=</span> <span class=n>buf</span><span class=p>[</span><span class=n>begin</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>		<span class=n>buf</span><span class=p>[</span><span class=n>begin</span><span class=p>]</span> <span class=o>=</span> <span class=n>buf</span><span class=p>[</span><span class=n>end</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>		<span class=n>buf</span><span class=p>[</span><span class=n>end</span><span class=p>]</span> <span class=o>=</span> <span class=n>tmp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=n>begin</span><span class=o>++</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=n>end</span><span class=o>--</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nf>out</span><span class=p>(</span><span class=n>data</span><span class=p>,</span> <span class=n>buf</span><span class=p>,</span> <span class=n>length</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>回顾一下整个调用链</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>graph TD
+</span></span><span class=line><span class=cl>    printk --&gt; include/printk.h --&gt; kern/printk.c --&gt; include/print.h --&gt; lib/print.c
+</span></span></code></pre></td></tr></table></div></div><ul><li>include目录：目录通常包含所有的头文件，这些头文件提供了函数声明、宏、结构体定义和常量等，这些头文件为内核的各个模块提供了接口，使得不同模块之间可以共享信息和功能。</li><li>kern目录：通常包含与内核核心功能（如进程调度、内存管理、系统调用等）相关的实现代码。它主要是内核的实现部分。</li><li>lib目录：包含实现内核中通用功能和服务的库函数。它通常存放一些通用的辅助代码，这些代码可以被多个内核模块共享。它通常不涉及具体的硬件操作，而是提供一些基础的功能支持，例如字符串操作、内存管理、数学计算等。</li></ul><p>需要注意，我们实现的是printk函数，而不是printf函数，虽然二者很像。</p><ul><li>printk：用于内核空间，是内核中的一个函数，输出到内核日志缓冲区，通常不会直接显示在用户的终端上。</li><li>printf：用于用户空间，是C标准库的一部分，输出到标准输出（stdout），通常是用户的终端。</li></ul><p><strong>如何理解调用链？</strong></p><ul><li><p>我们要在一个文件中使用printk函数，就必须使用引入include文件夹里的printk.h头文件，至于它是如何实现的并不是程序员需要关心。</p></li><li><p>当链接器看到头文件中声明了printk函数时，它会查找所有目标文件，找到 printk 函数的实际实现（<code>kern/printk.c</code> 中），并将其与其他部分链接在一起。</p></li><li><p>在kern/printk.c中实现了printk函数，而printk的实现需要用到vprintfmt函数，这个函数在include/print.h中声明，但是仍然没有实现。</p></li><li><p>当链接器看到头文件中声明了vprintfmt函数时，它会查找所有目标文件，找到vprintfmt函数的实际实现（<code>lib/print.c</code> 中），并将其与其他部分链接在一起。</p></li></ul><h3 id=可变参数>可变参数</h3><p>printk的具体实现中，<code>...</code>代表可变参数，即后面有数量未知的参数。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=kt>void</span> <span class=nf>printk</span><span class=p>(</span><span class=k>const</span> <span class=kt>char</span> <span class=o>*</span><span class=n>fmt</span><span class=p>,</span> <span class=p>...)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=n>va_list</span> <span class=n>ap</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=nf>va_start</span><span class=p>(</span><span class=n>ap</span><span class=p>,</span> <span class=n>fmt</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>vprintfmt</span><span class=p>(</span><span class=n>outputk</span><span class=p>,</span> <span class=nb>NULL</span><span class=p>,</span> <span class=n>fmt</span><span class=p>,</span> <span class=n>ap</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=nf>va_end</span><span class=p>(</span><span class=n>ap</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>va_xxx是<code>stdarg.h</code> 库中的宏，<code>stdarg.h</code>是C标准库，我们在路径<code>/usr/lib/gcc-cross/mips-linux-gnu/12/include</code>下可以找到这个文件，具体实现细节比较复杂，笔者也没有看懂，感兴趣的可以自行研究。</p><ul><li><p><code>va_list</code>：用来声明一个变量，用于保存可变参数的列表。</p></li><li><p><code>va_start(va_list args, last_fixed_arg)</code>：初始化 <code>va_list</code> 变量，告诉宏从哪个固定参数开始提取可变参数。<code>last_fixed_arg</code> 是在参数列表中的最后一个固定参数。必须调用 <code>va_start</code> 来初始化 <code>va_list</code>，否则无法访问可变参数。</p></li><li><p><code>va_arg(va_list args, type)</code>：访问可变参数列表中的下一个参数。<code>type</code> 是你希望获取的参数类型，每次调用 <code>va_arg</code> 后，指针都会向后移动。</p></li><li><p><code>va_end(va_list args)</code>：用于结束对可变参数的访问。调用完 <code>va_arg</code> 后，必须调用 <code>va_end</code> 来清理资源。</p></li></ul><h2 id=结语>结语</h2><p>lab1的课下练习，如果仅仅是完成填空是很容易的，但是如果要理解内核中的每一行代码在干什么是一件很费时间（同时也很有趣）的事情。希望同学们能够保持好奇，不仅仅拘泥于完成练习，积极探索操作系统的魅力。</p></section><footer class=article-footer><section class=article-tags><a href=/tags/buaa-os/>BUAA-OS</a>
+<a href=/tags/mos/>Mos</a>
+<a href=/tags/elf/>Elf</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 Mar 21, 2025 17:00 UTC</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".main-article");renderMathInElement(e,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/os-lab0/><div class=article-image><img src=/p/os-lab0/cover.58ecd96f661ebebbf9d22057f0c42c6d_hu_c85d55ee752b7cb0.jpg width=250 height=150 loading=lazy alt="Featured image of post BUAA-OS-lab0 实验报告" data-key=OS-lab0 data-hash="md5-WOzZb2Yevrv50iBX8MQsbQ=="></div><div class=article-details><h2 class=article-title>BUAA-OS-lab0 实验报告</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//lhy0424-disqus-com.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 Az's Blog</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

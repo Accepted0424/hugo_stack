@@ -1,0 +1,552 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="电梯调度"><title>BUAA-OO-Unit2</title>
+<link rel=canonical href=https://lhy0424.top/p/oo-unit2/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="BUAA-OO-Unit2"><meta property='og:description' content="电梯调度"><meta property='og:url' content='https://lhy0424.top/p/oo-unit2/'><meta property='og:site_name' content="Az's Blog"><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='BUAA-OO'><meta property='article:tag' content='Java'><meta property='article:tag' content='面向对象'><meta property='article:published_time' content='2025-04-18T18:28:00+00:00'><meta property='article:modified_time' content='2025-04-18T18:28:00+00:00'><meta property='og:image' content='https://lhy0424.top/p/oo-unit2/cover.jpg'><meta name=twitter:title content="BUAA-OO-Unit2"><meta name=twitter:description content="电梯调度"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://lhy0424.top/p/oo-unit2/cover.jpg'><link rel="shortcut icon" href=/img/az.jpg></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/az_hu_2167c1e5a8cad978.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>Az's Blog</a></h1><h2 class=site-description>Stay hungry, Stay foolish.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Accepted0424 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#三次迭代回顾>三次迭代回顾</a></li><li><a href=#生产者-消费者模型>生产者-消费者模型</a></li><li><a href=#多线程中的同步块与锁>多线程中的同步块与锁</a></li><li><a href=#策略设计>策略设计</a><ol><li><a href=#电梯调度策略>电梯调度策略</a></li><li><a href=#分配策略>分配策略</a></li></ol></li><li><a href=#调度器dispatch设计>调度器（Dispatch）设计</a><ol><li><a href=#结束和等待条件>结束和等待条件</a></li><li><a href=#接收乘客请求>接收乘客请求</a></li><li><a href=#分配请求>分配请求</a></li></ol></li><li><a href=#双轿厢改造>双轿厢改造</a><ol><li><a href=#输出同步>输出同步</a></li><li><a href=#换乘层限制>换乘层限制</a></li></ol></li><li><a href=#架构设计>架构设计</a></li><li><a href=#debug>Debug</a><ol><li><a href=#debug方法>debug方法</a></li></ol></li><li><a href=#评测机>评测机</a></li><li><a href=#心得体会>心得体会</a><ol><li><a href=#线程安全>线程安全</a></li><li><a href=#层次化设计>层次化设计</a></li><li><a href=#其他>其他</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/oo-unit2/><img src=/p/oo-unit2/cover_hu_e68147161572c09e.jpg srcset="/p/oo-unit2/cover_hu_e68147161572c09e.jpg 800w, /p/oo-unit2/cover_hu_7086f93a20e81022.jpg 1600w" width=800 height=450 loading=lazy alt="Featured image of post BUAA-OO-Unit2"></a></div><div class=article-details><header class=article-category><a href=/categories/buaa-oo/>BUAA-OO</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/oo-unit2/>BUAA-OO-Unit2</a></h2><h3 class=article-subtitle>电梯调度</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Apr 18, 2025</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 16 分钟</time></div></footer></div></header><section class=article-content><h1 id=buaa-oo-unit2总结>BUAA-OO-Unit2总结</h1><h2 id=三次迭代回顾>三次迭代回顾</h2><p><strong>第五次作业</strong></p><p>本单元以某公司大楼的<strong>目的选层电梯系统</strong>为背景。</p><blockquote><p>目的选层电梯系统的运行流程：</p><ol><li>进入电梯前，乘客输入目标楼层；</li><li>系统根据设定的策略指定最合适的电梯来服务，将结果告知乘客；</li><li>乘客进入指定电梯后，无需再次按楼层按钮，电梯会自动将其送至目标楼层。</li></ol></blockquote><p>与普通的目的选层电梯系统有所区分的是，该公司为提高运行效率，充分考虑不同职位的员工所从事工作的时间急迫性，为不同类型的乘客请求赋予了<strong>优先级指数</strong>。优先级指数描述了乘客到达目的楼层的急迫程度。</p><p><strong>第六次作业</strong></p><blockquote><p>本次作业的新增内容有：</p><ol><li>取消“乘客请求指定电梯”约束，需要自行设计电梯分配策略</li><li>新增“临时调度”请求；新增“RECEIVE”约束</li><li>修改乘客请求格式；修改“OUT”指令输出格式；修改测试数据约束；修改“实现提示”“提示与警示”部分</li></ol></blockquote><p><strong>第七次作业</strong></p><blockquote><p>本次作业的新增内容有：</p><ul><li>新增双轿厢电梯改造</li><li>修改"RECEIVE"约束；修改临时调度约束</li></ul></blockquote><p><strong>性能要求</strong></p><blockquote><p>抛开麻烦的公式，简单来说就是</p><ul><li>运行时间尽量短</li><li>尽量满足乘客请求的优先级</li><li>尽量减少系统的无效运行</li></ul></blockquote><h2 id=生产者-消费者模型>生产者-消费者模型</h2><p>程序在运行中任何时刻都有可能收到用户请求，我们不能收到一个请求就立刻将其分配给某个电梯去处理，因为电梯处理一个请求需要时间，如果在处理一个请求的过程中接收到了一个请求该怎么办呢？是放弃当前请求还是放弃新接受到的请求？显然都不合理。</p><p>于是我们想到可以给每部电梯新建一个待处理的容器（队列、数组等等），里面放着分配给该部电梯的乘客请求。我们收到一个请求只需要把该请求放入对应电梯的待处理容器里即可，而对于电梯来说，它的任务只有一个，那就是把这个容器里的请求全部处理完即可。于是我们很自然的实现了一个多线程中的经典设计模型**&ldquo;生产者-消费者模型&rdquo;**。</p><p>在第一次作业中，由于每一个请求都有指定的电梯，所以我们可以直接把请求放在对应电梯的待处理容器里。而在后续两次迭代中，需要我们自己决定乘客请求分配给哪个电梯，并且已经分配的请求有可能被取消需要被再次分配，因此我们还需要一个分配线程（Dispatch Thread）。</p><p>综上，在本次电梯单元，我们需要用到两个<strong>生产者-消费者模型</strong></p><ul><li><p><strong>输入线程</strong>作为生产者，<strong>分配线程</strong>作为消费者。输入线程负责从外部读取用户请求，这些请求被放入⼀个输入缓冲区（请求队列）中。分配线程持续从该缓冲区中取出请求，进行传递sche和update信号、选择电梯等操作，并将调度结果发送到另⼀个调度缓冲区（电梯的待分配队列）。</p></li><li><p><strong>分配线程</strong>作为生产者，六个<strong>电梯线程</strong>作为消费者。分配线程将这些任务传递给具体的<strong>电梯线程</strong>，后者执行具体的操作，如移动电梯、开关门、响应请求等。</p></li></ul><h2 id=多线程中的同步块与锁>多线程中的同步块与锁</h2><p>在学习了OS之后，我们发现 Java 中的<code>synchronized</code> 关键字实现的就是一种管程（Monitor）机制，更准确地说，它实现的是一种<strong>MESA风格的管程</strong>。相比于Hoare管程，MESA管程的特点是当一个线程被 <code>notify()</code> 或 <code>notifyAll()</code> 唤醒时，它只是被放入了就绪队列，还要等待重新竞争锁，我们在设计时需要考虑这个问题。</p><p>synchronized是Java中的关键字，告诉JVM要对这个语句块进行线程互斥控制，其后的括号内需要一个对象用作锁，获取到锁才会执行代码块内的代码，执行结束后会释放锁。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>synchronized</span><span class=p>(</span><span class=n>object</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w> </span><span class=c1>// 获取锁</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w> </span><span class=c1>// 释放锁</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><blockquote><p><strong>为什么在Object.java中找不到和锁相关的代码？</strong></p><p>在 Java 里，每个对象都自动带有一个对象监视器（Monitor），这个机制由 JVM 层面（C++ 代码）实现，而不是在 <code>Object.java</code> 源码中。</p><p>Java 的 <code>synchronized</code> 依赖于 <strong>对象头（Object Header）</strong> 中的 <strong>Mark Word</strong> 来存储锁状态。</p><p>每个 Java 对象在 JVM 内存中存储结构如下：</p><div class=table-wrapper><table><thead><tr><th><strong>对象头</strong> (Header)</th><th><strong>实例数据</strong></th><th><strong>对齐填充</strong></th></tr></thead><tbody><tr><td>Mark Word（存储锁状态） + Class Pointer</td><td>成员变量</td><td>对齐数据</td></tr></tbody></table></div><p>其中：</p><ul><li><strong>Mark Word</strong> 记录了<strong>对象的锁状态</strong>、线程 ID、GC 信息等。</li><li>当 <code>synchronized</code> 代码块运行时，JVM 会修改 <code>Mark Word</code>，进行加锁和解锁操作。</li></ul></blockquote><p>synchronized的使用方法有以下三种：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// 关键字在实例方法上，锁为当前实例</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>synchronized</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>instanceLock</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// code</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 关键字在静态方法上，锁为当前Class对象</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=n>ssynchronized</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>classLock</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// code</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=c1>// 关键字在代码块上，锁为括号里面的对象</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>blockLock</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Object</span><span class=w> </span><span class=n>o</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>Object</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>synchronized</span><span class=w> </span><span class=p>(</span><span class=n>o</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// code</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>在三次作业中，我的所有同步设计都是通过synchronized关键字实现的，其实为了更好的性能应该使用读写锁分开处理读操作和写操作，但是由于时间原因就没有去重构。</p><p>什么时候需要加锁是一个很关键的问题，笔者认为如果一个对象或数据可能同时被多个线程修改，或者多个线程同时读写该对象的状态，就应该加锁，或者使用线程安全的数据结构或机制。在三次作业中，RequestQueue（也就是电梯的待处理队列）就是需要重点关注的对象，因为分配线程和电梯线程都会对其进行访问。我们对其中可能造成数据冲突的方法都加上synchronized关键字，确保这些方法之间的互斥，这样我们就可以称RequestQueue类是<strong>线程安全</strong>的，这样我们在使用该类的方法时就无需考虑同步问题。</p><p>当然也需要注意不能无脑加锁，把所有方法都加上synchronized关键字固然能保证没有数据冲突，但这样会大幅降低并发效率，可能会在一些情况下超出课程组给出的一些时间限制。</p><h2 id=策略设计>策略设计</h2><h3 id=电梯调度策略>电梯调度策略</h3><p>在三次作业中，每部电梯最多容纳6个乘客，我们该怎么保证在所有乘客都能到达目的地的情况下电梯运行时间尽可能少，优先级高的乘客能尽快到达目的地，并且尽可能减少耗电量。</p><p>最常规的电梯调度策略是<strong>Look算法</strong>。</p><blockquote><p><strong>SCAN 算法</strong>（也称电梯算法）是一种磁盘调度算法，用于确定磁盘臂和磁头在处理读写请求时的运动。它让电梯在最底层和最顶层之间连续往返运行，在运行过程中响应处在于电梯运行方向相同的各楼层上的请求。</p><p><strong>LOOK算法</strong>是对SCAN算法的改进，也是一种硬盘调度算法。当LOOK算法发现电梯所移动的方向上不再有请求时立即改变运行方向，而扫描算法则需要移动到最底层或者最顶层时才改变运行方向。</p></blockquote><p>现实中大多数电梯都采用LOOK算法或优化后的LOOK算法，但我们发现这个算法并没有考虑乘客的优先级。假设当前电梯在F1下行，电梯里有一个优先级为1的乘客正在前往B4，而这是有一个优先级为100的乘客在F2发出请求想要前往F7，显然这时候我们应该优先让电梯服务优先级为100的乘客。</p><p>于是笔者尝试自己改造LOOK算法。仔细分析后，我们发现电梯调度问题的关键其实就是<strong>何时反转方向</strong>。不过需要注意的是我们在设计算法时不能针对某种特殊情况去优化，这样容易过拟合（Overfitting），即特殊情况下性能优越，但是平均性能有所下降。</p><p>以下是笔者的一次算法优化尝试：</p><ul><li>对于电梯内的乘客，我们应该优先送优先级足够大的乘客，确保优先级大的乘客能尽快到达目的地，而不会被优先级太小的乘客拖长到达时间。具体实现方法为如果电梯里非空，比较向上的优先级和向下的优先级来确定下一步的移动方向。</li></ul>$$
+Priority\_up = \sum_{toFLoor > curfloor} \frac{priority}{toFloor - curFloor}(对于电梯内所以目标楼层大于当前楼层的乘客)
+$$$$
+Priority\_up = \sum_{toFLoor < curfloor} \frac{priority}{curFloor-toFloor}(对于电梯内所以目标楼层小于当前楼层的乘客)
+$$<ul><li>对于电梯外的请求，我们应该先接优先级大且行程（ $|toFloor - fromFloor|$ ）较大的乘客。具体实现方法为如果电梯内部没人且电梯的待处理队列非空，则遍历待处理队列，找出综合优先级最大的乘客，根据该乘客的楼层确定电梯运行方向。</li></ul>$$
+Priority\_complex = priority \times |toFloor - fromFloor|
+$$<ul><li>电梯内部满员时，我们可以让优先级足够小的乘客中途下电梯，让优先级足够大的乘客上去。具体实现方法为每到一层，先让到达目的地的乘客下来，如果电梯满员且该层存在未处理请求，则依次比较该层的所有请求乘客，如果其优先级为电梯内优先级最小的乘客的<strong>5倍</strong>以上，则让电梯内优先级最小的乘客下来，让对应的外部请求乘客上电梯。</li></ul><p>其实这是一次比较失败的算法优化，在一些极端情况性能确实优于LOOK算法，在中测时性能和LOOK相当，但在强测数据量较大时普遍不如LOOK算法。</p><h3 id=分配策略>分配策略</h3><p>在第六和第七次作业中，我们需要自己决定一个请求应该分配给哪部电梯。这就涉及到一个问题，分配给哪部电梯才能保证性能分尽可能高。</p><ul><li>如果其他5部电梯都正在sche或update，如果这时突然来了100个请求，这时100个请求全部分配给一个电梯会导致整体运行时间过长。我们应该给电梯接收乘客请求的数量设置一个最大值，在所有电梯都不接收请求时分配线程进入等待状态，某个电梯空闲时唤醒分配线程。</li><li>对于第七次作业，电梯的可达楼层范围发生了变化，我们在分配时的条件也应该发生变化。我们应该首选可达fromFloor和toFloor的电梯接收请求，减少换乘带来的时间和电量损失，次选可达fromFloor，确保电梯可以接到对应乘客。</li></ul><h2 id=调度器dispatch设计>调度器（Dispatch）设计</h2><h3 id=结束和等待条件>结束和等待条件</h3><ul><li>未分配队列为空，但输入还未结束，应该进入等待状态，避免轮询。</li><li>因为所有电梯暂时无法接收乘客请求而无法继续分配，但是未分配队列非空，应该进入等待，避免轮询。</li><li>输入结束且未分配队列，此时应该跳出循环结束dispatch线程。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>run</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>while</span><span class=w> </span><span class=p>(</span><span class=kc>true</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// 输入未结束，还有可能获取请求</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>while</span><span class=w> </span><span class=p>(</span><span class=n>isEmpty</span><span class=p>()</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=o>!</span><span class=n>isEnd</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>dispatchWait</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>InterruptedException</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=k>throw</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>RuntimeException</span><span class=p>(</span><span class=n>e</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// 所有电梯处于忙碌状态，但是还有未分配请求，等待空闲电梯</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>while</span><span class=w> </span><span class=p>(</span><span class=n>allElevatorsBusy</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=o>!</span><span class=n>isEmpty</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=kd>synchronized</span><span class=w> </span><span class=p>(</span><span class=n>busyLock</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                        </span><span class=n>busyLock</span><span class=p>.</span><span class=na>wait</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>InterruptedException</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                        </span><span class=k>throw</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>RuntimeException</span><span class=p>(</span><span class=n>e</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// 输入结束，且没有未分配队列，告知电梯的已分配队列不会再有来自dispatch的分配</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>isEnd</span><span class=p>()</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=n>isEmpty</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>for</span><span class=w> </span><span class=p>(</span><span class=kt>int</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>1</span><span class=p>;</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>&lt;=</span><span class=w> </span><span class=n>6</span><span class=p>;</span><span class=w> </span><span class=n>i</span><span class=o>++</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>elevators</span><span class=o>[</span><span class=n>i</span><span class=o>]</span><span class=p>.</span><span class=na>getRequestQueue</span><span class=p>().</span><span class=na>setEnd</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=c1>// 等待所有子任务结束</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>for</span><span class=w> </span><span class=p>(</span><span class=n>Future</span><span class=o>&lt;?&gt;</span><span class=w> </span><span class=n>f</span><span class=w> </span><span class=p>:</span><span class=w> </span><span class=n>futures</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                        </span><span class=n>f</span><span class=p>.</span><span class=na>get</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>Exception</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                        </span><span class=k>throw</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>RuntimeException</span><span class=p>(</span><span class=n>e</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=c1>// 关闭线程池</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>executor</span><span class=p>.</span><span class=na>shutdown</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>break</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// 分配操作</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>dispatch</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>InterruptedException</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>throw</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>RuntimeException</span><span class=p>(</span><span class=n>e</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>其实分配线程有点类似 Java 中的<strong>守护（Daemon）线程</strong>，其必须要等到其他所有线程都结束之后才能结束，其必须要在所有电梯线程都结束之后才能结束。</p><h3 id=接收乘客请求>接收乘客请求</h3><p>提供统一的<code>offer</code>接口，通过传参区分不同行为。</p><p>对于乘客请求，其所在楼层是会发生变化的，由于我们无法直接修改personRequest实例的fromFloor，我们可以通过一个map来记录每个乘客的当前楼层。</p><p>请求有以下分类：</p><ul><li>乘客请求（PersonRequest）<ul><li>首次请求，nowFloorMap记录的楼层即为请求的fromFloor，需要记入总请求数</li><li>被取消的请求，nowFloorMap记录的楼层为乘客当前的楼层（通过参数传入），无需记入总请求数</li><li>中途下电梯的乘客请求，nowFloorMap记录的楼层为乘客当前的楼层（通过参数传入），无需记入总请求数</li></ul></li><li>调度请求（ScheRequest）</li><li>双轿厢改造请求（UpdateRequest）</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>synchronized</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>offer</span><span class=p>(</span><span class=n>Request</span><span class=w> </span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>Boolean</span><span class=w> </span><span class=n>isRearrange</span><span class=p>,</span><span class=w> </span><span class=n>Boolean</span><span class=w> </span><span class=n>first</span><span class=p>,</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=n>nowFloor</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>r</span><span class=w> </span><span class=k>instanceof</span><span class=w> </span><span class=n>PersonRequest</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>PersonRequest</span><span class=w> </span><span class=n>pr</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>(</span><span class=n>PersonRequest</span><span class=p>)</span><span class=w> </span><span class=n>r</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>unDispatchQueue</span><span class=p>.</span><span class=na>offer</span><span class=p>(</span><span class=n>pr</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>first</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>nowFloorMap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=n>pr</span><span class=p>,</span><span class=w> </span><span class=n>intOf</span><span class=p>(</span><span class=n>pr</span><span class=p>.</span><span class=na>getFromFloor</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>isRearrange</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>nowFloorMap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=n>pr</span><span class=p>,</span><span class=w> </span><span class=n>nowFloor</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=o>!</span><span class=n>isRearrange</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=n>first</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>personRequestReceive</span><span class=o>++</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>r</span><span class=w> </span><span class=k>instanceof</span><span class=w> </span><span class=n>ScheRequest</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>ScheRequest</span><span class=w> </span><span class=n>sr</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>(</span><span class=n>ScheRequest</span><span class=p>)</span><span class=w> </span><span class=n>r</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>unDispatchSche</span><span class=p>.</span><span class=na>offer</span><span class=p>(</span><span class=n>sr</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>r</span><span class=w> </span><span class=k>instanceof</span><span class=w> </span><span class=n>UpdateRequest</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>UpdateRequest</span><span class=w> </span><span class=n>ur</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>(</span><span class=n>UpdateRequest</span><span class=p>)</span><span class=w> </span><span class=n>r</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>acceptUpdate</span><span class=p>(</span><span class=n>ur</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>acceptUpdate</span><span class=p>(</span><span class=n>ur</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>Exception</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>e</span><span class=p>.</span><span class=na>printStackTrace</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>unDispatchUpdate</span><span class=p>.</span><span class=na>add</span><span class=p>(</span><span class=n>ur</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hasFreeElevator</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>notifyAll</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=分配请求>分配请求</h3><ul><li>对于调度请求和乘客请求，我们直接将请求放入电梯的未分配队列即可</li><li>对于双轿厢改造请求，我们通过线程池来实现异步操作（后续详细解释）。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>private</span><span class=w> </span><span class=kd>synchronized</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>dispatch</span><span class=p>()</span><span class=w> </span><span class=kd>throws</span><span class=w> </span><span class=n>InterruptedException</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>while</span><span class=w> </span><span class=p>(</span><span class=o>!</span><span class=n>unDispatchSche</span><span class=p>.</span><span class=na>isEmpty</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>ScheRequest</span><span class=w> </span><span class=n>sr</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>unDispatchSche</span><span class=p>.</span><span class=na>peek</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>elevators</span><span class=o>[</span><span class=n>sr</span><span class=p>.</span><span class=na>getElevatorId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>getRequestQueue</span><span class=p>().</span><span class=na>offer</span><span class=p>(</span><span class=n>unDispatchSche</span><span class=p>.</span><span class=na>poll</span><span class=p>(),</span><span class=w>  </span><span class=n>0</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>while</span><span class=w> </span><span class=p>(</span><span class=o>!</span><span class=n>unDispatchUpdate</span><span class=p>.</span><span class=na>isEmpty</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>UpdateRequest</span><span class=w> </span><span class=n>ur</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>unDispatchUpdate</span><span class=p>.</span><span class=na>poll</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>Future</span><span class=o>&lt;?&gt;</span><span class=w> </span><span class=n>future</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>executor</span><span class=p>.</span><span class=na>submit</span><span class=p>(()</span><span class=w> </span><span class=o>-&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>wait2clearInside</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>wait2clearInside</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>InterruptedException</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=k>throw</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>RuntimeException</span><span class=p>(</span><span class=n>e</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;UPDATE-BEGIN-%d-%d&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>(),</span><span class=w> </span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>Thread</span><span class=p>.</span><span class=na>sleep</span><span class=p>(</span><span class=n>1000</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>InterruptedException</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=k>throw</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>RuntimeException</span><span class=p>(</span><span class=n>e</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;UPDATE-END-%d-%d&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>(),</span><span class=w> </span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>updateDone</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>updateDone</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>});</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>futures</span><span class=p>.</span><span class=na>add</span><span class=p>(</span><span class=n>future</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// 分配给最近的空闲电梯</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=o>!</span><span class=n>unDispatchQueue</span><span class=p>.</span><span class=na>isEmpty</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>PersonRequest</span><span class=w> </span><span class=n>pr</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>unDispatchQueue</span><span class=p>.</span><span class=na>peek</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=c1>// 获取被分配电梯的序号</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      		</span><span class=p>......</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;RECEIVE-%d-%d&#34;</span><span class=p>,</span><span class=w> </span><span class=n>pr</span><span class=p>.</span><span class=na>getPersonId</span><span class=p>(),</span><span class=w> </span><span class=n>elevators</span><span class=o>[</span><span class=n>target</span><span class=o>]</span><span class=p>.</span><span class=na>getId</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>elevators</span><span class=o>[</span><span class=n>target</span><span class=o>]</span><span class=p>.</span><span class=na>getRequestQueue</span><span class=p>().</span><span class=na>offer</span><span class=p>(</span><span class=n>unDispatchQueue</span><span class=p>.</span><span class=na>poll</span><span class=p>(),</span><span class=w> </span><span class=n>nowFloorMap</span><span class=p>.</span><span class=na>get</span><span class=p>(</span><span class=n>pr</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>notifyAll</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=双轿厢改造>双轿厢改造</h2><p>&ldquo;将一部电梯移动另一部电梯的电梯井中"的操作并不需要体现在代码中，我们只需要改变两部电梯的可达楼层范围即可。</p><h3 id=输出同步>输出同步</h3><p>同步输出是双轿厢电梯改造中比较麻烦的一点，因为其要求是两部电梯分别改造，但是需要统一输出。</p><p>具体有两种实现方式：</p><ul><li><p>利用信号量进行线程间通信，当两个电梯都完成对应操作后统⼀输出</p></li><li><p>异步处理，让电梯在处理完之后sleep一段时间确保二者都完成了对应操作之后由分配线程输出。</p></li></ul><p>笔者采用的第二种方法：</p><ul><li>在电梯线程接收到update请求后，立即告知两部电梯，让其尽快停下来，并且不再接收请求，因为update请求优先级大于乘客请求，所以要让电梯从等待中唤醒（如果所有电梯都不能接收乘客请求了）。</li><li>分配时，因为处理过程中涉及到分配线程的sleep，为了避免sleep期间不能接收请求的问题，我们创建一个子线程处理，子线程sleep并不影响分配线程。</li><li>等待两部电梯线程处于静止状态并清空内部所有的乘客之后由分配器子线程统一输出BEGIN，接着子线程会sleep一秒，确保满足改造时间限制。</li><li>电梯线程在清理完内部乘客之后也应该sleep1秒（最好大于1秒），因为BEGIN-END之间电梯是不能移动的，要等到输出END之后再输出。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// Dispatch.java</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>private</span><span class=w> </span><span class=n>ExecutorService</span><span class=w> </span><span class=n>executor</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Executors</span><span class=p>.</span><span class=na>newFixedThreadPool</span><span class=p>(</span><span class=n>5</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>synchronized</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>offer</span><span class=p>(</span><span class=n>Request</span><span class=w> </span><span class=n>r</span><span class=p>,</span><span class=w> </span><span class=n>Boolean</span><span class=w> </span><span class=n>isRearrange</span><span class=p>,</span><span class=w> </span><span class=n>Boolean</span><span class=w> </span><span class=n>first</span><span class=p>,</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=n>nowFloor</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>r</span><span class=w> </span><span class=k>instanceof</span><span class=w> </span><span class=n>PersonRequest</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>r</span><span class=w> </span><span class=k>instanceof</span><span class=w> </span><span class=n>ScheRequest</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w> </span><span class=k>else</span><span class=w> </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>r</span><span class=w> </span><span class=k>instanceof</span><span class=w> </span><span class=n>UpdateRequest</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>UpdateRequest</span><span class=w> </span><span class=n>ur</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=p>(</span><span class=n>UpdateRequest</span><span class=p>)</span><span class=w> </span><span class=n>r</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>acceptUpdate</span><span class=p>(</span><span class=n>ur</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>acceptUpdate</span><span class=p>(</span><span class=n>ur</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>Exception</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>e</span><span class=p>.</span><span class=na>printStackTrace</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>unDispatchUpdate</span><span class=p>.</span><span class=na>add</span><span class=p>(</span><span class=n>ur</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>hasFreeElevator</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>notifyAll</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>private</span><span class=w> </span><span class=kd>synchronized</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>dispatch</span><span class=p>()</span><span class=w> </span><span class=kd>throws</span><span class=w> </span><span class=n>InterruptedException</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>while</span><span class=w> </span><span class=p>(</span><span class=o>!</span><span class=n>unDispatchSche</span><span class=p>.</span><span class=na>isEmpty</span><span class=p>())</span><span class=w> </span><span class=p>{...}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>while</span><span class=w> </span><span class=p>(</span><span class=o>!</span><span class=n>unDispatchUpdate</span><span class=p>.</span><span class=na>isEmpty</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>UpdateRequest</span><span class=w> </span><span class=n>ur</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>unDispatchUpdate</span><span class=p>.</span><span class=na>poll</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>Future</span><span class=o>&lt;?&gt;</span><span class=w> </span><span class=n>future</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>executor</span><span class=p>.</span><span class=na>submit</span><span class=p>(()</span><span class=w> </span><span class=o>-&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>wait2clearInside</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>wait2clearInside</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>InterruptedException</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=k>throw</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>RuntimeException</span><span class=p>(</span><span class=n>e</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;UPDATE-BEGIN-%d-%d&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>(),</span><span class=w> </span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>try</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>Thread</span><span class=p>.</span><span class=na>sleep</span><span class=p>(</span><span class=n>1000</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w> </span><span class=k>catch</span><span class=w> </span><span class=p>(</span><span class=n>InterruptedException</span><span class=w> </span><span class=n>e</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=k>throw</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>RuntimeException</span><span class=p>(</span><span class=n>e</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;UPDATE-END-%d-%d&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>(),</span><span class=w> </span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorAId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>updateDone</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>elevators</span><span class=o>[</span><span class=n>ur</span><span class=p>.</span><span class=na>getElevatorBId</span><span class=p>()</span><span class=o>]</span><span class=p>.</span><span class=na>updateDone</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>});</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>futures</span><span class=p>.</span><span class=na>add</span><span class=p>(</span><span class=n>future</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=c1>// 分配给最近的空闲电梯</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=o>!</span><span class=n>unDispatchQueue</span><span class=p>.</span><span class=na>isEmpty</span><span class=p>())</span><span class=w> </span><span class=p>{...}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>notifyAll</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// Elevator.java</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>private</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>executeUpdate</span><span class=p>()</span><span class=w> </span><span class=kd>throws</span><span class=w> </span><span class=n>InterruptedException</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>inUpdate</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>true</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>updateHasBegin</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>true</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=o>!</span><span class=n>insideQueue</span><span class=p>.</span><span class=na>isEmpty</span><span class=p>())</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;OPEN-%s-%d&#34;</span><span class=p>,</span><span class=w> </span><span class=n>formatFloor</span><span class=p>(</span><span class=n>curFloor</span><span class=p>),</span><span class=w> </span><span class=n>id</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>Thread</span><span class=p>.</span><span class=na>sleep</span><span class=p>(</span><span class=n>minTimeOpen2Close</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>allPersonOut</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;CLOSE-%s-%d&#34;</span><span class=p>,</span><span class=w> </span><span class=n>formatFloor</span><span class=p>(</span><span class=n>curFloor</span><span class=p>),</span><span class=w> </span><span class=n>id</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>insideHasClear</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hasAcceptUpdate</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>false</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>Thread</span><span class=p>.</span><span class=na>sleep</span><span class=p>(</span><span class=n>1100</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>updateParam</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>removeAllReceive</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>inUpdate</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>false</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=换乘层限制>换乘层限制</h3><ul><li><p>线程间通信确保在同一电梯井的电梯的不会同时出现在换乘层。</p><ul><li>需要注意的是，在电梯前往换乘层的过程中就应该判定换乘层已经被占用。</li></ul></li><li><p>电梯不应在换乘层等待，到达换乘层完成对应操作后应尽快离开。</p></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=w>		</span><span class=n>Status</span><span class=w> </span><span class=n>status</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>update</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>status</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=n>Status</span><span class=p>.</span><span class=na>WAIT</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=n>curFloor</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=n>transferFloor</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=n>afterUpdate</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>status</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>canMove</span><span class=p>()</span><span class=w> </span><span class=o>?</span><span class=w> </span><span class=n>Status</span><span class=p>.</span><span class=na>MOVE</span><span class=w> </span><span class=p>:</span><span class=w> </span><span class=n>canReverse</span><span class=p>()</span><span class=w> </span><span class=o>?</span><span class=w> </span><span class=n>Status</span><span class=p>.</span><span class=na>REVERSE</span><span class=w> </span><span class=p>:</span><span class=w> </span><span class=n>Status</span><span class=p>.</span><span class=na>WAIT</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>switch</span><span class=w> </span><span class=p>(</span><span class=n>status</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>case</span><span class=w> </span><span class=n>UPDATE</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>break</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>case</span><span class=w> </span><span class=n>OPEN</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>break</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>case</span><span class=w> </span><span class=n>MOVE</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>if</span><span class=w> </span><span class=p>((</span><span class=n>curFloor</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>1</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=n>0</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=n>curFloor</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>2</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=n>transferFloor</span><span class=p>)</span><span class=w> </span><span class=o>||</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>curFloor</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>1</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=n>transferFloor</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>transferFloorIsOccupied</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>true</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>modifyFloor</span><span class=p>(</span><span class=kc>true</span><span class=p>,</span><span class=w> </span><span class=kc>false</span><span class=p>,</span><span class=w> </span><span class=kc>false</span><span class=p>,</span><span class=w> </span><span class=n>0</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>Thread</span><span class=p>.</span><span class=na>sleep</span><span class=p>(</span><span class=n>timePerFloor</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;ARRIVE-%s-%d&#34;</span><span class=p>,</span><span class=w> </span><span class=n>formatFloor</span><span class=p>(</span><span class=n>curFloor</span><span class=p>),</span><span class=w> </span><span class=n>id</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>curFloor</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=n>transferFloor</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>transferFloorIsOccupied</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>false</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>break</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>case</span><span class=w> </span><span class=n>REVERSE</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>if</span><span class=w> </span><span class=p>((</span><span class=n>curFloor</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>1</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=n>0</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=n>curFloor</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>2</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=n>transferFloor</span><span class=p>)</span><span class=w> </span><span class=o>||</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>curFloor</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>1</span><span class=w> </span><span class=o>==</span><span class=w> </span><span class=n>transferFloor</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>transferFloorIsOccupied</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>true</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>modifyFloor</span><span class=p>(</span><span class=kc>false</span><span class=p>,</span><span class=w> </span><span class=kc>true</span><span class=p>,</span><span class=w> </span><span class=kc>false</span><span class=p>,</span><span class=w> </span><span class=n>0</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>Thread</span><span class=p>.</span><span class=na>sleep</span><span class=p>(</span><span class=n>timePerFloor</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;ARRIVE-%s-%d&#34;</span><span class=p>,</span><span class=w> </span><span class=n>formatFloor</span><span class=p>(</span><span class=n>curFloor</span><span class=p>),</span><span class=w> </span><span class=n>id</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>curFloor</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=n>transferFloor</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                    </span><span class=n>transferFloorIsOccupied</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>false</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>break</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>default</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=k>break</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=架构设计>架构设计</h2><p>整体架构比较简单，只有五个类</p><ul><li>MainClass主线程接收输入</li><li>Dispatch线程对不同的请求进行分类处理</li><li>RequestQueue类是电梯的待处理队列，每个电梯实例都有一个RequestQueue实例作为缓冲区</li><li>Elevator线程对请求进行处理</li></ul><p>笔者在设计的过程中找不到理由再抽象出一个类（可能OOP的思想还没学透彻吧），所以大量的处理逻辑集中在Elevator类中，导致Elevator类的代码行数接近500行。</p><p><strong>HW5</strong> 无分配线程，输入线程直接分配给电梯的待处理队列，当时认为完全没有必要引入分配线程，没能考虑后续迭代问题</p><p><strong>HW6</strong> 新增分配线程，在分配线程和电梯线程中增加调度逻辑</p><p><strong>HW7</strong> 在分配线程和电梯线程中新增Update异步处理逻辑</p><p>三次迭代中整体架构设计变化不大，所以这里只放最后一次的设计架构：</p><p><img src=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefinedexported_from_idea.drawio%20%282%29.png loading=lazy alt="exported_from_idea.drawio (2)"></p><p>时序图（sequence diagram）：</p><p><img src=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefinedsequenceDiagram.drawio.png loading=lazy alt=sequenceDiagram.drawio></p><h2 id=debug>Debug</h2><p><strong>输出顺序</strong></p><p>在多线程中print的顺序十分重要，因为当前线程的操作会影响到其他线程的运行，且题目中有着严格的输出循序要求。一些print需要在操作之后，一些需要在操作之前。</p><p><img src=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefined%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-04-19%20111357.png loading=lazy></p><p><img src=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefined%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-04-19%20110913.png loading=lazy></p><p><strong>楼层计数</strong></p><p>把楼层转化为int类型后，使用时不能直接用floor+1或floor-1，因为F1（+1）的下一层是B1（-1）而不是0。</p><p><img src=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefined%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-04-19%20111931.png loading=lazy></p><h3 id=debug方法>debug方法</h3><p>由于程序的输出需要通过官方程序，调试起来很麻烦，所以我大部分的debug都是通过添加输出来实现的。</p><p>由于Java好像没有全局变量，只好在MainClass里声明一个public static final类型的变量来近似实现全局变量的效果。</p><p>声明一个全局debug控制开关，用来控制是否显示调试信息。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// MainClass.java</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>MainClass</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// debug info</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=kt>boolean</span><span class=w> </span><span class=n>debug</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=kc>false</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>RESET</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;\u001B[0m&#34;</span><span class=p>;</span><span class=w>  </span><span class=c1>// 重置颜色</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>YELLOW</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;\u001B[33m&#34;</span><span class=p>;</span><span class=w> </span><span class=c1>// 黄色</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kd>final</span><span class=w> </span><span class=n>String</span><span class=w> </span><span class=n>BLUE</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=s>&#34;\u001B[34m&#34;</span><span class=p>;</span><span class=w>  </span><span class=c1>// 蓝色</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>main</span><span class=p>(</span><span class=n>String</span><span class=o>[]</span><span class=w> </span><span class=n>args</span><span class=p>)</span><span class=w> </span><span class=kd>throws</span><span class=w> </span><span class=n>Exception</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>   	</span><span class=p>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// Elevator.java</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>MainClass</span><span class=p>.</span><span class=na>debug</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>TimableOutput</span><span class=p>.</span><span class=na>println</span><span class=p>(</span><span class=n>MainClass</span><span class=p>.</span><span class=na>BLUE</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=s>&#34;WAITING...&#34;</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>MainClass</span><span class=p>.</span><span class=na>RESET</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h2 id=评测机>评测机</h2><p>由于官方的数据投喂包使用起来比较麻烦，所以自己写了一个自动化程序，能够实现快速的输入数据，再加上对输出的逻辑判断和性能指标计算即可构成一个简易评测机。</p><p>hw7评测机源码：https://github.com/Accepted0424/quickHacker/blob/master/utils/quickInput_elevator3.py</p><ul><li><p>支持windows和mac平台。</p></li><li><p>给定java项目文件夹，每次运行时会遍历文件夹下所有<code>.java</code>文件并自动引入官方依赖包生成<code>.jar</code>文件。操作简便，编辑完 java文件之后只需要直接<code>Run Code</code>即可，无需额外操作。</p></li><li><p><strong>可能</strong>比较完善的输出逻辑判断。</p></li><li><p>支持输出三项性能指标。</p></li><li><p>重要信息特殊颜色突出（SCHE、UPDATE、RECEIVE）。</p></li><li><p>将输入输出保存至log，便于查找。</p></li></ul><h2 id=心得体会>心得体会</h2><h3 id=线程安全>线程安全</h3><p>在接触多线程编程之前，我一直以为“让多个线程一起工作”只是提升程序效率的一种手段。然而，真正深入学习之后才发现：线程安全是多线程编程中最难也最核心的问题之一。它不像语法错误那样容易察觉，往往潜伏在系统中，直到某一次并发冲突才暴露出严重的后果。线程安全并不是“写代码时加几把锁”那么简单，而是一种思维方式，它需要我们从程序整体考虑，而不是局限于单一线程。写好多线程程序需要大量的经验积累！</p><h3 id=层次化设计>层次化设计</h3><p>在这个单元中，我并没有很好的关注”层次化设计“，大量的逻辑写在了Elevator类中，各种逻辑的耦合导致debug的时候十分痛苦，往往是牵一发而动全身，改好了一个bug可能导致了更多的bug。这也是我需要反思学习、积累经验的，很多时候一个优秀的架构设计往往能避免很多问题。</p><h3 id=其他>其他</h3><ul><li>多线程编程需要摒弃之前的编程思维，更多的考虑时序关系。单线程程序的执行是线性的，开发者只需要关注代码从上到下的执行逻辑即可；但在多线程环境中，代码的执行顺序不再可控，线程之间可能并发运行、抢占资源，造成不可预测的结果。</li><li>很多时候本地无法跑出官方评测机的结果，甚至在本地跑的结果也千奇百怪，这主要是因为我们只能让线程进入<strong>就绪状态</strong>，而无法控制线程何时执行，这就带来了很多不确定性。最理想的情况当然是确保逻辑严密，JVM无论怎么调度都能保证正确性，但是这需要大量的经验累积和对底层知识的深入理解。</li><li>在第三次作业的处理中引入了异步操作导致不确定性进一步增加，而且也有点不符合实际，个人认为是一次比较失败的设计，但是由于时间原因确实没精力再重构了。</li><li>在刚学习Java的多线程编程时很多地方都感到困惑，不理解其背后的原理，但是在OS也学到线程和进程后，对很多东西都感到豁然开朗。</li><li>原本以为手机上的软件开发没什么难度，但是自己实操了之后才明白，写一个软件不难，但是想写一个支持高并发，能够让几亿人同时使用的软件确实绝非易事，毕竟自己处理6个电梯线程就出现了数不清的bug。</li></ul></section><footer class=article-footer><section class=article-tags><a href=/tags/buaa-oo/>BUAA-OO</a>
+<a href=/tags/java/>Java</a>
+<a href=/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/>面向对象</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 Apr 18, 2025 18:28 UTC</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".main-article");renderMathInElement(e,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/oo-unit1/><div class=article-image><img src=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefinedundefinedimage7-1.png loading=lazy data-key=OO-unit1 data-hash=https://lhy-blog-image.oss-cn-beijing.aliyuncs.com/undefinedundefinedimage7-1.png></div><div class=article-details><h2 class=article-title>BUAA-OO-Unit1</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//lhy0424-disqus-com.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 Az's Blog</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

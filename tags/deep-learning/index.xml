@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Deep Learning on Az's Blog</title><link>https://lhy0424.top/tags/deep-learning/</link><description>Recent content in Deep Learning on Az's Blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 10 Mar 2025 15:32:00 +0000</lastBuildDate><atom:link href="https://lhy0424.top/tags/deep-learning/index.xml" rel="self" type="application/rss+xml"/><item><title>Tansformer学习笔记</title><link>https://lhy0424.top/p/transformer/</link><pubDate>Mon, 10 Mar 2025 15:32:00 +0000</pubDate><guid>https://lhy0424.top/p/transformer/</guid><description>&lt;img src="https://lhy0424.top/p/transformer/transformers_2b9aba81a7.jpg" alt="Featured image of post Tansformer学习笔记" />&lt;h1 id="transformer">Transformer
+&lt;/h1>&lt;p>Transformer 最早在2017年的&lt;a class="link" href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1706.03762" target="_blank" rel="noopener"
+>《Attention Is All You Need》&lt;/a>论文中提出，通过引入 &lt;strong>自注意力（Self-Attention）+ 位置编码（Positional Encoding）+ 多头注意力（Multi-Head Attention）+ 前馈网络（Feed-Forward Network）&lt;/strong>，解决了传统 Seq2Seq 模型在处理&lt;strong>可变长序列&lt;/strong>时的长距离依赖、计算效率等关键问题。&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>seq2seq&lt;/strong>，序列到序列，输入为一段序列，输出也是一段序列，如翻译任务。&lt;/p>
+&lt;p>&lt;strong>处理可变长序列&lt;/strong>，指的是在自然语言处理（NLP）等任务中，模型需要能够应对&lt;strong>不同长度&lt;/strong>的输入或输出序列，而不是固定长度的数据。&lt;/p>&lt;/blockquote>
+&lt;p>with transformer you can&lt;/p>
+&lt;ul>
+&lt;li>voice-to-text&lt;/li>
+&lt;li>text-to-voice&lt;/li>
+&lt;li>text-to-image&amp;hellip;&lt;/li>
+&lt;/ul>
+&lt;p>《Attention is All You Need》专注于把一种语言翻译成另一种，这也是Transformer最初的设计目的，而后来被广泛应用于各种自然语言处理（NLP）任务，比如ChatGPT、DeepSeek等大模型，本文主要介绍最基础的transformer结构。&lt;/p>
+&lt;h2 id="a-high-level-look">A High-Level Look
+&lt;/h2>$$
+Transfomer(我是一个学生) = I\space am\space a\space studuent
+$$&lt;p>&lt;img src="https://lhy0424.top/p/transformer/100338.png"
+width="2464"
+height="1372"
+srcset="https://lhy0424.top/p/transformer/100338_hu_1ca66c0856641636.png 480w, https://lhy0424.top/p/transformer/100338_hu_f6af1cf1143230d9.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="179"
+data-flex-basis="431px"
+>&lt;/p>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/The_transformer_encoder_decoder_stack.png"
+loading="lazy"
+alt="img"
+>&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/transformer/221542.png"
+width="530"
+height="696"
+srcset="https://lhy0424.top/p/transformer/221542_hu_420c5707aadfcde8.png 480w, https://lhy0424.top/p/transformer/221542_hu_e0f8e7941159190f.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="76"
+data-flex-basis="182px"
+>&lt;/p>
+&lt;h2 id="token-embedding-词嵌入">Token Embedding 词嵌入
+&lt;/h2>&lt;blockquote>
+&lt;p>&lt;em>&lt;strong>Can you can a can like a canner can a can.&lt;/strong>&lt;/em>&lt;/p>&lt;/blockquote>
+&lt;ul>
+&lt;li>token? 单词片段或标点符号&lt;/li>
+&lt;li>将每个token转化为对应的高维向量，构成Embedding matrix
+&lt;ul>
+&lt;li>Embedding matrix随机初始化，并通过数据进行学习&lt;/li>
+&lt;li>GPT-3中每个token的向量有12288个维度&lt;/li>
+&lt;li>向量的方向代表语义，语义相似的token有着相似的方向&lt;/li>
+&lt;li>两个词的差异也会体现在向量之差，例如man和woman的向量之差与uncle和aunt的向量之差相似，也可以理解为$\vec{uncle}+(\vec{woman}-\vec{man}) = \vec{aunt}$&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>得到的词向量无上下文语义，但是其性质决定其可以用于分析上下文
+&lt;ul>
+&lt;li>Attention的目标就是让单个token通过上下文获得更丰富的语义。（比如判断出每个can的含义）&lt;/li>
+&lt;li>上下文长度指的即是模型每次能处理的向量数目（预测下一个token时结合的文本量）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Unembedding matrix 解嵌入矩阵，可以将一个向量解析为对应的单词&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://lhy0424.top/p/transformer/100732.png"
+width="2499"
+height="1085"
+srcset="https://lhy0424.top/p/transformer/100732_hu_9ddc44a6431ecfa0.png 480w, https://lhy0424.top/p/transformer/100732_hu_acbdc36ac31700b5.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="230"
+data-flex-basis="552px"
+>&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/transformer/102903.png"
+width="2555"
+height="791"
+srcset="https://lhy0424.top/p/transformer/102903_hu_838a9c3c8ff3b961.png 480w, https://lhy0424.top/p/transformer/102903_hu_bfa74c1c85bd8f7c.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="323"
+data-flex-basis="775px"
+>&lt;/p>
+&lt;h2 id="positional-encoding">Positional encoding
+&lt;/h2>&lt;p>引入额外的位置编码刻画数据在时序上的特征
+&lt;/p>
+$$
+PE_{pos,2i}=sin(pos/10000^{2i/d_{model}})\\
+PE_{pos,2i+1}=cos(pos/10000^{2i/d_{model}})
+$$&lt;p>&lt;img src="https://jalammar.github.io/images/t/transformer_positional_encoding_vectors.png"
+loading="lazy"
+alt="transformer_positional_encoding_vectors"
+>&lt;/p>
+&lt;h2 id="encoder">Encoder
+&lt;/h2>&lt;ul>
+&lt;li>self-attention自注意力机制&lt;/li>
+&lt;li>Feed Forward Neural Network 前馈神经网络&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/encoder_with_tensors.png"
+loading="lazy"
+alt="encoder_with_tensors"
+>&lt;/p>
+&lt;h3 id="self-attention-自注意力机制">Self-Attention 自注意力机制
+&lt;/h3>&lt;blockquote>
+&lt;p>&lt;em>&lt;strong>“ Can you can a can like a canner can a can. ”&lt;/strong>&lt;/em>&lt;/p>&lt;/blockquote>
+&lt;ul>
+&lt;li>can 代指的是什么？需要联系上下文&lt;/li>
+&lt;/ul>
+&lt;h5 id="qkv">Q、K、V
+&lt;/h5>&lt;p>**如何理解矩阵形式的Q、K、V：**在map/dict查询时我们可以根据key查询数据，如果query=key，那么取出key对应的数据。但是对于矩阵形式的Q、K、V，这样并不可行，只能变得soft一些，计算query和key的关系之后再对value加权求和。（softmax也是类似的思想）&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>$Query\space vector = \vec{E} \times W_Q$&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>$ Key\space vector=\vec{E}\times W_K$&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>$Value\space vector = \vec{E}\times W_V$&lt;/p>
+&lt;ul>
+&lt;li>Value反映了如果要改变目标词的语义，需要对目标词的embedding加上一个什么样的向量&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>$W_K\space W_K\space W_V$均通过训练获得&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/transformer_self_attention_vectors.png"
+loading="lazy"
+alt="transformer_self_attention_vectors"
+>&lt;/p>
+$$
+Softmax(\frac{q_i\cdot k_j}{\sqrt{d_k}})\\ d_k\space is\space the \space dimension\space of\space the\space key\space vector
+$$&lt;p>这个公式表示在j位置的token在i位置的表达量，显然i位置本身的token在i位置表达量最大。&lt;/p>
+&lt;ul>
+&lt;li>query点乘key得到一个较大的正数，即称key代表的embedding注意到了query代表的embedding&lt;/li>
+&lt;li>如果是一个较小值或负值，则代表两个词互不相关&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/self-attention_softmax.png"
+loading="lazy"
+alt="self-attention_softmax"
+>
+&lt;/p>
+$$
+z_i = \sum_{j=1}^{n} softmax(\frac{q_i\cdot k_j}{\sqrt{d_k}}) \times v_j \\or\\
+Attention(Q,K,V) = softmax(\frac{QK^T}{\sqrt{d_k}})V
+$$&lt;p>
+之后我们用softmax score乘每个位置上的value向量再求和，即可得到该位置上的self-attention层的输出向量$z_1$，$z_1$之后会传入feed-forward neural network。&lt;/p>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/self-attention-matrix-calculation-2.png"
+loading="lazy"
+alt="self-attention-matrix-calculation-2"
+>&lt;/p>
+&lt;h4 id="multi-head-attention-多头注意力机制">Multi-head attention 多头注意力机制
+&lt;/h4>&lt;p>模型在对当前位置的信息进行编码时，会过度的将注意力集中于自身的位置&lt;/p>
+&lt;blockquote>
+&lt;p>Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions.&lt;/p>&lt;/blockquote>
+&lt;ul>
+&lt;li>
+&lt;p>提高模型对其他位置的注意力。之前的方法得到的z向量尽管以及包含了其他位置的编码信息，但是其仍主要受自身的影响。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Transformer有8个注意力头，即每个encoder/decoder有八组QKV&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>每组QKV分别按上述方法进行计算得到一组z向量，再将他们拼接起来叉乘一个新的矩阵$W^o$，得到一个新的z向量&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/transformer_attention_heads_weight_matrix_o.png"
+loading="lazy"
+alt="transformer_attention_heads_weight_matrix_o"
+>&lt;/p>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/transformer_multi-headed_self-attention-recap.png"
+loading="lazy"
+alt="transformer_multi-headed_self-attention-recap"
+>&lt;/p>
+&lt;h3 id="inside-the-multilayer-perception-多层感知器">Inside the Multilayer Perception 多层感知器
+&lt;/h3>&lt;p>推理需要事实作为依据，大模型是如何存储事实的？&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/transformer/155134.png"
+width="1071"
+height="252"
+srcset="https://lhy0424.top/p/transformer/155134_hu_8f6f785f2815ceaa.png 480w, https://lhy0424.top/p/transformer/155134_hu_f7e93e0d0d392361.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="425"
+data-flex-basis="1020px"
+>&lt;/p>
+&lt;h4 id="linear-up-projection">Linear (up projection)
+&lt;/h4>&lt;ul>
+&lt;li>
+&lt;p>乘一个矩阵$W_{\uparrow}$，将向量映射到高维空间&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>矩阵的每一行都是一个问题 (简化理解)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>$\vec{B_{\uparrow}}$为Bias偏置，确保当embedding与问题相符时为1，其他情况为0或负&lt;/p>
+&lt;/li>
+&lt;/ul>
+$$
+W_{\uparrow}\vec{E}+\vec{B_{\uparrow}}
+$$&lt;p>&lt;img src="https://lhy0424.top/p/transformer/152128.png"
+width="1167"
+height="597"
+srcset="https://lhy0424.top/p/transformer/152128_hu_1cbb7e2b14c749ca.png 480w, https://lhy0424.top/p/transformer/152128_hu_30313c75f06d0339.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="195"
+data-flex-basis="469px"
+>&lt;/p>
+&lt;p>&lt;img src="https://lhy0424.top/p/transformer/152234.png"
+width="2401"
+height="702"
+srcset="https://lhy0424.top/p/transformer/152234_hu_704987701938aa35.png 480w, https://lhy0424.top/p/transformer/152234_hu_b0a456a5283fc5a.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="342"
+data-flex-basis="820px"
+>&lt;/p>
+&lt;h4 id="relu线性整流函数">ReLU线性整流函数
+&lt;/h4>&lt;ul>
+&lt;li>对得到的高维向量进行处理：非线性函数，将负值映射为0，正值不变&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://lhy0424.top/p/transformer/152726.png"
+width="1016"
+height="640"
+srcset="https://lhy0424.top/p/transformer/152726_hu_5bdb60ef4f1c6341.png 480w, https://lhy0424.top/p/transformer/152726_hu_9f22fd598d1f9e65.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="158"
+data-flex-basis="381px"
+>&lt;/p>
+&lt;h4 id="linear-down-projection">Linear (down projection)
+&lt;/h4>&lt;ul>
+&lt;li>对高维向量进行降维处理，使输出向量的维数降回到嵌入空间的维数&lt;/li>
+&lt;/ul>
+$$
+W_{\downarrow}(\space ReLU(W_{\uparrow}\vec{E}+B_{\uparrow})\space) + B_{\downarrow}
+$$&lt;p>&lt;img src="https://lhy0424.top/p/transformer/153428.png"
+width="2129"
+height="765"
+srcset="https://lhy0424.top/p/transformer/153428_hu_eca90da885eb1c91.png 480w, https://lhy0424.top/p/transformer/153428_hu_a1db886d0a38ac2b.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="278"
+data-flex-basis="667px"
+>&lt;/p>
+&lt;h3 id="residuals-残差">Residuals 残差
+&lt;/h3>&lt;ul>
+&lt;li>
+&lt;p>在每个子层（如自注意力层和前馈神经网络层）中，残差连接允许输入信号绕过子层，直接与子层的输出相加。这意味着输出是子层的原始输入与子层的变换输出的和。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>用于帮助解决深度神经网络训练过程中的梯度消失或梯度爆炸问题。&lt;/p>
+&lt;ul>
+&lt;li>梯度消失：梯度趋近于零，网络权重无法更新或更新的很微小，网络训练再久也不会有效果；&lt;/li>
+&lt;li>梯度爆炸：梯度呈指数级增长，变的非常大，然后导致网络权重的大幅更新，使网络变得不稳定。&lt;/li>
+&lt;/ul>
+$$
+output=x+F(x)\space(其中 F(x)F(x)F(x) 表示子层的复杂变换)
+$$&lt;p>即使 F(x)F(x)F(x) 部分可能会导致数值不稳定，恒等项 xxx 总能为梯度提供一个稳定的基础，从而改善整体训练的稳定性。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/transformer_resideual_layer_norm_3.png"
+loading="lazy"
+alt="transformer_resideual_layer_norm_3"
+>&lt;/p>
+&lt;h2 id="decoder">Decoder
+&lt;/h2>&lt;ul>
+&lt;li>解码器也含有这两个层，但是中间增加了一个注意力层帮助解码器关注到相关的输入&lt;/li>
+&lt;li>解码器的self-attention与编码器稍有不同，其只关注输出序列中位于当前位置之前的token（masking掩码）
+&lt;ul>
+&lt;li>掩码：在计算 $q_i\cdot k_j$ 时将将 $j&amp;gt;i$ 的项置为$-\infin$，在softmax的过程中$-\infin$会被转化为0，起到屏蔽作用&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://lhy0424.top/p/transformer/221542-1741617673211-3.png"
+width="530"
+height="696"
+srcset="https://lhy0424.top/p/transformer/221542-1741617673211-3_hu_420c5707aadfcde8.png 480w, https://lhy0424.top/p/transformer/221542-1741617673211-3_hu_e0f8e7941159190f.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="76"
+data-flex-basis="182px"
+>&lt;/p>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/transformer_decoding_2.gif"
+loading="lazy"
+alt="transformer_decoding_2"
+>&lt;/p>
+&lt;h2 id="linear-layer">Linear Layer
+&lt;/h2>&lt;p>实际上，decoder的输出是一个浮点型的向量，如何得到一个token？&lt;/p>
+&lt;ul>
+&lt;li>线性层是一个全链接神经网络，将decoder的输出向量转化为一个更大的向量（logits vector）&lt;/li>
+&lt;li>logits vector的维度等于“output vocabulary”所包含的token数（模型在训练中学习到的的token），logits vector中的每一格就是对某个token的评分&lt;/li>
+&lt;li>之后softmax layer会将logits vector转化为概率（归一化，所有数值相加等于一），选取概率最大的token&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://jalammar.github.io/images/t/transformer_decoder_output_softmax.png"
+loading="lazy"
+alt="transformer_decoder_output_softmax"
+>&lt;/p>
+&lt;h2 id="softmax-with-temperature">softmax with temperature
+&lt;/h2>&lt;p>softmax对向量进行归一化，确保$\sum x_n = 1$
+&lt;/p>
+$$
+\begin{bmatrix}
+x_1\\
+x_2\\
+x_3\\
+...
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+\frac{e^{x_1/T}}{\sum_{n=0}^{N-1}e^{x_n/T}}\\
+\frac{e^{x_2/T}}{\sum_{n=0}^{N-1}e^{x_n/T}}\\
+\frac{e^{x_3/T}}{\sum_{n=0}^{N-1}e^{x_n/T}}\\
+...
+\end{bmatrix}
+$$&lt;ul>
+&lt;li>T越大，会给小数值赋予更多的权重，分布越均匀
+&lt;ul>
+&lt;li>模型更愿意选择可能性较低的词&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>T越小，较大的数组优势会更明显。
+&lt;ul>
+&lt;li>T = 0时模型总是会选择最可能的词&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="参考资料">参考资料
+&lt;/h2>&lt;ul>
+&lt;li>《Attention Is All You Need》 &lt;a class="link" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener"
+>https://arxiv.org/abs/1706.03762&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="noopener"
+>https://jalammar.github.io/illustrated-transformer/&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.3blue1brown.com/topics/neural-networks" target="_blank" rel="noopener"
+>https://www.3blue1brown.com/topics/neural-networks&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

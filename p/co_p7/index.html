@@ -1,0 +1,863 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="verilog流水线CPU（异常中断处理）"><title>P7_设计文档</title>
+<link rel=canonical href=https://lhy0424.top/p/co_p7/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="P7_设计文档"><meta property='og:description' content="verilog流水线CPU（异常中断处理）"><meta property='og:url' content='https://lhy0424.top/p/co_p7/'><meta property='og:site_name' content="Az's Blog"><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='BUAA-CO'><meta property='article:tag' content='verilog'><meta property='article:published_time' content='2024-12-20T00:32:00+00:00'><meta property='article:modified_time' content='2024-12-20T00:32:00+00:00'><meta property='og:image' content='https://lhy0424.top/p/co_p7/P7_cover.jpg'><meta name=twitter:title content="P7_设计文档"><meta name=twitter:description content="verilog流水线CPU（异常中断处理）"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://lhy0424.top/p/co_p7/P7_cover.jpg'><link rel="shortcut icon" href=/img/az.jpg></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/az_hu_2167c1e5a8cad978.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>Az's Blog</a></h1><h2 class=site-description>Stay hungry, Stay foolish.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Accepted0424 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#预备知识>预备知识</a><ol><li><a href=#异常程序处理>异常程序处理</a><ol><li><a href=#代码解释>代码解释</a></li></ol></li><li><a href=#cpu与外设的交互>CPU与外设的交互</a><ol><li><a href=#外设>外设</a></li><li><a href=#内存>内存</a></li></ol></li><li><a href=#宏观pc>宏观PC</a></li></ol></li><li><a href=#tasks>Tasks</a><ol><li><a href=#task-1-建立与外界的联系>Task-1: 建立与外界的联系</a><ol><li><a href=#timer>Timer</a></li></ol></li><li><a href=#task-2-记录异常并流水>Task-2: 记录异常并流水</a><ol><li><a href=#if级>IF级</a></li><li><a href=#id级>ID级</a></li><li><a href=#ex级>EX级</a></li><li><a href=#ma级>MA级</a></li></ol></li><li><a href=#task-3-加入协处理器cp0>Task-3: 加入协处理器CP0</a></li><li><a href=#task-4-加指令>Task-4: 加指令</a><ol><li><a href=#mfc0>MFC0</a></li><li><a href=#mtc0>MTC0</a></li><li><a href=#eret>ERET</a></li><li><a href=#syscall>syscall</a></li></ol></li><li><a href=#流水寄存器行为>流水寄存器行为</a><ol><li><a href=#为什么要修改寄存器的清空行为>为什么要修改寄存器的清空行为？</a></li><li><a href=#pc>PC</a></li><li><a href=#if_id-reg>IF_ID Reg</a></li><li><a href=#id_ex-reg>ID_EX Reg</a></li><li><a href=#ex_ma-reg>EX_MA Reg</a></li><li><a href=#ma_wb-reg>MA_WB Reg</a></li></ol></li></ol></li><li><a href=#我的bug>我的Bug</a></li><li><a href=#测试方案>测试方案</a></li><li><a href=#思考题>思考题</a></li><li><a href=#课程组官方testbench>课程组官方TestBench</a></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/co_p7/><img src=/p/co_p7/P7_cover_hu_cae888011562e8d8.jpg srcset="/p/co_p7/P7_cover_hu_cae888011562e8d8.jpg 800w, /p/co_p7/P7_cover_hu_d121a85b2eb899c4.jpg 1600w" width=800 height=530 loading=lazy alt="Featured image of post P7_设计文档"></a></div><div class=article-details><header class=article-category><a href=/categories/buaa-co/>BUAA-CO</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/co_p7/>P7_设计文档</a></h2><h3 class=article-subtitle>verilog流水线CPU（异常中断处理）</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 20, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 15 分钟</time></div></footer></div></header><section class=article-content><h1 id=p7_mips微系统>P7_MIPS微系统</h1><h2 id=预备知识>预备知识</h2><h3 id=异常程序处理>异常程序处理</h3><p>先要明白一点，Mars不会帮你处理中断异常，Mars遇到异常指令或中断信号会跳至中断异常处理程序（0x4180之后），如何处理中断异常完全由0x4180之后的代码决定。</p><p>先看课程组给出的示例程序</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span><span class=lnt>76
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 程序首先从这里运行</span>
+</span></span><span class=line><span class=cl>.text
+</span></span><span class=line><span class=cl>    <span class=c1># 只允许外部中断</span>
+</span></span><span class=line><span class=cl>    ori <span class=nv>$t0</span>, <span class=nv>$0</span>, 0x1001
+</span></span><span class=line><span class=cl>    mtc0 <span class=nv>$t0</span>, <span class=nv>$12</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 算术溢出</span>
+</span></span><span class=line><span class=cl>    lui <span class=nv>$t0</span>, 0x7fff
+</span></span><span class=line><span class=cl>    lui <span class=nv>$t1</span>, 0x7fff
+</span></span><span class=line><span class=cl>    add <span class=nv>$t2</span>, <span class=nv>$t0</span>, <span class=nv>$t1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>end:
+</span></span><span class=line><span class=cl>    beq <span class=nv>$0</span>, <span class=nv>$0</span>, end
+</span></span><span class=line><span class=cl>    nop
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>.ktext 0x4180
+</span></span><span class=line><span class=cl>_entry:
+</span></span><span class=line><span class=cl>    <span class=c1># 保存上下文</span>
+</span></span><span class=line><span class=cl>    j _save_context
+</span></span><span class=line><span class=cl>    nop
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>_main_handler:
+</span></span><span class=line><span class=cl>    <span class=c1># 取出 ExcCode</span>
+</span></span><span class=line><span class=cl>    mfc0 <span class=nv>$k0</span>, <span class=nv>$13</span>
+</span></span><span class=line><span class=cl>    ori <span class=nv>$k1</span>, <span class=nv>$0</span>, 0x7c
+</span></span><span class=line><span class=cl>    and <span class=nv>$k0</span>, <span class=nv>$k0</span>, <span class=nv>$k1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 如果是中断，直接恢复上下文</span>
+</span></span><span class=line><span class=cl>    beq <span class=nv>$k0</span>, <span class=nv>$0</span>, _restore_context
+</span></span><span class=line><span class=cl>    nop
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 将 EPC + 4，即处理异常的方法就是跳过当前指令</span>
+</span></span><span class=line><span class=cl>    mfc0 <span class=nv>$k0</span>, <span class=nv>$14</span>
+</span></span><span class=line><span class=cl>    addu <span class=nv>$k0</span>, <span class=nv>$k0</span>, <span class=m>4</span>
+</span></span><span class=line><span class=cl>    mtc0 <span class=nv>$k0</span>, <span class=nv>$14</span>
+</span></span><span class=line><span class=cl>    j _restore_context
+</span></span><span class=line><span class=cl>    nop
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>_exception_return:
+</span></span><span class=line><span class=cl>    eret
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>_save_context:
+</span></span><span class=line><span class=cl>    ori <span class=nv>$k0</span>, <span class=nv>$0</span>, 0x1000     <span class=c1># 在栈上找一块空间保存现场</span>
+</span></span><span class=line><span class=cl>    addiu <span class=nv>$k0</span>, <span class=nv>$k0</span>, -256
+</span></span><span class=line><span class=cl>    sw <span class=nv>$sp</span>, 116<span class=o>(</span><span class=nv>$k0</span><span class=o>)</span>        <span class=c1># 最先保存栈指针</span>
+</span></span><span class=line><span class=cl>    move <span class=nv>$sp</span>, <span class=nv>$k0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 依次保存通用寄存器（注意要跳过 $sp）、HI 和 LO</span>
+</span></span><span class=line><span class=cl>    sw <span class=nv>$1</span>, 4<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    sw <span class=nv>$2</span>, 8<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># ......</span>
+</span></span><span class=line><span class=cl>    sw <span class=nv>$31</span>, 124<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    mfhi <span class=nv>$k0</span>
+</span></span><span class=line><span class=cl>    mflo <span class=nv>$k1</span>
+</span></span><span class=line><span class=cl>    sw <span class=nv>$k0</span>, 128<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    sw <span class=nv>$k1</span>, 132<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    j _main_handler
+</span></span><span class=line><span class=cl>    nop
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>_restore_context:
+</span></span><span class=line><span class=cl>    <span class=c1># 依次恢复通用寄存器（注意要跳过 $sp）、 HI 和 LO</span>
+</span></span><span class=line><span class=cl>    lw <span class=nv>$1</span>, 4<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    lw <span class=nv>$2</span>, 8<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># ......</span>
+</span></span><span class=line><span class=cl>    lw <span class=nv>$31</span>, 124<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    lw <span class=nv>$k0</span>, 128<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    lw <span class=nv>$k1</span>, 132<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    mthi <span class=nv>$k0</span>
+</span></span><span class=line><span class=cl>    mtlo <span class=nv>$k1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 最后恢复栈指针</span>
+</span></span><span class=line><span class=cl>    lw <span class=nv>$sp</span>, 116<span class=o>(</span><span class=nv>$sp</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    j _exception_return
+</span></span><span class=line><span class=cl>    nop
+</span></span></code></pre></td></tr></table></div></div><h4 id=代码解释>代码解释</h4><ul><li><p><strong>.text:</strong> Subsequent items (instructions) stored in Text segment at next available address.随后的条目（指令）存储在文本段的下一个可用地址中。普通的用户模式下的代码段，简单来说就是存指令的地方。</p></li><li><p><strong>.ktext:</strong> Subsequent items stored in Kernel Text segment at next available address.随后的条目存储在内核文本段的下一个可用地址中。即内核模式下的代码段，内核模式下运行，具有最高权限，可以直接访问硬件和受保护的资源。对于p7来说就是存放异常处理程序的地方。</p></li><li><p>异常包括很多种类型，中断和异常也不同，不同的异常或中断处理方式不一样，因此我们需要记录下异常或中断的信息，然后用特定方式处理异常，这就是CP0（协处理器）的作用。</p></li><li><p>进入中断异常处理程序后，我们先从CP0中获取异常或中断信息，然后跳转至不同的地方处理异常中断，一般最后都会跳转到eret，返回主程序。</p></li></ul><h3 id=cpu与外设的交互>CPU与外设的交互</h3><p>CPU的作用就是对外界输入数据做出对应的处理后返回结果。</p><h4 id=外设>外设</h4><p>对于p7，我们有三个外设需要处理。这三个外设的作用就是时不时向cpu发出一个中断信号。</p><ul><li>计时器（Timer）：计算机系统中的计时部件，可以按照配置定时地产生时钟中断。</li><li>存储器（Memory）：计算机系统中的存储部件，用于存储指令和数据。我们在 P6 的时候已经接触过了。</li><li>中断发生器（InterruptGenerator）：抽象的计算机系统外设，会随机的产生外部中断信号，产生的中断信号在 CPU 响应前会持续置高。</li></ul><h4 id=内存>内存</h4><ul><li><p>我们可以认为内存也是一种外设。</p></li><li><p>我们可以认为指令、数据、异常处理程序、外设寄存器等都是储存在同一内存中，只不过存储的位置不同，有着严格的界限。</p></li></ul><div class=table-wrapper><table><thead><tr><th><strong>条目</strong></th><th><strong>地址或地址范围</strong></th><th><strong>备注</strong></th></tr></thead><tbody><tr><td>数据存储器</td><td><em><strong>0x0000_0000</strong></em>∼<em><strong>0x0000_2FFF</strong></em></td><td></td></tr><tr><td>指令存储器</td><td><em><strong>0x0000_3000</strong></em>∼<em><strong>0x0000_6FFF</strong></em></td><td></td></tr><tr><td>PC 初始值</td><td><em><strong>0x0000_3000</strong></em></td><td></td></tr><tr><td>异常处理程序入口地址</td><td><em><strong>0x0000_4180</strong></em></td><td></td></tr><tr><td>计时器 0 寄存器地址</td><td><em><strong>0x0000_7F00</strong></em>∼<em><strong>0x0000_7F0B</strong></em></td><td>计时器 0 的 3 个寄存器</td></tr><tr><td>计时器 1 寄存器地址</td><td><em><strong>0x0000_7F10</strong></em>∼<em><strong>0x0000_7F1B</strong></em></td><td>计时器 1 的 3 个寄存器</td></tr><tr><td>中断发生器响应地址</td><td><em><strong>0x0000_7F20</strong></em>∼<em><strong>0x0000_7F23</strong></em></td><td></td></tr></tbody></table></div><h3 id=宏观pc>宏观PC</h3><p>对于流水线寄存器，每一流水级的PC都不同。我们希望CPU实现的功能应该是单周期的，引入多周期只是为了提高效率。如果我们把CPU封装起来，不关注内部的复杂过程，在外部看来CPU应该只有一个PC，即CPU一个周期仅执行一条指令。为此我们需要引入宏观PC的概念。</p><ul><li>我们将 CP0 放在 M 级（大家都放在M级，方便对拍），因此也以 M 级为界线，规定 M 级的 PC 就是宏观 PC。</li><li>**所谓“宏观”指令，表示该指令之前的所有指令序列对 CPU 的更新已完成，该指令及其之后的指令序列对 CPU 的更新未完成。**放在M级显然满足这个定义。</li></ul><h2 id=tasks>Tasks</h2><h3 id=task-1-建立与外界的联系>Task-1: 建立与外界的联系</h3><h4 id=timer>Timer</h4><ul><li>Timer内部有三个寄存器: 0号寄存器ctrl、1号寄存器preset、2号寄存器count。虽然说是寄存器，但我们可以认为其实内存的一部分。</li></ul><div class=table-wrapper><table><thead><tr><th></th><th>0号寄存器ctrl</th><th>1号寄存器preset</th><th>2号寄存器count</th></tr></thead><tbody><tr><td>TC1</td><td><em><strong>0x0000_7F00</strong></em>∼<em><strong>0x0000_7F03</strong></em></td><td><em><strong>0x0000_7F04</strong></em>∼<em><strong>0x0000_7F07</strong></em></td><td><em><strong>0x0000_7F08</strong></em>∼<em><strong>0x0000_7F0b</strong></em></td></tr><tr><td>TC2</td><td><em><strong>0x0000_7F10</strong></em>∼<em><strong>0x0000_7F13</strong></em></td><td><em><strong>0x0000_7F14</strong></em>∼<em><strong>0x0000_7F17</strong></em></td><td><em><strong>0x0000_7F18</strong></em>∼<em><strong>0x0000_7F1b</strong></em></td></tr></tbody></table></div><ul><li><p>我们可以通过sw指令向对应Timer寄存器中存值以开启计时并调整倒计时。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>    <span class=c1># MODE 0 for timer1</span>
+</span></span><span class=line><span class=cl>    ori <span class=nv>$t1</span> <span class=nv>$0</span> <span class=m>9</span> <span class=c1>#设置计时使能和中断屏蔽</span>
+</span></span><span class=line><span class=cl>    sw <span class=nv>$t1</span> 0x7F00<span class=o>(</span><span class=nv>$0</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    ori <span class=nv>$t1</span> <span class=nv>$0</span> <span class=m>1</span> <span class=c1>#设置计时数</span>
+</span></span><span class=line><span class=cl>    sw <span class=nv>$t1</span> 0x7F04<span class=o>(</span><span class=nv>$0</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># MODE 1 for timer1</span>
+</span></span><span class=line><span class=cl>    ori <span class=nv>$t1</span> <span class=nv>$0</span> <span class=m>11</span> <span class=c1>#设置计时使能和中断屏蔽</span>
+</span></span><span class=line><span class=cl>    sw <span class=nv>$t1</span> 0x7F00<span class=o>(</span><span class=nv>$0</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    ori <span class=nv>$t1</span> <span class=nv>$0</span> <span class=m>10</span> <span class=c1>#设置计时数</span>
+</span></span><span class=line><span class=cl>    sw <span class=nv>$t1</span> 0x7F04<span class=o>(</span><span class=nv>$0</span><span class=o>)</span>
+</span></span></code></pre></td></tr></table></div></div></li></ul><h3 id=task-2-记录异常并流水>Task-2: 记录异常并流水</h3><ul><li>where CP0: M级。</li><li>延迟槽指令: 如果一个处于延迟槽的指令发生了异常，我们从异常处理程序中返回时需要回到它的上一个指令（跳转指令）。因此我们需要增加判断一个信号用于判断指令是否在延迟槽中，并向后流水传至CP0。（branch、jump、jal、jr在ID级，IF级的指令即处于延迟槽中）。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=k>assign</span> <span class=n>BD_IF</span> <span class=o>=</span> <span class=p>((</span><span class=n>branch_ID</span> <span class=o>===</span> <span class=mh>1</span><span class=mb>&#39;b1</span><span class=p>)</span> <span class=o>||</span> <span class=p>(</span><span class=n>jump_ID</span> <span class=o>===</span> <span class=mh>1</span><span class=mb>&#39;b1</span><span class=p>))</span><span class=o>?</span> <span class=mh>1</span><span class=mb>&#39;b1</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			   <span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li>内部异常和外部中断：同时发生时处理外部中断，当内部无异常时设为Int(外部中断)。</li><li>一条指令多个异常 & 多个指令异常：<strong>优先处理最早可以探查到的异常</strong>。</li></ul><div class=table-wrapper><table><thead><tr><th style=text-align:left>异常与中断码</th><th style=text-align:left>助记符与名称</th><th style=text-align:left>指令与指令类型</th><th style=text-align:left>描述</th><th></th></tr></thead><tbody><tr><td style=text-align:left>0</td><td style=text-align:left><code>Int</code> （外部中断）</td><td style=text-align:left>所有指令</td><td style=text-align:left>中断请求，来源于计时器与外部中断。</td><td></td></tr><tr><td style=text-align:left>4</td><td style=text-align:left><code>AdEL</code> （取指异常）</td><td style=text-align:left>所有指令</td><td style=text-align:left>PC 地址未字对齐。</td><td>1</td></tr><tr><td style=text-align:left>4</td><td style=text-align:left><code>AdEL</code> （取指异常）</td><td style=text-align:left>所有指令</td><td style=text-align:left>PC 地址超过 <code>0x3000 ~ 0x6ffc</code>。</td><td>1</td></tr><tr><td style=text-align:left>4</td><td style=text-align:left><code>AdEL</code> （取数异常）</td><td style=text-align:left><code>lw</code></td><td style=text-align:left>取数地址未与 4 字节对齐。</td><td>1</td></tr><tr><td style=text-align:left>4</td><td style=text-align:left><code>AdEL</code> （取数异常）</td><td style=text-align:left><code>lh</code></td><td style=text-align:left>取数地址未与 2 字节对齐。</td><td>1</td></tr><tr><td style=text-align:left>4</td><td style=text-align:left><code>AdEL</code> （取数异常）</td><td style=text-align:left><code>lh</code>, <code>lb</code></td><td style=text-align:left>取 Timer 寄存器的值。</td><td></td></tr><tr><td style=text-align:left>4</td><td style=text-align:left><code>AdEL</code> （取数异常）</td><td style=text-align:left>load 型指令</td><td style=text-align:left>计算地址时加法溢出。</td><td>1</td></tr><tr><td style=text-align:left>4</td><td style=text-align:left><code>AdEL</code> （取数异常）</td><td style=text-align:left>load 型指令</td><td style=text-align:left>取数地址超出 DM、Timer0、Timer1、中断发生器的范围。</td><td></td></tr><tr><td style=text-align:left>5</td><td style=text-align:left><code>AdES</code> （存数异常）</td><td style=text-align:left><code>sw</code></td><td style=text-align:left>存数地址未 4 字节对齐。</td><td>1</td></tr><tr><td style=text-align:left>5</td><td style=text-align:left><code>AdES</code> （存数异常）</td><td style=text-align:left><code>sh</code></td><td style=text-align:left>存数地址未 2 字节对齐。</td><td>1</td></tr><tr><td style=text-align:left>5</td><td style=text-align:left><code>AdES</code> （存数异常）</td><td style=text-align:left><code>sh</code>, <code>sb</code></td><td style=text-align:left>存 Timer 寄存器的值。</td><td></td></tr><tr><td style=text-align:left>5</td><td style=text-align:left><code>AdES</code> （存数异常）</td><td style=text-align:left>store 型指令</td><td style=text-align:left>计算地址加法溢出。</td><td>1</td></tr><tr><td style=text-align:left>5</td><td style=text-align:left><code>AdES</code> （存数异常）</td><td style=text-align:left>store 型指令</td><td style=text-align:left>向计时器的 Count 寄存器存值。</td><td></td></tr><tr><td style=text-align:left>5</td><td style=text-align:left><code>AdES</code> （存数异常）</td><td style=text-align:left>store 型指令</td><td style=text-align:left>存数地址超出 DM、Timer0、Timer1、中断发生器的范围。</td><td></td></tr><tr><td style=text-align:left>8</td><td style=text-align:left><code>Syscall</code> （系统调用）</td><td style=text-align:left><code>syscall</code></td><td style=text-align:left>系统调用。</td><td></td></tr><tr><td style=text-align:left>10</td><td style=text-align:left><code>RI</code>（未知指令）</td><td style=text-align:left>-</td><td style=text-align:left>未知的指令码。</td><td></td></tr><tr><td style=text-align:left>12</td><td style=text-align:left><code>Ov</code>（溢出异常）</td><td style=text-align:left><code>add</code>, <code>addi</code>, <code>sub</code></td><td style=text-align:left>算术溢出。</td><td>1</td></tr></tbody></table></div><h4 id=if级>IF级</h4><ul><li>PC 地址未字对齐 <code>AdEL</code></li><li>PC 地址超过 0x3000 ~ 0x6ffc <code>AdEL</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=c1>// in PC module
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>assign</span> <span class=n>exc</span> <span class=o>=</span> <span class=p>((</span><span class=n>pc</span> <span class=o>&lt;</span> <span class=mh>32&#39;h3000</span><span class=p>)</span> <span class=o>||</span> <span class=p>(</span><span class=n>pc</span> <span class=o>&gt;</span> <span class=mh>32&#39;h6ffc</span><span class=p>))</span><span class=o>?</span> <span class=mh>4</span><span class=mi>&#39;d4</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>			 <span class=p>(</span><span class=n>pc</span><span class=p>[</span><span class=mh>1</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=o>!=</span> <span class=mh>2</span><span class=mb>&#39;b0</span><span class=p>)</span><span class=o>?</span> <span class=mh>4</span><span class=mi>&#39;d4</span><span class=o>:</span> <span class=mh>4</span><span class=mi>&#39;d0</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=id级>ID级</h4><ul><li>未知的指令码 <code>RI</code></li><li>syscall 对于syscall指令我们只需发出一个异常信号即可 <code>syscall</code></li></ul><p>如果有if嵌套，注意内部if对应的else也需要判断为未知指令。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=c1>// in controller module
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>if</span> <span class=p>(</span><span class=n>OpCode</span> <span class=o>==</span> <span class=n>xxxxxx</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>Funct</span> <span class=o>==</span> <span class=n>xxxxxx</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>       <span class=c1>//ctrl signal assignment 
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>end</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>        <span class=c1>//exception RI
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=n>exc</span> <span class=o>=</span> <span class=mh>4</span><span class=mi>&#39;d10</span><span class=p>;</span> 
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span><span class=line><span class=cl><span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>OpCode</span> <span class=o>==</span> <span class=n>xxxxxx</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>    <span class=c1>//ctrl signal assignment 
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>end</span>
+</span></span><span class=line><span class=cl><span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>    <span class=c1>//exception RI
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>exc</span> <span class=o>=</span> <span class=mh>4</span><span class=mi>&#39;d10</span><span class=p>;</span> 
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=ex级>EX级</h4><ul><li>算术溢出 <code>OV</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>32</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>A_ext</span> <span class=o>=</span> <span class=p>{</span><span class=n>A</span><span class=p>[</span><span class=mh>31</span><span class=p>],</span><span class=n>A</span><span class=p>};</span>
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>32</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>B_ext</span> <span class=o>=</span> <span class=p>{</span><span class=n>B</span><span class=p>[</span><span class=mh>31</span><span class=p>],</span><span class=n>B</span><span class=p>};</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>32</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>addi_temp</span> <span class=o>=</span> <span class=n>A_ext</span> <span class=o>+</span> <span class=n>B_ext</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>addi_overflow</span> <span class=o>=</span> <span class=p>((</span><span class=n>F</span> <span class=o>==</span> <span class=no>`ADDI</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>addi_temp</span><span class=p>[</span><span class=mh>32</span><span class=p>]</span> <span class=o>!=</span> <span class=n>addi_temp</span><span class=p>[</span><span class=mh>31</span><span class=p>]));</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>32</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>add_temp</span> <span class=o>=</span> <span class=n>A_ext</span> <span class=o>+</span> <span class=n>B_ext</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>add_overflow</span> <span class=o>=</span> <span class=p>((</span><span class=n>F</span> <span class=o>==</span> <span class=no>`ADD</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>add_temp</span><span class=p>[</span><span class=mh>32</span><span class=p>]</span> <span class=o>!=</span> <span class=n>add_temp</span><span class=p>[</span><span class=mh>31</span><span class=p>]));</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>32</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>sub_temp</span> <span class=o>=</span> <span class=n>A_ext</span> <span class=o>-</span> <span class=n>B_ext</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>sub_overflow</span> <span class=o>=</span> <span class=p>((</span><span class=n>F</span> <span class=o>==</span> <span class=no>`SUB</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>sub_temp</span><span class=p>[</span><span class=mh>32</span><span class=p>]</span> <span class=o>!=</span> <span class=n>sub_temp</span><span class=p>[</span><span class=mh>31</span><span class=p>]));</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=k>assign</span> <span class=n>exc</span> <span class=o>=</span> <span class=p>(</span><span class=n>addi_overflow</span> <span class=o>|</span> <span class=n>add_overflow</span> <span class=o>|</span> <span class=n>sub_overflow</span><span class=p>)</span><span class=o>?</span> <span class=mh>4</span><span class=mi>&#39;d12</span><span class=o>:</span> <span class=mh>4</span><span class=mi>&#39;d0</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=ma级>MA级</h4><ul><li>load类指令<ul><li>lw取数地址未与 4 字节对齐 <code>AdEL</code></li><li>lh、lb取数地址未与 2 字节对齐 <code>AdEL</code></li><li>lh、lb取 Timer 寄存器的值：寄存器的值为32位，取半字或比特是非法行为非法 <code>AdEL</code></li><li>计算地址时加法溢出 <code>AdEL</code></li><li>取数地址超出 DM、Timer0、Timer1、中断发生器的范围 <code>AdEL</code></li></ul></li><li>store类指令<ul><li>sw存数地址未 4 字节对齐 <code>AdES</code></li><li>sh、sb存数地址未 2 字节对齐 <code>AdES</code></li><li>sh、sb存 Timer 寄存器的值 ：寄存器的值为32位，存半字或比特是非法行为非法 <code>AdES</code></li><li>计算地址加法溢出 <code>AdES</code></li><li>向计时器的 Count 寄存器存值 ：计时器的count寄存器是只读寄存器(read-only) <code>AdES</code></li><li>存数地址超出 DM、Timer0、Timer1、中断发生器的范围 <code>AdES</code></li></ul></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	 <span class=c1>//load EXC
+</span></span></span><span class=line><span class=cl><span class=c1></span>	 <span class=kt>wire</span> <span class=n>exc_load_align</span> <span class=o>=</span> <span class=p>(((</span><span class=n>load_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b111</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>byte_offset</span> <span class=o>!=</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>))</span> <span class=o>||</span> <span class=c1>//lw
+</span></span></span><span class=line><span class=cl><span class=c1></span>								  <span class=p>((</span><span class=n>load_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b100</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>byte_offset</span><span class=p>[</span><span class=mh>0</span><span class=p>]</span> <span class=o>!=</span> <span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>)));</span> <span class=c1>//lh
+</span></span></span><span class=line><span class=cl><span class=c1></span>	 
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>exc_load_adov</span> <span class=o>=</span> <span class=p>(</span><span class=n>load_type_MA</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>EX_EXCCode_pip_MA</span> <span class=o>==</span> <span class=mh>4</span><span class=mi>&#39;d12</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>exc_load_OutOfRange</span> <span class=o>=</span> <span class=o>!</span><span class=p>(((</span><span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h0</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>ALU_C_MA</span> <span class=o>&lt;=</span> <span class=mh>32&#39;h2fff</span><span class=p>))</span> <span class=o>||</span> <span class=c1>//DM
+</span></span></span><span class=line><span class=cl><span class=c1></span>										  <span class=p>((</span><span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h7f00</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>ALU_C_MA</span> <span class=o>&lt;=</span> <span class=mh>32&#39;h7f0b</span><span class=p>))</span> <span class=o>||</span> <span class=c1>//TC0
+</span></span></span><span class=line><span class=cl><span class=c1></span>										  <span class=p>((</span><span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h7f10</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>ALU_C_MA</span> <span class=o>&lt;=</span> <span class=mh>32&#39;h7f1b</span><span class=p>)));</span> <span class=c1>//TC1
+</span></span></span><span class=line><span class=cl><span class=c1></span>	 
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>exc_load_timer</span> <span class=o>=</span> <span class=p>((</span><span class=n>load_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b100</span> <span class=o>||</span> <span class=n>load_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b010</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h7f00</span><span class=p>);</span> 
+</span></span><span class=line><span class=cl>										  
+</span></span><span class=line><span class=cl>    <span class=kt>wire</span> <span class=n>EXCCode_ADEL</span> <span class=o>=</span> <span class=p>(</span><span class=n>load_type_MA</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>exc_load_align</span> <span class=o>||</span> <span class=n>exc_load_adov</span> <span class=o>||</span> <span class=n>exc_load_OutOfRange</span> <span class=o>||</span> <span class=n>exc_load_timer</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=c1>//store EXC
+</span></span></span><span class=line><span class=cl><span class=c1></span>	 <span class=kt>wire</span> <span class=n>exc_store_align</span> <span class=o>=</span> <span class=p>(((</span><span class=n>store_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b001</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>byte_offset</span> <span class=o>!=</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>))</span> <span class=o>||</span>
+</span></span><span class=line><span class=cl>							<span class=p>((</span><span class=n>store_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b100</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>byte_offset</span><span class=p>[</span><span class=mh>0</span><span class=p>]</span> <span class=o>!=</span> <span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>)));</span>
+</span></span><span class=line><span class=cl>											
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>exc_store_adov</span> <span class=o>=</span> <span class=p>(</span><span class=n>store_type_MA</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>EX_EXCCode_pip_MA</span> <span class=o>==</span> <span class=mh>4</span><span class=mi>&#39;d12</span><span class=p>));</span> <span class=c1>//addr overflow
+</span></span></span><span class=line><span class=cl><span class=c1></span>	 
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>exc_store_OutOfRange</span> <span class=o>=</span> <span class=o>!</span><span class=p>(((</span><span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h0</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>ALU_C_MA</span> <span class=o>&lt;=</span> <span class=mh>32&#39;h2fff</span><span class=p>))</span> <span class=o>||</span> <span class=c1>//DM
+</span></span></span><span class=line><span class=cl><span class=c1></span>								  <span class=p>((</span><span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h7f00</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>ALU_C_MA</span> <span class=o>&lt;=</span> <span class=mh>32&#39;h7f0b</span><span class=p>))</span> <span class=o>||</span> <span class=c1>//TC0
+</span></span></span><span class=line><span class=cl><span class=c1></span>								  <span class=p>((</span><span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h7f10</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>ALU_C_MA</span> <span class=o>&lt;=</span> <span class=mh>32&#39;h7f1b</span><span class=p>)));</span> <span class=c1>//TC1
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>exc_store_timer</span> <span class=o>=</span> <span class=p>(</span><span class=n>store_type_MA</span> <span class=o>&amp;&amp;</span> <span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h0000</span><span class=n>_7f08</span> <span class=o>&amp;&amp;</span> <span class=n>ALU_C_MA</span> <span class=o>&lt;=</span> <span class=mh>32&#39;h0000</span><span class=n>_7f0b</span><span class=p>)</span> <span class=o>||</span>
+</span></span><span class=line><span class=cl>							<span class=p>(</span><span class=n>store_type_MA</span> <span class=o>&amp;&amp;</span> <span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h0000</span><span class=n>_7f18</span> <span class=o>&amp;&amp;</span> <span class=n>ALU_C_MA</span> <span class=o>&lt;=</span> <span class=mh>32&#39;h0000</span><span class=n>_7f1b</span><span class=p>)</span> <span class=o>||</span>
+</span></span><span class=line><span class=cl>							<span class=p>((</span><span class=n>store_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b010</span> <span class=o>||</span> <span class=n>store_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b100</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=n>ALU_C_MA</span> <span class=o>&gt;=</span> <span class=mh>32&#39;h7f00</span><span class=p>);</span> 
+</span></span><span class=line><span class=cl>									
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>EXCCode_ADES</span> <span class=o>=</span> <span class=p>(</span><span class=n>store_type_MA</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>exc_store_align</span> <span class=o>||</span> <span class=n>exc_store_adov</span> <span class=o>||</span> <span class=n>exc_store_OutOfRange</span> <span class=o>||</span> <span class=n>exc_store_timer</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=k>assign</span> <span class=n>MA_EXCCode_pip_MA</span> <span class=o>=</span> <span class=n>EXCCode_ADEL</span><span class=o>?</span> <span class=mh>4</span><span class=mi>&#39;d4</span><span class=o>:</span> 
+</span></span><span class=line><span class=cl>								<span class=n>EXCCode_ADES</span><span class=o>?</span> <span class=mh>4</span><span class=mi>&#39;d5</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=mh>4</span><span class=mi>&#39;d0</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=task-3-加入协处理器cp0>Task-3: 加入协处理器CP0</h3><ul><li>所有寄存器均为32bits</li><li>处理中断和异常信号，判断是否发出req信号，发出req信号时所有流水寄存器清空（部分信号需要特殊处理）</li><li>eret指令需要清空EXL部分</li><li>0001_0000</li></ul><div class=table-wrapper><table><thead><tr><th style=text-align:left>寄存器</th><th>寄存器编号</th><th style=text-align:left>功能域</th><th style=text-align:left>位域</th><th style=text-align:left>解释</th></tr></thead><tbody><tr><td style=text-align:left>SR（State Register）</td><td>12</td><td style=text-align:left>IM（Interrupt Mask）</td><td style=text-align:left>15:8</td><td style=text-align:left>分别对应六个外部中断，相应位置 1 表示允许中断，置 0 表示禁止中断。这是一个被动的功能，只能通过 <code>mtc0</code> 这个指令修改，通过修改这个功能域，我们可以屏蔽一些中断。</td></tr><tr><td style=text-align:left>SR（State Register）</td><td>12</td><td style=text-align:left>EXL（Exception Level）</td><td style=text-align:left>1</td><td style=text-align:left>任何异常发生时置位，这会强制进入核心态（也就是进入异常处理程序）并禁止中断。</td></tr><tr><td style=text-align:left>SR（State Register）</td><td>12</td><td style=text-align:left>IE（Interrupt Enable）</td><td style=text-align:left>0</td><td style=text-align:left>全局中断使能，该位置 1 表示允许中断，置 0 表示禁止中断。</td></tr><tr><td style=text-align:left>Cause</td><td>13</td><td style=text-align:left>BD（Branch Delay）</td><td style=text-align:left>31</td><td style=text-align:left>当该位置 1 的时候，EPC 指向当前指令的前一条指令（一定为跳转），否则指向当前指令。</td></tr><tr><td style=text-align:left>Cause</td><td>13</td><td style=text-align:left>IP（Interrupt Pending）</td><td style=text-align:left>15:10</td><td style=text-align:left>为 6 位待决的中断位，分别对应 6 个外部中断，相应位置 1 表示有中断，置 0 表示无中断，将会每个周期被修改一次，修改的内容来自计时器和外部中断。</td></tr><tr><td style=text-align:left>Cause</td><td>13</td><td style=text-align:left>ExcCode</td><td style=text-align:left>6:2</td><td style=text-align:left>异常编码，记录当前发生的是什么异常。</td></tr><tr><td style=text-align:left>EPC</td><td>14</td><td style=text-align:left>-</td><td style=text-align:left>-</td><td style=text-align:left>记录异常处理结束后需要返回的 PC。</td></tr></tbody></table></div><div class=table-wrapper><table><thead><tr><th style=text-align:left>端口</th><th style=text-align:left>方向</th><th style=text-align:left>位数</th><th style=text-align:left>解释</th></tr></thead><tbody><tr><td style=text-align:left>clk</td><td style=text-align:left>IN</td><td style=text-align:left>1</td><td style=text-align:left>时钟信号。</td></tr><tr><td style=text-align:left>reset</td><td style=text-align:left>IN</td><td style=text-align:left>1</td><td style=text-align:left>复位信号。</td></tr><tr><td style=text-align:left>en</td><td style=text-align:left>IN</td><td style=text-align:left>1</td><td style=text-align:left>写使能信号。</td></tr><tr><td style=text-align:left>CP0Add</td><td style=text-align:left>IN</td><td style=text-align:left>5</td><td style=text-align:left>读取/写入目标寄存器地址。</td></tr><tr><td style=text-align:left>CP0In</td><td style=text-align:left>IN</td><td style=text-align:left>32</td><td style=text-align:left>写入寄存器数据。</td></tr><tr><td style=text-align:left>CP0Out</td><td style=text-align:left>OUT</td><td style=text-align:left>32</td><td style=text-align:left>读出寄存器数据。</td></tr><tr><td style=text-align:left>VPC</td><td style=text-align:left>IN</td><td style=text-align:left>32</td><td style=text-align:left>当前异常中断发生时PC的值。</td></tr><tr><td style=text-align:left>BDIn</td><td style=text-align:left>IN</td><td style=text-align:left>1</td><td style=text-align:left>当前异常中断发生指令是否是延迟槽内指令。</td></tr><tr><td style=text-align:left>ExcCodeIn</td><td style=text-align:left>IN</td><td style=text-align:left>5</td><td style=text-align:left>当前发生异常类型。</td></tr><tr><td style=text-align:left>HWInt</td><td style=text-align:left>IN</td><td style=text-align:left>6</td><td style=text-align:left>外部产生的中断信号。</td></tr><tr><td style=text-align:left>EXLClr</td><td style=text-align:left>IN</td><td style=text-align:left>1</td><td style=text-align:left>是否结束异常中断处理（复位 EXL）。</td></tr><tr><td style=text-align:left>EPCOut</td><td style=text-align:left>OUT</td><td style=text-align:left>32</td><td style=text-align:left>EPC 的值。</td></tr><tr><td style=text-align:left>Req</td><td style=text-align:left>OUT</td><td style=text-align:left>1</td><td style=text-align:left>进入处理程序请求。</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=cp>`define IM regs[12][15:10]
+</span></span></span><span class=line><span class=cl><span class=cp>`define EXL regs[12][1]
+</span></span></span><span class=line><span class=cl><span class=cp>`define IE regs[12][0]
+</span></span></span><span class=line><span class=cl><span class=cp>`define BD regs[13][31]
+</span></span></span><span class=line><span class=cl><span class=cp>`define IP regs[13][15:10]
+</span></span></span><span class=line><span class=cl><span class=cp>`define EXCCode regs[13][6:2]	 
+</span></span></span><span class=line><span class=cl><span class=cp></span>	 <span class=c1>// SR-12, Cause-13, EPC-14
+</span></span></span><span class=line><span class=cl><span class=c1></span>	 <span class=kt>reg</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>regs</span> <span class=p>[</span><span class=mh>0</span><span class=o>:</span><span class=mh>31</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>	 <span class=k>assign</span> <span class=n>CP0Out</span> <span class=o>=</span> <span class=n>regs</span><span class=p>[</span><span class=n>CP0Addr</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=n>IntReq</span> <span class=o>=</span> <span class=p>(</span><span class=o>|</span><span class=p>(</span><span class=n>HWInt</span> <span class=o>&amp;</span> <span class=no>`IM</span><span class=p>))</span> <span class=o>&amp;</span> <span class=o>!</span><span class=no>`EXL</span> <span class=o>&amp;</span> <span class=no>`IE</span><span class=p>;</span> <span class=c1>// 允许当前中断 且 不在中断异常中 且 允许中断发生
+</span></span></span><span class=line><span class=cl><span class=c1></span>	 <span class=kt>wire</span> <span class=n>ExcReq</span> <span class=o>=</span> <span class=p>(</span><span class=o>|</span><span class=n>EXCCodeIn</span><span class=p>)</span> <span class=o>&amp;</span> <span class=o>!</span><span class=no>`EXL</span><span class=p>;</span> <span class=c1>// 存在异常 且 不在中断中
+</span></span></span><span class=line><span class=cl><span class=c1></span>	 <span class=k>assign</span> <span class=n>Req</span> <span class=o>=</span> <span class=n>IntReq</span> <span class=o>|</span> <span class=n>ExcReq</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>tempEPC</span> <span class=o>=</span> <span class=p>(</span><span class=n>Req</span><span class=p>)</span> <span class=o>?</span> <span class=p>(</span><span class=n>BDIn</span> <span class=o>?</span> <span class=n>VPC</span><span class=o>-</span><span class=mh>4</span> <span class=o>:</span> <span class=n>VPC</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                            <span class=o>:</span> <span class=n>regs</span><span class=p>[</span><span class=mh>14</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	 <span class=k>assign</span> <span class=n>EPCOut</span> <span class=o>=</span> <span class=p>{</span><span class=n>tempEPC</span><span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>2</span><span class=p>],</span> <span class=mh>2</span><span class=mb>&#39;b0</span><span class=p>};</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=k>integer</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=k>initial</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=p>(</span><span class=n>i</span><span class=o>=</span><span class=mh>0</span><span class=p>;</span><span class=n>i</span><span class=o>&lt;</span><span class=mh>32</span><span class=p>;</span><span class=n>i</span><span class=o>=</span><span class=n>i</span><span class=o>+</span><span class=mh>1</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=n>regs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>	 <span class=k>end</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>reset</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=k>for</span> <span class=p>(</span><span class=n>i</span><span class=o>=</span><span class=mh>0</span><span class=p>;</span><span class=n>i</span><span class=o>&lt;</span><span class=mh>32</span><span class=p>;</span><span class=n>i</span><span class=o>=</span><span class=n>i</span><span class=o>+</span><span class=mh>1</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=n>regs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=no>`IP</span> <span class=o>&lt;=</span> <span class=n>HWInt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>en</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=n>regs</span><span class=p>[</span><span class=n>CP0Addr</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>CP0In</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>Req</span><span class=p>)</span> <span class=k>begin</span> <span class=c1>// int|exc
+</span></span></span><span class=line><span class=cl><span class=c1></span>				<span class=no>`EXCCode</span> <span class=o>&lt;=</span> <span class=n>IntReq</span> <span class=o>?</span> <span class=mh>5</span><span class=mb>&#39;b0</span> <span class=o>:</span> <span class=n>EXCCodeIn</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=no>`EXL</span> <span class=o>&lt;=</span> <span class=mh>1</span><span class=mb>&#39;b1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=n>regs</span><span class=p>[</span><span class=mh>14</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>tempEPC</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=no>`BD</span> <span class=o>&lt;=</span> <span class=n>BDIn</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>EXLClr</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=no>`EXL</span> <span class=o>&lt;=</span> <span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>	 <span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=task-4-加指令>Task-4: 加指令</h3><p>在 P6 基础上新增了 <code>mfc0, mtc0, eret, syscall</code> 四条新指令</p><p>目前p7要求实现如下指令：(最好把jump指令也实现了，方便处理异常)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>nop, add, sub, and, or, slt, sltu, lui
+</span></span><span class=line><span class=cl>addi, andi, ori
+</span></span><span class=line><span class=cl>lb, lh, lw, sb, sh, sw
+</span></span><span class=line><span class=cl>mult, multu, div, divu, mfhi, mflo, mthi, mtlo
+</span></span><span class=line><span class=cl>beq, bne, jal, jr,
+</span></span><span class=line><span class=cl>mfc0, mtc0, eret, syscall
+</span></span></code></pre></td></tr></table></div></div><h4 id=mfc0>MFC0</h4><p>把CP0中的rd号寄存器的值存入grf的rt寄存器</p><ul><li>需要简单处理下转发，类似lw的转发</li></ul><p><img src=/p/co_p7/mfc0.png width=838 height=622 srcset="/p/co_p7/mfc0_hu_50ab437d1654dc62.png 480w, /p/co_p7/mfc0_hu_9c51af34e0fe2e67.png 1024w" loading=lazy alt=mfc0 class=gallery-image data-flex-grow=134 data-flex-basis=323px></p><h4 id=mtc0>MTC0</h4><p>将grf的rt号寄存器的值存入CP0的rd号寄存器</p><p><img src=/p/co_p7/mtc0.png width=836 height=642 srcset="/p/co_p7/mtc0_hu_ab07cb8471ce8106.png 480w, /p/co_p7/mtc0_hu_83136521f18a4ef5.png 1024w" loading=lazy alt=mtc0 class=gallery-image data-flex-grow=130 data-flex-basis=312px></p><h4 id=eret>ERET</h4><p>从错误处理程序中返回到主程序</p><ul><li>在ID级时设置next_pc为CP0的EXC</li><li>在ID级时清空延迟槽，确保后续指令不会被处理</li><li>到达MA级时，需要清空CP0的EXL部分，表示当前不在处于核心状态（异常处理程序）</li><li>在ID级时，如果EX或MA级是MTC0且目标寄存器为14号（EXC）则阻塞，确保返回地址正确。</li></ul><p><img src=/p/co_p7/eret.png width=866 height=682 srcset="/p/co_p7/eret_hu_1e53b4866b3d2ee4.png 480w, /p/co_p7/eret_hu_7c33f88c193f7d6e.png 1024w" loading=lazy alt=eret class=gallery-image data-flex-grow=126 data-flex-basis=304px></p><h4 id=syscall>syscall</h4><p>在controller里发出一个异常信号（异常码为8）即可</p><p><img src=/p/co_p7/syscall.png width=879 height=616 srcset="/p/co_p7/syscall_hu_773486bcb530b1fb.png 480w, /p/co_p7/syscall_hu_ee3870c9a69b286a.png 1024w" loading=lazy alt=syscall class=gallery-image data-flex-grow=142 data-flex-basis=342px></p><h3 id=流水寄存器行为>流水寄存器行为</h3><h4 id=为什么要修改寄存器的清空行为>为什么要修改寄存器的清空行为？</h4><p>我们在阻塞的时候会在EX级产生一个bubble，可以看作nop不发生任何作用，但实际上我们要把CPU封装为单周期CPU，级两条相邻的指令之间不会莫名其妙多出来一个nop指令。</p><p>试想，如果不修改清空逻辑的情况下，ID级是一个延迟槽内的指令，正常来说它到达MA级时如果发生了异常或中断，我们的EPC是需要写入PC-4的，因为我们从异常处理程序中返回时需要返回到延迟槽指令的前一条指令（即跳转指令）。而如果延迟槽内的指令在ID级时发生了阻塞产生了一个&rsquo;nop&rsquo;，nop流水到MA级时发生了异常或中断我们该如何记录EPC？这个&rsquo;nop&rsquo;在外部看来是不应该存在的，其没有对应的PC，其对应的PC应该是延迟槽指令的PC，其也应该被标记为延迟槽内指令，这样从异常处理程序中返回时才能返回到正确的地址。</p><p>按照从上至下的优先级依次处理</p><div class=table-wrapper><table><thead><tr><th>信号</th><th>PC流水寄存器行为</th><th>BD流水寄存器行为</th><th>其他流水寄存器行为</th></tr></thead><tbody><tr><td><code>reset</code></td><td>复位至 <code>0x00003000</code></td><td>复位至 <code>0</code></td><td>清空</td></tr><tr><td><code>req</code></td><td>设置为 <code>0x00004180</code></td><td>设置为 <code>0</code></td><td>清空</td></tr><tr><td><code>ID_EXLClr</code> （仅对F级到D级流水寄存器起作用，<strong>且此时stall信号为0</strong>）</td><td>设置为当前周期的 <code>EPC</code> 的值</td><td>不发生变化</td><td>清空</td></tr><tr><td><code>flush</code>（仅指对D级到E级流水寄存器起作用的阻塞信号）</td><td>不发生变化</td><td>不发生变化</td><td>清空</td></tr></tbody></table></div><h4 id=pc>PC</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>    <span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=n>reset</span> <span class=o>||</span> <span class=n>req</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>            <span class=n>pc</span> <span class=o>&lt;=</span> <span class=n>req</span><span class=o>?</span> <span class=mh>32&#39;h4180</span><span class=o>:</span> <span class=mh>32&#39;h3000</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>end</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=n>en</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>               <span class=n>pc</span> <span class=o>&lt;=</span> <span class=n>next_pc</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>end</span>
+</span></span><span class=line><span class=cl>        <span class=k>end</span>
+</span></span><span class=line><span class=cl>    <span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=if_id-reg>IF_ID Reg</h4><p>clear_bd表示清空延迟槽，对于P7仅针对eret指令</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	 <span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>reset</span> <span class=o>||</span> <span class=n>clr</span> <span class=o>||</span> <span class=n>req</span> <span class=o>||</span> <span class=n>clear_bd</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>            <span class=c1>//置0操作省略
+</span></span></span><span class=line><span class=cl><span class=c1></span>			<span class=n>pc_add4_out</span> <span class=o>&lt;=</span> <span class=p>(</span><span class=n>reset</span><span class=p>)</span><span class=o>?</span> <span class=mh>32&#39;h00003004</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>						   <span class=p>(</span><span class=n>req</span><span class=p>)</span><span class=o>?</span> <span class=mh>32&#39;h00004184</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>						   <span class=p>(</span><span class=n>clear_bd</span><span class=p>)</span><span class=o>?</span> <span class=nl>EPC:</span>
+</span></span><span class=line><span class=cl>							<span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=n>BD_out</span> <span class=o>&lt;=</span> <span class=p>(</span><span class=n>clear_bd</span><span class=p>)</span><span class=o>?</span> <span class=nl>BD:</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span> <span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>en</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>                <span class=c1>//省略
+</span></span></span><span class=line><span class=cl><span class=c1></span>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>	 <span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=id_ex-reg>ID_EX Reg</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	 <span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>reset</span> <span class=o>||</span> <span class=n>stall</span> <span class=o>||</span> <span class=n>req</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>            <span class=c1>//置0操作省略
+</span></span></span><span class=line><span class=cl><span class=c1></span>			<span class=n>pc_add4_out</span> <span class=o>&lt;=</span> <span class=p>(</span><span class=n>reset</span><span class=p>)</span><span class=o>?</span> <span class=mh>32&#39;h00003004</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=p>(</span><span class=n>req</span><span class=p>)</span><span class=o>?</span> <span class=mh>32&#39;h00004184</span><span class=o>:</span> 
+</span></span><span class=line><span class=cl>								<span class=p>(</span><span class=n>stall</span><span class=p>)</span><span class=o>?</span> <span class=nl>pc_add4:</span>
+</span></span><span class=line><span class=cl>								<span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=n>BD_out</span> <span class=o>&lt;=</span> <span class=p>(</span><span class=n>stall</span><span class=p>)</span><span class=o>?</span> <span class=nl>BD:</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>en</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=c1>//省略
+</span></span></span><span class=line><span class=cl><span class=c1></span>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>	 <span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=ex_ma-reg>EX_MA Reg</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	 <span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>reset</span> <span class=o>||</span> <span class=n>clr</span> <span class=o>||</span> <span class=n>req</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>                <span class=c1>//置0操作省略
+</span></span></span><span class=line><span class=cl><span class=c1></span>				<span class=n>pc_add4_out</span> <span class=o>&lt;=</span> <span class=n>reset</span><span class=o>?</span> <span class=mh>32&#39;h00003004</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>							   <span class=n>req</span><span class=o>?</span> <span class=mh>32&#39;h00004184</span><span class=o>:</span> 
+</span></span><span class=line><span class=cl>							   <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span> <span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=k>if</span> <span class=p>(</span><span class=n>en</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>                    <span class=c1>//省略
+</span></span></span><span class=line><span class=cl><span class=c1></span>				<span class=k>end</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>	 <span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=ma_wb-reg>MA_WB Reg</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>clr</span> <span class=o>||</span> <span class=n>reset</span> <span class=o>||</span> <span class=n>req</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>            <span class=c1>//置0操作省略
+</span></span></span><span class=line><span class=cl><span class=c1></span>			<span class=n>pc_add4_out</span> <span class=o>&lt;=</span> <span class=n>reset</span><span class=o>?</span> <span class=mh>32&#39;h00003004</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=n>req</span><span class=o>?</span> <span class=mh>32&#39;h00004184</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span> <span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>en</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>                <span class=c1>//省略
+</span></span></span><span class=line><span class=cl><span class=c1></span>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=我的bug>我的Bug</h2><p>以下是我在通过课下弱测和中测后发现的bug：</p><ul><li>不涉及计算操作时ALUOP默认设为了`ADD，导致不是ALU类指令时出现了溢出情况。</li><li>当MA级异常时，如果EX级为mthi或mtlo时仍会向HI或LO中写入值。</li><li>当PC错误或遇到未知指令时没有向后传递nop。</li><li>mtc0位于MA级时，如果当出现中断时，仍会向CP0中的寄存器写入值。</li><li>EXCCode优先级问题。load或store指令会触发EX级的算术overflow（异常码12）异常，在MA级也会除法overflow（异常码4或5）的异常，按照<code>优先处理先探查到的错误</code>的原则我们会选择EX级的算术overflow，导致存入CP0的异常码错误。</li></ul><h2 id=测试方案>测试方案</h2><ul><li>手动构造样例确保新指令的功能正确性，尽可能覆盖大部分异常情况。</li><li>随机生成指令强测确保转发和阻塞的正确性。对CO-Killer略加修改，生成符合要求的随机数据。</li><li>限制读写寄存器的范围，能够尽可能多的造成数据冒险，再加上大量随机数据，基本可以覆盖全部转发和阻塞情况。</li><li>利用自己写的python脚本填充nop至0x4180。</li><li>定时器产生周期性中断信号，测试timer的中断是否正确被处理。</li><li>修改testbench产生中断，测试中断发生器发出的中断是否正确被处理。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 填充nop</span>
+</span></span><span class=line><span class=cl><span class=n>last_pc</span> <span class=o>=</span> <span class=nb>input</span><span class=p>(</span><span class=s1>&#39;enter the last pc in text: &#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>pc</span> <span class=o>=</span> <span class=nb>int</span><span class=p>(</span><span class=n>last_pc</span><span class=p>,</span> <span class=mi>16</span><span class=p>)</span> <span class=o>+</span> <span class=mi>4</span>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=n>pc</span> <span class=o>&lt;</span> <span class=mh>0x4180</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;# </span><span class=si>{</span><span class=nb>hex</span><span class=p>(</span><span class=n>pc</span><span class=p>)</span><span class=si>}</span><span class=se>\n</span><span class=s2>nop&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>pc</span> <span class=o>+=</span> <span class=mi>4</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=思考题>思考题</h2><ol><li>请查阅相关资料，说明鼠标和键盘的输入信号是如何被 CPU 知晓的？</li></ol><blockquote><p>鼠标和键盘产生中断信号，进入中断处理区的对应位置，将输入信号从鼠标和键盘中读入寄存器。</p></blockquote><ol start=2><li>请思考为什么我们的 CPU 处理中断异常必须是已经指定好的地址？如果你的 CPU 支持用户自定义入口地址，即处理中断异常的程序由用户提供，其还能提供我们所希望的功能吗？如果可以，请说明这样可能会出现什么问题？否则举例说明。（假设用户提供的中断处理程序合法）</li></ol><blockquote><ul><li>指定好的中断处理入口地址由硬件设计决定，能确保所有中断和异常按照既定逻辑处理。如果允许用户自定义入口地址，用户可能会直接跳过关键的上下文保存步骤，导致程序状态紊乱</li><li>指定的中断地址通常位于受保护的系统区域，由操作系统或固件控制。用户故意定义有害的中断处理程序，例如窃取敏感信息或修改关键数据。</li></ul></blockquote><ol start=3><li>为何与外设通信需要 Bridge？</li></ol><blockquote><ul><li>CPU与外设数据吞吐量存在差异：Bridge充当缓冲区和速率匹配器，协调高速的处理器与低速外设之间的数据交换。</li><li>地址映射差异：Bridge可以对地址进行解码，将处理器的访问请求转化为外设能够理解的操作。</li></ul></blockquote><ol start=4><li>请阅读官方提供的定时器源代码，阐述两种中断模式的异同，并针对每一种模式绘制状态移图。</li></ol><blockquote><p><strong>MODE 0</strong></p><p>定时产生中断信号</p><p><img src=/p/co_p7/timer_mode0.png width=401 height=328 srcset="/p/co_p7/timer_mode0_hu_a1acf249ce3603c1.png 480w, /p/co_p7/timer_mode0_hu_eb0ef2b2f46f6d2d.png 1024w" loading=lazy alt=timer_mode0 class=gallery-image data-flex-grow=122 data-flex-basis=293px></p><p><strong>MODE 1</strong></p><p>周期性产生中断信号</p><p><img src=/p/co_p7/timer_mode1.png width=401 height=328 srcset="/p/co_p7/timer_mode1_hu_41c645421cf1b3fd.png 480w, /p/co_p7/timer_mode1_hu_dfd9c5c6476abdc8.png 1024w" loading=lazy alt=timer_mode1 class=gallery-image data-flex-grow=122 data-flex-basis=293px></p></blockquote><ol start=5><li>倘若中断信号流入的时候，在检测宏观 PC 的一级如果是一条空泡（你的 CPU 该级所有信息均为空）指令，此时会发生什么问题？在此例基础上请思考：在 P7 中，清空流水线产生的空泡指令应该保留原指令的哪些信息？</li></ol><blockquote><p>如果此时有一个中断或异常信号，则CP0记录下的PC为0x0000，在从异常处理程序返回时会发生错误。</p><p>应该保留PC值，由于在Req信号有效时，通过将流水寄存器的PC值不进行复位，使得达到精确异常的效果。使得回到EPC时依然是精确的。</p></blockquote><ol start=6><li>为什么 <code>jalr</code> 指令为什么不能写成 <code>jalr $31, $31</code>？</li></ol><blockquote><p>如果 <code>jalr $31 $31 </code>的延迟槽内发生异常或需要响应中断。那么 <code>$31</code> 寄存器的值已经被 <code>jalr</code> 改变，但是处理异常结束后，会再次执行 <code>jalr</code> 指令，这就会跳转到不正确的 <code>PC</code> 地址。</p></blockquote><ol start=7><li>[P7 选做] 请详细描述你的测试方案及测试数据构造策略。</li></ol><blockquote><p>见上文</p></blockquote><h2 id=课程组官方testbench>课程组官方TestBench</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=no>`timescale</span> <span class=mh>1</span><span class=n>ns</span><span class=o>/</span><span class=mh>1</span><span class=n>ps</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>module</span> <span class=n>mips_txt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>reg</span> <span class=n>clk</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>reg</span> <span class=n>reset</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>reg</span> <span class=n>interrupt</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>macroscopic_pc</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>i_inst_addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>i_inst_rdata</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>m_data_addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>m_data_rdata</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>m_data_wdata</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>3</span> <span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>m_data_byteen</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>m_int_addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>3</span> <span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>m_int_byteen</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>m_inst_addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span>		<span class=n>w_grf_we</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>4</span> <span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>w_grf_addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>w_grf_wdata</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>w_inst_addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=n>mips</span> <span class=n>uut</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>clk</span><span class=p>(</span><span class=n>clk</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>reset</span><span class=p>(</span><span class=n>reset</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>interrupt</span><span class=p>(</span><span class=n>interrupt</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>macroscopic_pc</span><span class=p>(</span><span class=n>macroscopic_pc</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>i_inst_addr</span><span class=p>(</span><span class=n>i_inst_addr</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>i_inst_rdata</span><span class=p>(</span><span class=n>i_inst_rdata</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>m_data_addr</span><span class=p>(</span><span class=n>m_data_addr</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>m_data_rdata</span><span class=p>(</span><span class=n>m_data_rdata</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>m_data_wdata</span><span class=p>(</span><span class=n>m_data_wdata</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>m_data_byteen</span><span class=p>(</span><span class=n>m_data_byteen</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>m_int_addr</span><span class=p>(</span><span class=n>m_int_addr</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>m_int_byteen</span><span class=p>(</span><span class=n>m_int_byteen</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>m_inst_addr</span><span class=p>(</span><span class=n>m_inst_addr</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>w_grf_we</span><span class=p>(</span><span class=n>w_grf_we</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>w_grf_addr</span><span class=p>(</span><span class=n>w_grf_addr</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>w_grf_wdata</span><span class=p>(</span><span class=n>w_grf_wdata</span><span class=p>),</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>		<span class=p>.</span><span class=n>w_inst_addr</span><span class=p>(</span><span class=n>w_inst_addr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>initial</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=n>clk</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=n>reset</span> <span class=o>&lt;=</span> <span class=mh>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=n>interrupt</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>#</span><span class=mh>20</span> <span class=n>reset</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>integer</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>reg</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>fixed_addr</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>reg</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>fixed_wdata</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>reg</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>data</span><span class=p>[</span><span class=mh>0</span><span class=o>:</span><span class=mh>4095</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>	<span class=kt>reg</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>inst</span><span class=p>[</span><span class=mh>0</span><span class=o>:</span><span class=mh>5119</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// ----------- For Instructions -----------
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=k>assign</span> <span class=n>m_data_rdata</span> <span class=o>=</span> <span class=n>data</span><span class=p>[(</span><span class=n>m_data_addr</span> <span class=o>&gt;&gt;</span> <span class=mh>2</span><span class=p>)</span> <span class=o>%</span> <span class=mh>5120</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>	<span class=k>assign</span> <span class=n>i_inst_rdata</span> <span class=o>=</span> <span class=n>inst</span><span class=p>[((</span><span class=n>i_inst_addr</span> <span class=o>-</span> <span class=mh>32&#39;h3000</span><span class=p>)</span> <span class=o>&gt;&gt;</span> <span class=mh>2</span><span class=p>)</span> <span class=o>%</span> <span class=mh>5120</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>initial</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=nb>$readmemh</span><span class=p>(</span><span class=s>&#34;code.txt&#34;</span><span class=p>,</span> <span class=n>inst</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mh>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mh>5120</span><span class=p>;</span> <span class=n>i</span> <span class=o>=</span> <span class=n>i</span> <span class=o>+</span> <span class=mh>1</span><span class=p>)</span> <span class=n>data</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// ----------- For Data Memory -----------
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=k>always</span> <span class=p>@(</span><span class=o>*</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=n>fixed_wdata</span> <span class=o>=</span> <span class=n>data</span><span class=p>[(</span><span class=n>m_data_addr</span> <span class=o>&gt;&gt;</span> <span class=mh>2</span><span class=p>)</span> <span class=o>&amp;</span> <span class=mh>4095</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>		<span class=n>fixed_addr</span> <span class=o>=</span> <span class=n>m_data_addr</span> <span class=o>&amp;</span> <span class=mh>32&#39;hfffffffc</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>m_data_byteen</span><span class=p>[</span><span class=mh>3</span><span class=p>])</span> <span class=n>fixed_wdata</span><span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>24</span><span class=p>]</span> <span class=o>=</span> <span class=n>m_data_wdata</span><span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>24</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>m_data_byteen</span><span class=p>[</span><span class=mh>2</span><span class=p>])</span> <span class=n>fixed_wdata</span><span class=p>[</span><span class=mh>23</span><span class=o>:</span><span class=mh>16</span><span class=p>]</span> <span class=o>=</span> <span class=n>m_data_wdata</span><span class=p>[</span><span class=mh>23</span><span class=o>:</span><span class=mh>16</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>m_data_byteen</span><span class=p>[</span><span class=mh>1</span><span class=p>])</span> <span class=n>fixed_wdata</span><span class=p>[</span><span class=mh>15</span><span class=o>:</span> <span class=mh>8</span><span class=p>]</span> <span class=o>=</span> <span class=n>m_data_wdata</span><span class=p>[</span><span class=mh>15</span><span class=o>:</span> <span class=mh>8</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>m_data_byteen</span><span class=p>[</span><span class=mh>0</span><span class=p>])</span> <span class=n>fixed_wdata</span><span class=p>[</span><span class=mh>7</span> <span class=o>:</span> <span class=mh>0</span><span class=p>]</span> <span class=o>=</span> <span class=n>m_data_wdata</span><span class=p>[</span><span class=mh>7</span> <span class=o>:</span> <span class=mh>0</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>reset</span><span class=p>)</span> <span class=k>for</span> <span class=p>(</span><span class=n>i</span> <span class=o>=</span> <span class=mh>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mh>4096</span><span class=p>;</span> <span class=n>i</span> <span class=o>=</span> <span class=n>i</span> <span class=o>+</span> <span class=mh>1</span><span class=p>)</span> <span class=n>data</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=o>|</span><span class=n>m_data_byteen</span> <span class=o>&amp;&amp;</span> <span class=n>fixed_addr</span> <span class=o>&gt;&gt;</span> <span class=mh>2</span> <span class=o>&lt;</span> <span class=mh>4096</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=n>data</span><span class=p>[</span><span class=n>fixed_addr</span> <span class=o>&gt;&gt;</span> <span class=mh>2</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>fixed_wdata</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=nb>$display</span><span class=p>(</span><span class=s>&#34;%d@%h: *%h &lt;= %h&#34;</span><span class=p>,</span> <span class=nb>$time</span><span class=p>,</span> <span class=n>m_inst_addr</span><span class=p>,</span> <span class=n>fixed_addr</span><span class=p>,</span> <span class=n>fixed_wdata</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// ----------- For Registers -----------
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=o>~</span><span class=n>reset</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>w_grf_we</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>w_grf_addr</span> <span class=o>!=</span> <span class=mh>0</span><span class=p>))</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=nb>$display</span><span class=p>(</span><span class=s>&#34;%d@%h: $%d &lt;= %h&#34;</span><span class=p>,</span> <span class=nb>$time</span><span class=p>,</span> <span class=n>w_inst_addr</span><span class=p>,</span> <span class=n>w_grf_addr</span><span class=p>,</span> <span class=n>w_grf_wdata</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=c1>// ----------- For Interrupt -----------
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>fixed_macroscopic_pc</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>assign</span> <span class=n>fixed_macroscopic_pc</span> <span class=o>=</span> <span class=n>macroscopic_pc</span> <span class=o>&amp;</span> <span class=mh>32&#39;hfffffffc</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>parameter</span> <span class=n>target_pc</span> <span class=o>=</span> <span class=mh>32&#39;h00003010</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>integer</span> <span class=n>count</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>initial</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=n>count</span> <span class=o>=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>always</span> <span class=p>@(</span><span class=k>negedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>reset</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=n>interrupt</span> <span class=o>=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>interrupt</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=k>if</span> <span class=p>(</span><span class=o>|</span><span class=n>m_int_byteen</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>m_int_addr</span> <span class=o>&amp;</span> <span class=mh>32&#39;hfffffffc</span><span class=p>)</span> <span class=o>==</span> <span class=mh>32&#39;h7f20</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>					<span class=n>interrupt</span> <span class=o>=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=k>end</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>			<span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=n>fixed_macroscopic_pc</span> <span class=o>==</span> <span class=n>target_pc</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=k>if</span> <span class=p>(</span><span class=n>count</span> <span class=o>==</span> <span class=mh>0</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>					<span class=n>count</span> <span class=o>=</span> <span class=mh>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>					<span class=n>interrupt</span> <span class=o>=</span> <span class=mh>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=k>end</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>	<span class=k>end</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>always</span> <span class=p>#</span><span class=mh>2</span> <span class=n>clk</span> <span class=o>&lt;=</span> <span class=o>~</span><span class=n>clk</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>endmodule</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/buaa-co/>BUAA-CO</a>
+<a href=/tags/verilog/>Verilog</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 Dec 20, 2024 00:32 UTC</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".main-article");renderMathInElement(e,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/co_p6/><div class=article-image><img src=/p/co_p6/P6_cover.64816edce6ec3d5591052dc64cddd19e_hu_27ea656168fc6a97.jpg width=250 height=150 loading=lazy alt="Featured image of post P6_设计文档" data-key=CO_P6 data-hash="md5-ZIFu3ObsPVWRBS3GTN3Rng=="></div><div class=article-details><h2 class=article-title>P6_设计文档</h2></div></a></article><article class=has-image><a href=/p/co_p5/><div class=article-image><img src=/p/co_p5/P5_cover.08253d42d84b55ea6f34da88673df9fc_hu_7d2b01ab03f41c54.jpg width=250 height=150 loading=lazy alt="Featured image of post P5_设计文档" data-key=CO_P5 data-hash="md5-CCU9QthLVepvNNqIZz35/A=="></div><div class=article-details><h2 class=article-title>P5_设计文档</h2></div></a></article><article class=has-image><a href=/p/co_p4/><div class=article-image><img src=/p/co_p4/P4_cover.e35cbe683792365d621ee0bca5193222_hu_ab01e330b0af82c1.jpg width=250 height=150 loading=lazy alt="Featured image of post P4_设计文档" data-key=CO_P4 data-hash="md5-41y+aDeSNl1iHuC8pRkyIg=="></div><div class=article-details><h2 class=article-title>P4_设计文档</h2></div></a></article><article class=has-image><a href=/p/verilog_edit/><div class=article-image><img src=/p/verilog_edit/vscode_teros_cover.50a936646666751c04c55ff217d84989_hu_f56521ebdc394b3c.png width=250 height=150 loading=lazy alt="Featured image of post 如何优雅地编写Verilog" data-key=verilog_edit data-hash="md5-UKk2ZGZmdRwExV/yF9hJiQ=="></div><div class=article-details><h2 class=article-title>如何优雅地编写Verilog</h2></div></a></article><article class=has-image><a href=/p/co_p3/><div class=article-image><img src=/p/co_p3/P3_cover.44f04a18e8947ae58695e587af0e52e5_hu_a04db9cc4433ec2c.jpg width=250 height=150 loading=lazy alt="Featured image of post P3_设计文档" data-key=CO_P3 data-hash="md5-RPBKGOiUeuWGleWHrw5S5Q=="></div><div class=article-details><h2 class=article-title>P3_设计文档</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//lhy0424-disqus-com.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 Az's Blog</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

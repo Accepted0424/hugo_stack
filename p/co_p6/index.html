@@ -1,0 +1,725 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="verilog流水线CPU（添加指令）"><title>P6_设计文档</title>
+<link rel=canonical href=https://lhy0424.top/p/co_p6/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="P6_设计文档"><meta property='og:description' content="verilog流水线CPU（添加指令）"><meta property='og:url' content='https://lhy0424.top/p/co_p6/'><meta property='og:site_name' content="Az's Blog"><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='BUAA-CO'><meta property='article:tag' content='verilog'><meta property='article:published_time' content='2024-12-10T22:26:00+00:00'><meta property='article:modified_time' content='2024-12-10T22:26:00+00:00'><meta property='og:image' content='https://lhy0424.top/p/co_p6/P6_cover.jpg'><meta name=twitter:title content="P6_设计文档"><meta name=twitter:description content="verilog流水线CPU（添加指令）"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://lhy0424.top/p/co_p6/P6_cover.jpg'><link rel="shortcut icon" href=/img/az.jpg></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/az_hu_2167c1e5a8cad978.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>Az's Blog</a></h1><h2 class=site-description>Stay hungry, Stay foolish.</h2></div></header><ol class=menu-social><li><a href=https://github.com/Accepted0424 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li><a href=/links/><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg>
+<span>Links</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#hazardv>Hazard.v</a><ol><li><ol><li><a href=#t_use表格需求者>T_use表格（需求者）</a></li><li><a href=#t_new表格供给者>T_new表格（供给者）</a></li></ol></li><li><a href=#rs策略矩阵>rs策略矩阵</a></li><li><a href=#rt策略矩阵>rt策略矩阵</a></li><li><a href=#如何理解策略矩阵>如何理解策略矩阵</a></li></ol></li><li><a href=#forward-in-mipsv>Forward in mips.v</a><ol><li><ol><li><a href=#数据的供给者>数据的供给者</a></li><li><a href=#数据需求者>数据需求者</a></li></ol></li></ol></li><li><a href=#流水线寄存器>流水线寄存器</a><ol><li><ol><li><a href=#stall-explain>Stall Explain</a></li><li><a href=#logic>Logic</a></li></ol></li></ol></li><li><a href=#信号解释>信号解释</a><ol><li><ol><li><a href=#jumpsrc-2-bit>jumpSrc (2-bit)</a></li><li><a href=#mem2reg-2-bit>Mem2Reg (2-bit)</a></li><li><a href=#regdst-2-bit>RegDst (2-bit)</a></li><li><a href=#aluop-4-bit>ALUOp (4-bit)</a></li></ol></li><li><a href=#mdop-4-bit>mdOp (4-bit)</a></li><li><a href=#load_type-3-bit>load_type (3-bit)</a></li><li><a href=#store_type-3-bit>store_type (3-bit)</a></li></ol></li><li><a href=#测试方案>测试方案</a><ol><li><a href=#指令分类>指令分类</a><ol><li><a href=#r-type>R-type</a></li><li><a href=#i-type>I-type</a></li><li><a href=#j-type>J-type</a></li></ol></li><li><a href=#测试步骤>测试步骤</a></li></ol></li><li><a href=#思考题>思考题</a></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/co_p6/><img src=/p/co_p6/P6_cover_hu_c1050791ea854d72.jpg srcset="/p/co_p6/P6_cover_hu_c1050791ea854d72.jpg 800w, /p/co_p6/P6_cover_hu_d9ad0602052485a0.jpg 1600w" width=800 height=523 loading=lazy alt="Featured image of post P6_设计文档"></a></div><div class=article-details><header class=article-category><a href=/categories/buaa-co/>BUAA-CO</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/co_p6/>P6_设计文档</a></h2><h3 class=article-subtitle>verilog流水线CPU（添加指令）</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Dec 10, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 10 分钟</time></div></footer></div></header><section class=article-content><h1 id=p6_document>P6_document</h1><h2 id=hazardv>Hazard.v</h2><div class=table-wrapper><table><thead><tr><th>input</th><th>explain</th></tr></thead><tbody><tr><td>Instr_ID</td><td>ID阶段的指令码</td></tr><tr><td>Instr_EX</td><td>EX阶段的指令码</td></tr><tr><td>Instr_MA</td><td>MA阶段的指令码</td></tr><tr><td>A3_EX</td><td>EX阶段的寄存器写入地址</td></tr><tr><td>A3_MA</td><td>MA阶段的寄存器写入地址</td></tr><tr><td>busy</td><td>乘除槽正在进行计算</td></tr><tr><td>start</td><td>乘除槽开始进行计算</td></tr></tbody></table></div><h4 id=t_use表格需求者>T_use表格（需求者）</h4><p>指令位于ID级时，还需要多少个周期才必须要使用数据。</p><div class=table-wrapper><table><thead><tr><th></th><th>add</th><th>sub</th><th>ori</th><th>lw</th><th>sw</th><th>beq</th><th>lui</th><th>jal</th><th>jr</th><th>nop</th></tr></thead><tbody><tr><td>$T_{use}(rs)$</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td></td><td>0</td><td></td></tr><tr><td>$T_{use}(rt)$</td><td>1</td><td>1</td><td></td><td></td><td>2</td><td>0</td><td></td><td></td><td></td><td></td></tr></tbody></table></div><div class=table-wrapper><table><thead><tr><th>P6_new</th><th>and</th><th>or</th><th>slt</th><th>sltu</th><th>addi</th><th>andi</th><th>lb</th><th>lh</th><th>sb</th><th>sh</th></tr></thead><tbody><tr><td>$T_{use}(rs)$</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>$T_{use}(rt)$</td><td>1</td><td>1</td><td>1</td><td>1</td><td></td><td></td><td></td><td></td><td>2</td><td>2</td></tr></tbody></table></div><div class=table-wrapper><table><thead><tr><th>P6_new</th><th>mult</th><th>multu</th><th>div</th><th>divu</th><th>mfhi</th><th>mflo</th><th>mthi</th><th>mtlo</th><th>bne</th></tr></thead><tbody><tr><td>$T_{use}(rs)$</td><td>1</td><td>1</td><td>1</td><td>1</td><td></td><td></td><td>1</td><td>1</td><td>0</td></tr><tr><td>$T_{use}(rt)$</td><td>1</td><td>1</td><td>1</td><td>1</td><td></td><td></td><td></td><td></td><td>0</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>1</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>Tuse_rs</span> <span class=o>=</span> <span class=p>(</span><span class=n>add_ID</span> <span class=o>|</span> <span class=n>sub_ID</span> <span class=o>|</span> <span class=n>ori_ID</span> <span class=o>|</span> <span class=n>lw_ID</span> <span class=o>|</span> <span class=n>sw_ID</span> <span class=o>|</span> <span class=n>lui_ID</span> <span class=o>|</span> <span class=n>and_ID</span> <span class=o>|</span> <span class=n>or_ID</span> <span class=o>|</span> <span class=n>slt_ID</span> <span class=o>|</span> <span class=n>sltu_ID</span> <span class=o>|</span> <span class=n>addi_ID</span> <span class=o>|</span> <span class=n>andi_ID</span> <span class=o>|</span> <span class=n>lb_ID</span> <span class=o>|</span> <span class=n>lh_ID</span> <span class=o>|</span> <span class=n>sb_ID</span> <span class=o>|</span> <span class=n>sh_ID</span> <span class=o>|</span> <span class=n>mthi_ID</span> <span class=o>|</span> <span class=n>mtlo_ID</span> <span class=o>|</span> <span class=n>mult_ID</span> <span class=o>|</span> <span class=n>multu_ID</span> <span class=o>|</span> <span class=n>div_ID</span> <span class=o>|</span> <span class=n>divu_ID</span><span class=p>)</span><span class=o>?</span><span class=mh>2</span><span class=mb>&#39;b01</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=p>(</span><span class=n>beq_ID</span> <span class=o>|</span> <span class=n>jr_ID</span> <span class=o>|</span> <span class=n>bne_ID</span><span class=p>)</span><span class=o>?</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=mh>2</span><span class=mb>&#39;b11</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>								
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>1</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>Tuse_rt</span> <span class=o>=</span> <span class=p>(</span><span class=n>add_ID</span> <span class=o>|</span> <span class=n>sub_ID</span> <span class=o>|</span> <span class=n>and_ID</span> <span class=o>|</span> <span class=n>or_ID</span> <span class=o>|</span> <span class=n>slt_ID</span> <span class=o>|</span><span class=n>sltu_ID</span> <span class=o>|</span> <span class=n>mult_ID</span> <span class=o>|</span> <span class=n>multu_ID</span> <span class=o>|</span> <span class=n>div_ID</span> <span class=o>|</span> <span class=n>divu_ID</span><span class=p>)</span><span class=o>?</span> <span class=mh>2</span><span class=mb>&#39;b01</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=p>(</span><span class=n>sw_ID</span> <span class=o>|</span> <span class=n>sb_ID</span> <span class=o>|</span> <span class=n>sh_ID</span><span class=p>)</span><span class=o>?</span> <span class=mh>2</span><span class=mb>&#39;b10</span><span class=o>:</span> 
+</span></span><span class=line><span class=cl>								<span class=p>(</span><span class=n>beq_ID</span> <span class=o>|</span> <span class=n>bne_ID</span><span class=p>)</span><span class=o>?</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=mh>2</span><span class=mb>&#39;b11</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=t_new表格供给者>T_new表格（供给者）</h4><p>T_new: 供给指令位于某个流水级时还需要多少个周期才可以计算出结果并存储到流水寄存器中。</p><p><em><strong>早于需求指令进入流水线的供给者还需要多少cycle能够产生需求者需要的寄存器值。</strong></em></p><div class=table-wrapper><table><thead><tr><th>Intsr</th><th>add</th><th>sub</th><th>ori</th><th>lw</th><th>sw</th><th>beq</th><th>lui</th><th>jal</th><th>jr</th><th>nop</th></tr></thead><tbody><tr><td>功能部件(结果来源)</td><td>ALU</td><td>ALU</td><td>ALU</td><td>DM</td><td></td><td></td><td>ALU</td><td>PC</td><td></td><td></td></tr><tr><td>EX</td><td>1</td><td>1</td><td>1</td><td>2</td><td></td><td></td><td>1</td><td>0</td><td></td><td></td></tr><tr><td>MA</td><td></td><td></td><td></td><td>1</td><td></td><td></td><td></td><td>0</td><td></td><td></td></tr><tr><td>WB</td><td></td><td></td><td></td><td>0</td><td></td><td></td><td></td><td>0</td><td></td><td></td></tr></tbody></table></div><div class=table-wrapper><table><thead><tr><th>P6_new_Intsr</th><th>and</th><th>or</th><th>slt</th><th>sltu</th><th>addi</th><th>andi</th><th>lb</th><th>lh</th><th>sb</th><th>sh</th></tr></thead><tbody><tr><td>功能部件(结果来源)</td><td>ALU</td><td>ALU</td><td>ALU</td><td>ALU</td><td>ALU</td><td>ALU</td><td>DM</td><td>DM</td><td></td><td></td></tr><tr><td>EX</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>2</td><td>2</td><td></td><td></td></tr><tr><td>MA</td><td></td><td></td><td></td><td></td><td></td><td></td><td>1</td><td>1</td><td></td><td></td></tr><tr><td>WB</td><td></td><td></td><td></td><td></td><td></td><td></td><td>0</td><td>0</td><td></td><td></td></tr></tbody></table></div><div class=table-wrapper><table><thead><tr><th>P6_new_Intsr</th><th>mult</th><th>multu</th><th>div</th><th>divu</th><th>mfhi</th><th>mflo</th><th>mthi</th><th>mtlo</th><th>bne</th></tr></thead><tbody><tr><td>功能部件(结果来源)</td><td></td><td></td><td></td><td></td><td>mdb</td><td>mdb</td><td></td><td></td><td></td></tr><tr><td>EX</td><td></td><td></td><td></td><td></td><td>1</td><td>1</td><td></td><td></td><td></td></tr><tr><td>MA</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>WB</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>1</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>Tnew_EX</span> <span class=o>=</span> <span class=p>(</span><span class=n>add_EX</span> <span class=o>|</span> <span class=n>sub_EX</span> <span class=o>|</span> <span class=n>ori_EX</span> <span class=o>|</span> <span class=n>lui_EX</span> <span class=o>|</span> <span class=n>and_EX</span> <span class=o>|</span> <span class=n>or_EX</span> <span class=o>|</span> <span class=n>slt_EX</span> <span class=o>|</span> <span class=n>sltu_EX</span> <span class=o>|</span> <span class=n>addi_EX</span> <span class=o>|</span> <span class=n>andi_EX</span> <span class=o>|</span> <span class=n>mfhi_EX</span> <span class=o>|</span> <span class=n>mflo_EX</span><span class=p>)</span><span class=o>?</span> <span class=mh>2</span><span class=mb>&#39;b01</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=p>(</span><span class=n>lw_EX</span> <span class=o>|</span> <span class=n>lb_EX</span> <span class=o>|</span> <span class=n>lh_EX</span><span class=p>)</span><span class=o>?</span> <span class=mh>2</span><span class=mb>&#39;b10</span><span class=o>:</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>1</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>Tnew_MA</span> <span class=o>=</span> <span class=p>(</span><span class=n>lw_MA</span> <span class=o>|</span> <span class=n>lb_MA</span> <span class=o>|</span> <span class=n>lh_MA</span><span class=p>)</span><span class=o>?</span><span class=mh>2</span><span class=mb>&#39;b01</span><span class=o>:</span><span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=rs策略矩阵>rs策略矩阵</h3><div class=table-wrapper><table><thead><tr><th>$T_{use} \textbackslash \space T_{new}$</th><th>EX</th><th>EX</th><th>EX</th><th>MA</th><th>MA</th><th>MA</th><th>WB</th><th>WB</th><th>WB</th></tr></thead><tbody><tr><td></td><td>ALU</td><td>DM</td><td>PC</td><td>ALU</td><td>DM</td><td>PC</td><td>ALU</td><td>DM</td><td>PC</td></tr><tr><td></td><td>1</td><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td><strong>S</strong></td><td><strong>S</strong></td><td>F</td><td>F</td><td><strong>S</strong></td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>1</td><td>F</td><td><strong>S</strong></td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr></tbody></table></div><h3 id=rt策略矩阵>rt策略矩阵</h3><div class=table-wrapper><table><thead><tr><th>$T_{use} \textbackslash \space T_{new}$</th><th>EX</th><th>EX</th><th>EX</th><th>MA</th><th>MA</th><th>MA</th><th>WB</th><th>WB</th><th>WB</th></tr></thead><tbody><tr><td></td><td>ALU</td><td>DM</td><td>PC</td><td>ALU</td><td>DM</td><td>PC</td><td>ALU</td><td>DM</td><td>PC</td></tr><tr><td></td><td>1</td><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td><strong>S</strong></td><td><strong>S</strong></td><td>F</td><td>F</td><td><strong>S</strong></td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>1</td><td>F</td><td><strong>S</strong></td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr><tr><td>2</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr></tbody></table></div><h3 id=如何理解策略矩阵>如何理解策略矩阵</h3><ul><li>策略矩阵针对的是AT法中的Time部分，具体判断阻塞还是转发需要综合Adress部分</li><li>对于ALU型指令，如add，只需要关注 $T_{new}$ 的ALU一列，其表示在当前流水级下，还有多少周期才能计算出结果并存入流水级寄存器。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=kt>wire</span> <span class=n>Stall_RS_EX</span> <span class=o>=</span> <span class=p>(</span><span class=n>Tuse_rs</span> <span class=o>&lt;</span> <span class=n>Tnew_EX</span><span class=p>)</span> <span class=o>&amp;</span> <span class=p>(</span><span class=n>A3_EX</span> <span class=o>==</span> <span class=n>RS_ID</span> <span class=o>&amp;</span> <span class=n>RS_ID</span> <span class=o>!=</span> <span class=mh>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=n>Stall_RS_MA</span> <span class=o>=</span> <span class=p>(</span><span class=n>Tuse_rs</span> <span class=o>&lt;</span> <span class=n>Tnew_MA</span><span class=p>)</span> <span class=o>&amp;</span> <span class=p>(</span><span class=n>A3_MA</span> <span class=o>==</span> <span class=n>RS_ID</span> <span class=o>&amp;</span> <span class=n>RS_ID</span> <span class=o>!=</span> <span class=mh>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=n>Stall_RT_EX</span> <span class=o>=</span> <span class=p>(</span><span class=n>Tuse_rt</span> <span class=o>&lt;</span> <span class=n>Tnew_EX</span><span class=p>)</span> <span class=o>&amp;</span> <span class=p>(</span><span class=n>A3_EX</span> <span class=o>==</span> <span class=n>RT_ID</span> <span class=o>&amp;</span> <span class=n>RT_ID</span> <span class=o>!=</span> <span class=mh>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=n>Stall_RT_MA</span> <span class=o>=</span> <span class=p>(</span><span class=n>Tuse_rt</span> <span class=o>&lt;</span> <span class=n>Tnew_MA</span><span class=p>)</span> <span class=o>&amp;</span> <span class=p>(</span><span class=n>A3_MA</span> <span class=o>==</span> <span class=n>RT_ID</span> <span class=o>&amp;</span> <span class=n>RT_ID</span> <span class=o>!=</span> <span class=mh>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=n>Stall_md</span> <span class=o>=</span> <span class=p>((</span><span class=n>busy</span> <span class=o>|</span> <span class=n>start</span><span class=p>)</span> <span class=o>&amp;</span> <span class=p>(</span><span class=n>mult_ID</span> <span class=o>|</span> <span class=n>multu_ID</span> <span class=o>|</span> <span class=n>div_ID</span> <span class=o>|</span> <span class=n>divu_ID</span> <span class=o>|</span> <span class=n>mfhi_ID</span> <span class=o>|</span> <span class=n>mflo_ID</span> <span class=o>|</span> <span class=n>mthi_ID</span> <span class=o>|</span> <span class=n>mtlo_ID</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>	
+</span></span><span class=line><span class=cl>	<span class=k>assign</span> <span class=n>Stall</span> <span class=o>=</span> <span class=n>Stall_RS_EX</span> <span class=o>|</span> <span class=n>Stall_RS_MA</span> <span class=o>|</span> <span class=n>Stall_RT_EX</span> <span class=o>|</span> <span class=n>Stall_RT_MA</span> <span class=o>|</span> <span class=n>Stall_md</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=forward-in-mipsv>Forward in mips.v</h2><h4 id=数据的供给者>数据的供给者</h4><ul><li>EX_MA级流水线寄存器</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>forward_EX_MA</span> <span class=o>=</span> <span class=p>(</span><span class=n>RegWrite_MA</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>Mem2Reg_MA</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>))</span><span class=o>?</span> <span class=nl>ALU_C_MA:</span>  
+</span></span><span class=line><span class=cl>								<span class=p>(</span><span class=n>RegWrite_MA</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>Mem2Reg_MA</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b10</span><span class=p>))</span><span class=o>?</span> <span class=n>pc_add4_MA</span> <span class=o>+</span> <span class=mh>32</span><span class=mi>&#39;d4</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>								<span class=mh>32&#39;h404</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li>MA_WB级流水线寄存器</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=k>assign</span> <span class=n>grf_WD</span> <span class=o>=</span> <span class=p>(</span><span class=n>Mem2Reg_WB</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>)</span> <span class=o>?</span> <span class=n>ALU_C_WB</span> <span class=o>:</span>
+</span></span><span class=line><span class=cl>					<span class=p>(</span><span class=n>Mem2Reg_WB</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b01</span><span class=p>)</span> <span class=o>?</span> <span class=n>dm_data_WB</span> <span class=o>:</span>
+</span></span><span class=line><span class=cl>					<span class=p>(</span><span class=n>Mem2Reg_WB</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b10</span><span class=p>)</span> <span class=o>?</span> <span class=n>pc_add4_WB</span> <span class=o>+</span> <span class=mh>32</span><span class=mi>&#39;d4</span> <span class=o>:</span> <span class=mh>32</span><span class=mi>&#39;d0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>							 
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>forward_MA_WB</span> <span class=o>=</span> <span class=n>RegWrite_WB</span><span class=o>?</span> <span class=nl>grf_WD:</span> <span class=mh>32&#39;h405</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=数据需求者>数据需求者</h4><ul><li>ID级</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>RD1_ID_valid</span> <span class=o>=</span>  <span class=p>((</span><span class=n>RS_ID</span> <span class=o>==</span> <span class=n>A3_MA</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>A3_MA</span> <span class=o>!=</span> <span class=mh>5</span><span class=mb>&#39;b0</span><span class=p>))</span><span class=o>?</span> <span class=nl>forward_EX_MA:</span>
+</span></span><span class=line><span class=cl>								<span class=p>((</span><span class=n>RS_ID</span> <span class=o>==</span> <span class=n>A3_WB</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>A3_WB</span> <span class=o>!=</span> <span class=mh>5</span><span class=mb>&#39;b0</span><span class=p>))</span><span class=o>?</span> <span class=nl>forward_MA_WB:</span>
+</span></span><span class=line><span class=cl>								<span class=n>RD1_ID</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>											
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>RD2_ID_valid</span> <span class=o>=</span>  <span class=p>((</span><span class=n>RT_ID</span> <span class=o>==</span> <span class=n>A3_MA</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>A3_MA</span> <span class=o>!=</span> <span class=mh>5</span><span class=mb>&#39;b0</span><span class=p>))</span><span class=o>?</span> <span class=nl>forward_EX_MA:</span>
+</span></span><span class=line><span class=cl>								<span class=p>((</span><span class=n>RT_ID</span> <span class=o>==</span> <span class=n>A3_WB</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>A3_WB</span> <span class=o>!=</span> <span class=mh>5</span><span class=mb>&#39;b0</span><span class=p>))</span><span class=o>?</span> <span class=nl>forward_MA_WB:</span>
+</span></span><span class=line><span class=cl>								<span class=n>RD2_ID</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li>EX级</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=c1>//forward--select valid ALU_A and ALU_B
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>ALU_A_EX_valid</span> <span class=o>=</span> <span class=p>((</span><span class=n>RS_EX</span> <span class=o>==</span> <span class=n>A3_MA</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>A3_MA</span> <span class=o>!=</span> <span class=mh>5</span><span class=mb>&#39;b0</span><span class=p>))</span><span class=o>?</span> <span class=nl>forward_EX_MA:</span>
+</span></span><span class=line><span class=cl>								 <span class=p>((</span><span class=n>RS_EX</span> <span class=o>==</span> <span class=n>A3_WB</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>A3_WB</span> <span class=o>!=</span> <span class=mh>5</span><span class=mb>&#39;b0</span><span class=p>))</span><span class=o>?</span> <span class=nl>forward_MA_WB:</span>
+</span></span><span class=line><span class=cl>								 <span class=n>RD1_EX</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>											
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>Grt_EX_valid</span> <span class=o>=</span>  <span class=p>((</span><span class=n>RT_EX</span> <span class=o>==</span> <span class=n>A3_MA</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>A3_MA</span> <span class=o>!=</span> <span class=mh>5</span><span class=mb>&#39;b0</span><span class=p>))</span><span class=o>?</span> <span class=nl>forward_EX_MA:</span>
+</span></span><span class=line><span class=cl>								<span class=p>((</span><span class=n>RT_EX</span> <span class=o>==</span> <span class=n>A3_WB</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>A3_WB</span> <span class=o>!=</span> <span class=mh>5</span><span class=mb>&#39;b0</span><span class=p>))</span><span class=o>?</span> <span class=nl>forward_MA_WB:</span>
+</span></span><span class=line><span class=cl>								<span class=n>RD2_EX</span><span class=p>;</span><span class=c1>//将目前正确的Grt值，流水到MA级供sw指令使用，也可供R-type-ALU指令使用
+</span></span></span><span class=line><span class=cl><span class=c1></span>											
+</span></span><span class=line><span class=cl>	<span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>Grt_MA_valid</span><span class=p>;</span> 
+</span></span><span class=line><span class=cl>								
+</span></span><span class=line><span class=cl>    <span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>ALU_B_EX_valid</span> <span class=o>=</span> <span class=p>(</span><span class=n>ALUSrc_EX</span> <span class=o>==</span> <span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>)</span> <span class=o>?</span> <span class=nl>Grt_EX_valid:</span>
+</span></span><span class=line><span class=cl>								 <span class=p>(</span><span class=n>ALUSrc_EX</span> <span class=o>==</span> <span class=mh>1</span><span class=mb>&#39;b1</span><span class=p>)</span> <span class=o>?</span> <span class=n>ext32_EX</span> <span class=o>:</span> <span class=mh>32</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li><p>MA级</p><p>再一次获取转发数据，确保DM中的Grt值是正确的</p></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>Grt_MA_valid_valid</span> <span class=o>=</span> <span class=p>((</span><span class=n>RT_MA</span> <span class=o>==</span> <span class=n>A3_WB</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>A3_WB</span> <span class=o>!=</span> <span class=mh>5</span><span class=mi>&#39;d0</span><span class=p>))</span><span class=o>?</span> <span class=nl>forward_MA_WB:</span> <span class=n>Grt_MA_valid</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=流水线寄存器>流水线寄存器</h2><div class=table-wrapper><table><thead><tr><th></th><th>PC</th><th>IF_ID</th><th>ID_EX</th><th>EX_MA</th><th>MA_WB</th></tr></thead><tbody><tr><td>en</td><td>nStall</td><td>nStall</td><td>true</td><td>false</td><td>true</td></tr><tr><td>clr</td><td>null</td><td>false</td><td>Stall</td><td>true</td><td>false</td></tr></tbody></table></div><div class=table-wrapper><table><thead><tr><th></th><th>RegDst</th><th>ExtOp</th><th>jump</th><th>jumpSrc</th><th>branch</th><th>bOp</th><th>ALUSrc</th><th>ALUOP</th><th>mdOp</th><th>load_type</th><th>store_type</th><th>MemWrite</th><th>Mem2Reg</th><th>RegWrite</th></tr></thead><tbody><tr><td>作用阶段</td><td>EX</td><td>ID</td><td>ID</td><td>ID</td><td>ID</td><td>ID</td><td>EX</td><td>EX</td><td>EX</td><td>MA</td><td>MA</td><td>MA</td><td>WB</td><td>WB</td></tr><tr><td>IF_ID</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>ID_EX</td><td>1</td><td></td><td></td><td></td><td></td><td></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>EX_MA</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>MA_WB</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>1</td><td>1</td></tr></tbody></table></div><h4 id=stall-explain>Stall Explain</h4><p>ID级指令静止，EX级插入一个nop</p><ul><li>PC不写入新数据</li><li>IF_ID寄存器不写入新数据</li><li>ID_EX寄存器清零，即插入nop(0x00000000)</li></ul><h4 id=logic>Logic</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=k>module</span> <span class=n>Stage_Reg</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>		<span class=k>input</span> <span class=n>clk</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=k>input</span> <span class=n>reset</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=k>input</span> <span class=n>en</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=k>input</span> <span class=n>clr</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=k>input</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>data</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>		<span class=k>output</span> <span class=kt>reg</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>data_out</span>
+</span></span><span class=line><span class=cl>    <span class=p>);</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=k>initial</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=n>data_out</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	 <span class=k>end</span>
+</span></span><span class=line><span class=cl>	 
+</span></span><span class=line><span class=cl>	 <span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>		<span class=k>if</span> <span class=p>(</span><span class=n>reset</span> <span class=o>||</span> <span class=n>clr</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			 <span class=n>data_out</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span> <span class=k>else</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>			<span class=k>if</span> <span class=p>(</span><span class=n>en</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>				<span class=n>data_out</span> <span class=o>&lt;=</span> <span class=n>data</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=k>end</span>
+</span></span><span class=line><span class=cl>		<span class=k>end</span>
+</span></span><span class=line><span class=cl>	 <span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=信号解释>信号解释</h2><h4 id=jumpsrc-2-bit>jumpSrc (2-bit)</h4><div class=table-wrapper><table><thead><tr><th>jumpSrc</th><th>type</th></tr></thead><tbody><tr><td>2&rsquo;b00</td><td>branch</td></tr><tr><td>2&rsquo;b01</td><td>jump</td></tr><tr><td>2&rsquo;b10</td><td>jr</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=k>assign</span> <span class=n>next_pc_ID</span> <span class=o>=</span> <span class=p>(</span><span class=n>jumpSrc_ID</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>)</span> <span class=o>?</span> <span class=nl>branch_offset_ID:</span>
+</span></span><span class=line><span class=cl>                    <span class=p>(</span><span class=n>jumpSrc_ID</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b01</span><span class=p>)</span> <span class=o>?</span> <span class=nl>jumpExt32_ID:</span>
+</span></span><span class=line><span class=cl>                    <span class=p>(</span><span class=n>jumpSrc_ID</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b10</span><span class=p>)</span> <span class=o>?</span> <span class=nl>RD1_ID_valid:</span> <span class=mh>32&#39;h404</span><span class=p>;</span> 
+</span></span></code></pre></td></tr></table></div></div><h4 id=mem2reg-2-bit>Mem2Reg (2-bit)</h4><div class=table-wrapper><table><thead><tr><th>Mem2Reg</th><th>type</th></tr></thead><tbody><tr><td>2‘b00</td><td>ALU</td></tr><tr><td>2&rsquo;b01</td><td>lw</td></tr><tr><td>2&rsquo;b10</td><td>link</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=k>assign</span> <span class=n>grf_WD</span> <span class=o>=</span> <span class=p>(</span><span class=n>Mem2Reg_WB</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>)</span> <span class=o>?</span> <span class=n>ALU_C_WB</span> <span class=o>:</span>
+</span></span><span class=line><span class=cl>				 <span class=p>(</span><span class=n>Mem2Reg_WB</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b01</span><span class=p>)</span> <span class=o>?</span> <span class=n>dm_data_WB</span> <span class=o>:</span>
+</span></span><span class=line><span class=cl>				 <span class=p>(</span><span class=n>Mem2Reg_WB</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b10</span><span class=p>)</span> <span class=o>?</span> <span class=n>pc_add4_WB</span> <span class=o>+</span> <span class=mh>32</span><span class=mi>&#39;d4</span> <span class=o>:</span> <span class=mh>32</span><span class=mi>&#39;d0</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=regdst-2-bit>RegDst (2-bit)</h4><div class=table-wrapper><table><thead><tr><th>RegDst</th><th>type</th></tr></thead><tbody><tr><td>2&rsquo;b00</td><td>无需写入寄存器的指令</td></tr><tr><td>2&rsquo;b01</td><td>R-type，写入rd寄存器</td></tr><tr><td>2&rsquo;b10</td><td>I-type，写入rt寄存器</td></tr><tr><td>2&rsquo;b11</td><td>link，写入$ra ($31)</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=k>assign</span> <span class=n>A3_EX</span> <span class=o>=</span>  <span class=p>(</span><span class=n>RegDst_EX</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b00</span><span class=p>)</span><span class=o>?</span> <span class=mh>5</span><span class=mb>&#39;b0</span><span class=o>:</span> <span class=c1>//null
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=p>(</span><span class=n>RegDst_EX</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b01</span><span class=p>)</span><span class=o>?</span> <span class=nl>RD_EX:</span>
+</span></span><span class=line><span class=cl>				<span class=p>(</span><span class=n>RegDst_EX</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b10</span><span class=p>)</span><span class=o>?</span> <span class=nl>RT_EX:</span>
+</span></span><span class=line><span class=cl>                <span class=p>(</span><span class=n>RegDst_EX</span> <span class=o>==</span> <span class=mh>2</span><span class=mb>&#39;b11</span><span class=p>)</span><span class=o>?</span> <span class=mh>5&#39;h1f</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>				<span class=mh>5</span><span class=mb>&#39;b00000</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=aluop-4-bit>ALUOp (4-bit)</h4><div class=table-wrapper><table><thead><tr><th>ALUOp</th><th>type</th></tr></thead><tbody><tr><td>4&rsquo;b0000</td><td>add</td></tr><tr><td>4&rsquo;b0001</td><td>sub</td></tr><tr><td>4&rsquo;b0010</td><td>or</td></tr><tr><td>4&rsquo;b0011</td><td>lui</td></tr><tr><td>4&rsquo;b0100</td><td>and</td></tr><tr><td>4&rsquo;b0101</td><td>slt</td></tr><tr><td>4&rsquo;b0110</td><td>sltu</td></tr><tr><td>4&rsquo;b0111</td><td>addi</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>32</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>A_ext</span> <span class=o>=</span> <span class=p>{</span><span class=n>A</span><span class=p>[</span><span class=mh>31</span><span class=p>],</span><span class=n>A</span><span class=p>};</span>
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>32</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>B_ext</span> <span class=o>=</span> <span class=p>{</span><span class=n>B</span><span class=p>[</span><span class=mh>31</span><span class=p>],</span><span class=n>B</span><span class=p>};</span>
+</span></span><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>32</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>temp</span> <span class=o>=</span> <span class=n>A_ext</span> <span class=o>+</span> <span class=n>B_ext</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>always</span> <span class=p>@(</span><span class=o>*</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>        <span class=k>case</span><span class=p>(</span><span class=n>F</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=no>`ADD</span><span class=o>:</span>    <span class=n>C</span> <span class=o>=</span> <span class=n>A</span> <span class=o>+</span> <span class=n>B</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=no>`ADDI</span><span class=o>:</span>	<span class=n>C</span> <span class=o>=</span> <span class=p>(</span><span class=n>temp</span><span class=p>[</span><span class=mh>32</span><span class=p>]</span> <span class=o>==</span> <span class=n>temp</span><span class=p>[</span><span class=mh>31</span><span class=p>])</span><span class=o>?</span><span class=n>temp</span><span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span><span class=o>:</span><span class=mh>32</span><span class=mi>&#39;d0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=no>`SUB</span><span class=o>:</span>    <span class=n>C</span> <span class=o>=</span> <span class=n>A</span> <span class=o>-</span> <span class=n>B</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=no>`OR</span><span class=o>:</span>     <span class=n>C</span> <span class=o>=</span> <span class=n>A</span> <span class=o>|</span> <span class=n>B</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=no>`SL16</span><span class=o>:</span>   <span class=n>C</span> <span class=o>=</span> <span class=n>B</span> <span class=o>&lt;&lt;</span> <span class=mh>16</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=no>`AND</span><span class=o>:</span>		<span class=n>C</span> <span class=o>=</span> <span class=n>A</span> <span class=o>&amp;</span> <span class=n>B</span><span class=p>;</span> 
+</span></span><span class=line><span class=cl>				<span class=no>`SLT</span><span class=o>:</span>  	<span class=n>C</span> <span class=o>=</span> <span class=p>(</span><span class=n>$signed</span><span class=p>(</span><span class=n>A</span><span class=p>)</span> <span class=o>&lt;</span> <span class=n>$signed</span><span class=p>(</span><span class=n>B</span><span class=p>))</span><span class=o>?</span> <span class=mh>32</span><span class=mb>&#39;b1</span><span class=o>:</span> <span class=mh>32</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>				<span class=no>`SLTU</span><span class=o>:</span> 	<span class=n>C</span> <span class=o>=</span> <span class=p>(</span><span class=n>A</span> <span class=o>&lt;</span> <span class=n>B</span><span class=p>)</span><span class=o>?</span> <span class=mh>32</span><span class=mb>&#39;b1</span><span class=o>:</span> <span class=mh>32</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>default</span><span class=o>:</span><span class=n>C</span> <span class=o>=</span> <span class=mh>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>endcase</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=mdop-4-bit>mdOp (4-bit)</h3><div class=table-wrapper><table><thead><tr><th>mdOp</th><th>type</th></tr></thead><tbody><tr><td>4&rsquo;b0001</td><td>mult</td></tr><tr><td>4&rsquo;b0010</td><td>multu</td></tr><tr><td>4&rsquo;b0011</td><td>div</td></tr><tr><td>4&rsquo;b0100</td><td>divu</td></tr><tr><td>4&rsquo;b0101</td><td>mthi</td></tr><tr><td>4&rsquo;b0110</td><td>mtlo</td></tr><tr><td>4&rsquo;b0111</td><td>mfhi</td></tr><tr><td>4&rsquo;b1000</td><td>mflo</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=c1>// in MulDivBlock
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>always</span> <span class=p>@(</span><span class=o>*</span><span class=p>)</span> <span class=k>begin</span>
+</span></span><span class=line><span class=cl>	<span class=k>case</span> <span class=p>(</span><span class=n>op</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=mh>4</span><span class=mb>&#39;b0001</span><span class=o>:</span> <span class=p>{</span><span class=n>prod_HI</span><span class=p>,</span> <span class=n>prod_LO</span><span class=p>}</span> <span class=o>=</span> <span class=p>(</span><span class=n>$signed</span><span class=p>(</span><span class=n>A</span><span class=p>)</span> <span class=o>*</span> <span class=n>$signed</span><span class=p>(</span><span class=n>B</span><span class=p>));</span><span class=c1>//mult
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=mh>4</span><span class=mb>&#39;b0010</span><span class=o>:</span> <span class=p>{</span><span class=n>prod_HI</span><span class=p>,</span> <span class=n>prod_LO</span><span class=p>}</span> <span class=o>=</span> <span class=n>$unsigned</span><span class=p>(</span><span class=n>A</span><span class=p>)</span> <span class=o>*</span> <span class=n>$unsigned</span><span class=p>(</span><span class=n>B</span><span class=p>);</span><span class=c1>//multu
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=mh>4</span><span class=mb>&#39;b0011</span><span class=o>:</span> <span class=p>{</span><span class=n>prod_HI</span><span class=p>,</span> <span class=n>prod_LO</span><span class=p>}</span> <span class=o>=</span> <span class=p>{</span><span class=n>$signed</span><span class=p>(</span><span class=n>A</span><span class=p>)</span> <span class=o>%</span> <span class=n>$signed</span><span class=p>(</span><span class=n>B</span><span class=p>),</span> <span class=n>$signed</span><span class=p>(</span><span class=n>A</span><span class=p>)</span> <span class=o>/</span> <span class=n>$signed</span><span class=p>(</span><span class=n>B</span><span class=p>)};</span><span class=c1>//div
+</span></span></span><span class=line><span class=cl><span class=c1></span>		<span class=mh>4</span><span class=mb>&#39;b0100</span><span class=o>:</span> <span class=p>{</span><span class=n>prod_HI</span><span class=p>,</span> <span class=n>prod_LO</span><span class=p>}</span> <span class=o>=</span> <span class=p>{</span><span class=n>A</span> <span class=o>%</span> <span class=n>B</span><span class=p>,</span> <span class=n>A</span> <span class=o>/</span> <span class=n>B</span><span class=p>};</span><span class=c1>//divu
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=k>endcase</span>
+</span></span><span class=line><span class=cl><span class=k>end</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>31</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>mdb_output</span> <span class=o>=</span> <span class=p>(</span><span class=n>mdOp_EX</span> <span class=o>==</span> <span class=mh>4</span><span class=mb>&#39;b0111</span><span class=p>)</span><span class=o>?</span> <span class=nl>mdb_HI:</span>
+</span></span><span class=line><span class=cl>									  <span class=p>(</span><span class=n>mdOp_EX</span> <span class=o>==</span> <span class=mh>4</span><span class=mb>&#39;b1000</span><span class=p>)</span><span class=o>?</span> <span class=nl>mdb_LO:</span>
+</span></span><span class=line><span class=cl>									  <span class=mh>32</span><span class=mi>&#39;d0</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=load_type-3-bit>load_type (3-bit)</h3><div class=table-wrapper><table><thead><tr><th>load_type</th><th>type</th></tr></thead><tbody><tr><td>3&rsquo;b000</td><td>lw</td></tr><tr><td>3&rsquo;b001</td><td>lbu</td></tr><tr><td>3&rsquo;b010</td><td>lb</td></tr><tr><td>3&rsquo;b011</td><td>lhu</td></tr><tr><td>3&rsquo;b100</td><td>lh</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	 <span class=k>assign</span> <span class=n>data_out</span> <span class=o>=</span> <span class=p>(</span><span class=n>load_type</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b000</span><span class=p>)</span><span class=o>?</span> <span class=nl>data_input:</span>
+</span></span><span class=line><span class=cl>							 <span class=p>(</span><span class=n>load_type</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b001</span><span class=p>)</span><span class=o>?</span> <span class=p>{</span><span class=mh>24</span><span class=mb>&#39;b0</span><span class=p>,</span> <span class=n>byte_sel</span><span class=p>}</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>							 <span class=p>(</span><span class=n>load_type</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b010</span><span class=p>)</span><span class=o>?</span> <span class=p>{{</span><span class=mh>24</span><span class=p>{</span><span class=n>byte_sel</span><span class=p>[</span><span class=mh>7</span><span class=p>]}},</span> <span class=n>byte_sel</span><span class=p>}</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>							 <span class=p>(</span><span class=n>load_type</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b011</span><span class=p>)</span><span class=o>?</span> <span class=p>{</span><span class=mh>16</span><span class=mb>&#39;b0</span><span class=p>,</span> <span class=n>hw_sel</span><span class=p>}</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>							 <span class=p>(</span><span class=n>load_type</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b100</span><span class=p>)</span><span class=o>?</span> <span class=p>{{</span><span class=mh>16</span><span class=p>{</span><span class=n>hw_sel</span><span class=p>[</span><span class=mh>15</span><span class=p>]}},</span> <span class=n>hw_sel</span><span class=p>}</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>							 <span class=mh>32</span><span class=mb>&#39;b0</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=store_type-3-bit>store_type (3-bit)</h3><div class=table-wrapper><table><thead><tr><th>store_type</th><th>type</th></tr></thead><tbody><tr><td>3&rsquo;b001</td><td>sw</td></tr><tr><td>3&rsquo;b010</td><td>sb</td></tr><tr><td>3&rsquo;b100</td><td>sh</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	 <span class=kt>wire</span> <span class=p>[</span><span class=mh>3</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>byteen_MA</span> <span class=o>=</span> <span class=p>(</span><span class=n>store_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b001</span><span class=p>)</span><span class=o>?</span> <span class=mh>4</span><span class=mb>&#39;b1111</span><span class=o>:</span> <span class=c1>//word
+</span></span></span><span class=line><span class=cl><span class=c1></span>									<span class=p>((</span><span class=n>store_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b010</span><span class=p>))</span><span class=o>?</span> <span class=nl>byte_sel:</span><span class=c1>//byte
+</span></span></span><span class=line><span class=cl><span class=c1></span>									<span class=p>(</span><span class=n>store_type_MA</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b100</span><span class=p>)</span><span class=o>?</span> <span class=nl>hw_sel:</span><span class=c1>//half word
+</span></span></span><span class=line><span class=cl><span class=c1></span>									<span class=mh>4</span><span class=mb>&#39;b0000</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=测试方案>测试方案</h2><h3 id=指令分类>指令分类</h3><h4 id=r-type>R-type</h4><ul><li><em><strong>ALU型指令（Grd &lt;- Grs ? Grt）</strong></em>——（add、sub、or、and、slt、sltu）</li><li><em><strong>ALU型指令（Grd &lt;- Grt ？ shamt）</strong></em>——（sll、srl、sra）</li><li><em><strong>跳转型指令（PC &lt;- Grs）</strong></em>——（jr）</li></ul><h4 id=i-type>I-type</h4><ul><li><em><strong>ALU-Imm型指令（Grt &lt;- Grs ？ imm）</strong></em>——（ori、lui、addi、andi）</li><li><em><strong>Memory-Store型指令（Memory[Grs + offset] &lt;- Grt）</strong></em>——（sw、sb、sh）</li><li><em><strong>Memory-load型指令（Grt &lt;- Memory[Grs + offset]）</strong></em>——（lw、lb、lbu、lh）</li><li><em><strong>Branch型指令（Grs ? Grt，PC &lt;- PC + 4 + offset）</strong></em>——（beq、bgez、bgtz、blez、bltz、bne）</li></ul><h4 id=j-type>J-type</h4><ul><li><em><strong>J-link型指令</strong></em> —— (jal)</li><li><em><strong>无条件Jump型指令</strong></em></li></ul><div class=table-wrapper><table><thead><tr><th></th><th>IF级</th><th>ID级</th><th>EX级</th><th>MA级</th><th>WB级</th></tr></thead><tbody><tr><td><em><strong>R-ALU</strong></em></td><td></td><td>读取数据（Grs、Grt）</td><td>计算数据</td><td></td><td>写入数据</td></tr><tr><td><em><strong>R-jump</strong></em></td><td></td><td>读取数据并跳转</td><td></td><td></td><td></td></tr><tr><td><em><strong>I-imm</strong></em></td><td></td><td>读取数据（Grt、imm）</td><td>计算数据</td><td></td><td>写入数据</td></tr><tr><td><em><strong>I-store</strong></em></td><td></td><td>读取数据（Grs+offset、Grt）</td><td>计算数据（地址）</td><td>写入数据</td><td></td></tr><tr><td><em><strong>I-load</strong></em></td><td></td><td>读取数据（Grs+offset、Grt）</td><td>计算数据（地址）</td><td>读取数据</td><td>写入数据</td></tr><tr><td><em><strong>I-branch</strong></em></td><td></td><td>读取数据（Grs、Grt）比较数据并跳转</td><td></td><td></td><td></td></tr><tr><td><em><strong>J-link</strong></em></td><td></td><td>扩展数据并跳转</td><td>传递跳转PC</td><td>传递跳转PC</td><td>写入pc+8</td></tr></tbody></table></div><h3 id=测试步骤>测试步骤</h3><ol><li>编写测试代码<ul><li>包括所有阻塞情况</li><li>测试所有转发通路</li><li>可利用课程组提供的分析工具对代码测试强度进行评估</li></ul></li><li>将ISE输出与Mars输出比对<ul><li>可利用同学开发评测机进行快速比对</li></ul></li><li>大量随机数据强测<ul><li>代码生成来自<a class=link href=hyggge.github.io>学长博客</a></li></ul></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>random</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>list_R</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;addu&#34;</span><span class=p>,</span> <span class=s2>&#34;subu&#34;</span><span class=p>,</span> <span class=s2>&#34;and&#34;</span><span class=p>,</span> <span class=s2>&#34;or&#34;</span><span class=p>,</span> <span class=s2>&#34;nor&#34;</span><span class=p>,</span> <span class=s2>&#34;xor&#34;</span><span class=p>,</span> <span class=s2>&#34;sltu&#34;</span><span class=p>,</span> <span class=s2>&#34;slt&#34;</span><span class=p>,</span> <span class=s2>&#34;sllv&#34;</span><span class=p>,</span> <span class=s2>&#34;srlv&#34;</span><span class=p>,</span> <span class=s2>&#34;srav&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>list_I</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;andi&#34;</span><span class=p>,</span> <span class=s2>&#34;addiu&#34;</span><span class=p>,</span> <span class=s2>&#34;ori&#34;</span><span class=p>,</span> <span class=s2>&#34;xori&#34;</span><span class=p>,</span> <span class=s2>&#34;lui&#34;</span><span class=p>,</span> <span class=s2>&#34;slti&#34;</span><span class=p>,</span> <span class=s2>&#34;sltiu&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>list_LS</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;lw&#34;</span><span class=p>,</span> <span class=s2>&#34;sw&#34;</span><span class=p>,</span> <span class=s2>&#34;lh&#34;</span><span class=p>,</span> <span class=s2>&#34;lhu&#34;</span><span class=p>,</span> <span class=s2>&#34;sh&#34;</span><span class=p>,</span> <span class=s2>&#34;lb&#34;</span><span class=p>,</span> <span class=s2>&#34;lbu&#34;</span><span class=p>,</span> <span class=s2>&#34;sb&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>list_shift</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;sll&#34;</span><span class=p>,</span> <span class=s2>&#34;srl&#34;</span><span class=p>,</span> <span class=s2>&#34;sra&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>list_B</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;bne&#34;</span><span class=p>,</span> <span class=s2>&#34;beq&#34;</span><span class=p>,</span><span class=s2>&#34;bgtz&#34;</span><span class=p>,</span> <span class=s2>&#34;blez&#34;</span><span class=p>,</span> <span class=s2>&#34;bltz&#34;</span><span class=p>,</span> <span class=s2>&#34;bgez&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>list_MD</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;mult&#34;</span><span class=p>,</span> <span class=s2>&#34;multu&#34;</span><span class=p>,</span> <span class=s2>&#34;div&#34;</span><span class=p>,</span> <span class=s2>&#34;divu&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>list_MTMF</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;mfhi&#34;</span><span class=p>,</span> <span class=s2>&#34;mflo&#34;</span><span class=p>,</span> <span class=s2>&#34;mthi&#34;</span><span class=p>,</span> <span class=s2>&#34;mtlo&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#length是生成的指令所用到的寄存器个数</span>
+</span></span><span class=line><span class=cl><span class=n>length</span> <span class=o>=</span> <span class=mi>8</span> <span class=c1>#为了增大冒险概率，我们将寄存器的范围缩小到0~7</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>R_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>k</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=nb>len</span><span class=p>(</span><span class=n>list_R</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>rs</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>rt</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>rd</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=s2>, $</span><span class=si>{}</span><span class=s2>, $</span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>list_R</span><span class=p>[</span><span class=n>k</span><span class=p>],</span> <span class=n>rd</span><span class=p>,</span> <span class=n>rs</span><span class=p>,</span> <span class=n>rt</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>k</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=nb>len</span><span class=p>(</span><span class=n>list_I</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>rs</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>rt</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>imm</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=o>-</span><span class=mi>32768</span><span class=p>,</span> <span class=mi>32768</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>abs_imm</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>65536</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>list_I</span><span class=p>[</span><span class=n>k</span><span class=p>]</span> <span class=o>==</span> <span class=s2>&#34;lui&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=s2>,</span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>list_I</span><span class=p>[</span><span class=n>k</span><span class=p>],</span> <span class=n>rt</span><span class=p>,</span> <span class=n>abs_imm</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=s2>, $</span><span class=si>{}</span><span class=s2>, </span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>list_I</span><span class=p>[</span><span class=n>k</span><span class=p>],</span> <span class=n>rt</span><span class=p>,</span> <span class=n>rs</span><span class=p>,</span> <span class=n>imm</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>LS_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>k</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=nb>len</span><span class=p>(</span><span class=n>list_LS</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>ins</span> <span class=o>=</span> <span class=n>list_LS</span><span class=p>[</span><span class=n>k</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>        <span class=n>num</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span><span class=p>(</span><span class=n>ins</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=o>==</span> <span class=s2>&#34;w&#34;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=n>num</span> <span class=o>=</span> <span class=p>(</span><span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>10000000</span><span class=p>)</span> <span class=o>&lt;&lt;</span> <span class=mi>2</span><span class=p>)</span> <span class=o>%</span> <span class=mi>4096</span>
+</span></span><span class=line><span class=cl>        <span class=k>elif</span><span class=p>(</span><span class=n>ins</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=o>==</span> <span class=s2>&#34;h&#34;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=n>num</span> <span class=o>=</span> <span class=p>(</span><span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>10000000</span><span class=p>)</span> <span class=o>&lt;&lt;</span> <span class=mi>1</span><span class=p>)</span> <span class=o>%</span> <span class=mi>4096</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>num</span> <span class=o>=</span> <span class=p>(</span><span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>10000000</span><span class=p>))</span> <span class=o>%</span> <span class=mi>4096</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=n>rt</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=s2>, </span><span class=si>{}</span><span class=s2>($0)</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>ins</span><span class=p>,</span> <span class=n>rt</span><span class=p>,</span> <span class=n>num</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>shift_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>k</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=nb>len</span><span class=p>(</span><span class=n>list_shift</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>shamt</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>rd</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>rt</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=s2>, $</span><span class=si>{}</span><span class=s2>, </span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>list_shift</span><span class=p>[</span><span class=n>k</span><span class=p>],</span> <span class=n>rd</span><span class=p>,</span> <span class=n>rt</span><span class=p>,</span> <span class=n>shamt</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>MD_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>k</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=nb>len</span><span class=p>(</span><span class=n>list_MD</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>rs</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>rt</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span><span class=p>(</span><span class=n>list_MD</span><span class=p>[</span><span class=n>k</span><span class=p>]</span> <span class=o>==</span> <span class=s2>&#34;mult&#34;</span> <span class=ow>or</span> <span class=n>list_MD</span><span class=p>[</span><span class=n>k</span><span class=p>]</span> <span class=o>==</span> <span class=s2>&#34;mul&#34;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=s2>, $</span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>list_MD</span><span class=p>[</span><span class=n>k</span><span class=p>],</span> <span class=n>rs</span><span class=p>,</span> <span class=n>rt</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=s2>, $</span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>list_MD</span><span class=p>[</span><span class=n>k</span><span class=p>],</span> <span class=n>rs</span><span class=p>,</span> <span class=mi>8</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>MTMF_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>k</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=nb>len</span><span class=p>(</span><span class=n>list_MTMF</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>rs</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>list_MTMF</span><span class=p>[</span><span class=n>k</span><span class=p>],</span> <span class=n>rs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>B_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=n>lable</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>k</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=nb>len</span><span class=p>(</span><span class=n>list_B</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span><span class=p>(</span><span class=n>k</span> <span class=o>==</span> <span class=mi>0</span> <span class=ow>or</span> <span class=n>k</span> <span class=o>==</span> <span class=mi>1</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>rs</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>rt</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=s2>, $</span><span class=si>{}</span><span class=s2>, </span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>list_B</span><span class=p>[</span><span class=n>k</span><span class=p>],</span> <span class=n>rs</span><span class=p>,</span> <span class=n>rt</span><span class=p>,</span> <span class=n>lable</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>rs</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10000000</span><span class=p>)</span> <span class=o>%</span> <span class=n>length</span>
+</span></span><span class=line><span class=cl>        <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;</span><span class=si>{}</span><span class=s2> $</span><span class=si>{}</span><span class=s2>, </span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>list_B</span><span class=p>[</span><span class=n>k</span><span class=p>],</span> <span class=n>rs</span><span class=p>,</span> <span class=nb>str</span><span class=p>(</span><span class=n>lable</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>b_begin</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>b_test_</span><span class=si>{}</span><span class=s2>_one:</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>B_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=s2>&#34;b_test_</span><span class=si>{}</span><span class=s2>_one_then&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>R_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;b_test_</span><span class=si>{}</span><span class=s2>_two:</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>B_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=s2>&#34;b_test_</span><span class=si>{}</span><span class=s2>_two_then&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;jal_test_</span><span class=si>{}</span><span class=s2>:</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;jal jal_test_</span><span class=si>{}</span><span class=s2>_then</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;end_</span><span class=si>{}</span><span class=s2>:</span><span class=se>\n\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>R_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>LS_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>shift_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>b_end</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=n>n</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>b_test_</span><span class=si>{}</span><span class=s2>_one_then:</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>R_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>LS_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>shift_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>MD_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>MTMF_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;j b_test_</span><span class=si>{}</span><span class=s2>_two</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>R_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>b_test_</span><span class=si>{}</span><span class=s2>_two_then:</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>R_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>LS_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>shift_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>MD_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>MTMF_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;jal jal_test_</span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;addu $1, $ra, $0</span><span class=se>\n</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>jal_test_</span><span class=si>{}</span><span class=s2>_then:</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>R_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>LS_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>shift_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>MD_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>MTMF_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;addiu $ra,$ra, 8</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>B_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=s2>&#34;end_</span><span class=si>{}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>R_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>LS_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>shift_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>MD_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>MTMF_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;jr $ra</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>n</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=s2>&#34;mips_code.asm&#34;</span><span class=p>,</span> <span class=s2>&#34;w&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>file</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>length</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>temp</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=o>-</span><span class=mi>2147483648</span><span class=p>,</span> <span class=mi>2147483648</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>s</span> <span class=o>=</span> <span class=s2>&#34;li $</span><span class=si>{}</span><span class=s2> </span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>i</span><span class=p>,</span> <span class=n>temp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;li $8, </span><span class=si>{}</span><span class=se>\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=o>-</span><span class=mi>2147483648</span><span class=p>,</span> <span class=mi>2147483648</span><span class=p>)</span> <span class=o>%</span> <span class=mi>10000</span> <span class=o>+</span> <span class=mi>1</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>10</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>R_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>MD_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>MTMF_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>LS_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>MTMF_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>I_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>shift_test</span><span class=p>(</span><span class=n>file</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>file</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>   
+</span></span></code></pre></td></tr></table></div></div><h2 id=思考题>思考题</h2><ol><li>为什么需要有单独的乘除法部件而不是整合进 ALU？为何需要有独立的 HI、LO 寄存器？</li></ol><blockquote><p>[!ANS]
+因为乘除操作较为复杂，需要多个周期才能完成，需要单独处理</p></blockquote><ol start=2><li>真实的流水线 CPU 是如何使用实现乘除法的？请查阅相关资料进行简单说明。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl><span class=cp>`define size 8  
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=k>module</span> <span class=n>mul_booth_signed</span><span class=p>(</span>  
+</span></span><span class=line><span class=cl>    <span class=k>input</span> <span class=kt>wire</span> <span class=p>[</span><span class=no>`size</span> <span class=o>-</span> <span class=mh>1</span> <span class=o>:</span> <span class=mh>0</span><span class=p>]</span> <span class=n>mul1</span><span class=p>,</span><span class=n>mul2</span><span class=p>,</span>  
+</span></span><span class=line><span class=cl>    <span class=k>input</span> <span class=n>clk</span><span class=p>,</span>  
+</span></span><span class=line><span class=cl>    <span class=k>input</span> <span class=kt>wire</span> <span class=p>[</span><span class=mh>2</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>clk_cnt</span><span class=p>,</span><span class=c1>//运算节拍，相当于状态机了，8位的话每次运算有4个拍  
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>output</span> <span class=kt>wire</span> <span class=p>[</span><span class=mh>2</span><span class=o>*</span><span class=no>`size</span> <span class=o>-</span> <span class=mh>1</span> <span class=o>:</span> <span class=mh>0</span><span class=p>]</span> <span class=n>res</span>  
+</span></span><span class=line><span class=cl>    <span class=p>);</span>  
+</span></span><span class=line><span class=cl>  
+</span></span><span class=line><span class=cl>    <span class=c1>//由于传值默认就是补码，所以只需要再计算“负补码”即可  
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>wire</span> <span class=p>[</span><span class=no>`size</span> <span class=o>-</span> <span class=mh>1</span> <span class=o>:</span> <span class=mh>0</span><span class=p>]</span> <span class=n>bmul1</span><span class=p>,</span><span class=n>bmul2</span><span class=p>;</span>  
+</span></span><span class=line><span class=cl>    <span class=k>assign</span> <span class=n>bmul1</span> <span class=o>=</span> <span class=p>(</span><span class=o>~</span><span class=n>mul1</span> <span class=o>+</span> <span class=mh>1</span><span class=mb>&#39;b1</span><span class=p>)</span> <span class=p>;</span>  
+</span></span><span class=line><span class=cl>    <span class=k>assign</span> <span class=n>bmul2</span> <span class=o>=</span> <span class=p>(</span><span class=o>~</span><span class=n>mul2</span> <span class=o>+</span> <span class=mh>1</span><span class=mb>&#39;b1</span><span class=p>)</span> <span class=p>;</span><span class=c1>//其实乘数2的负补码也没用到。  
+</span></span></span><span class=line><span class=cl><span class=c1></span> <span class=c1>//其实可以把状态机的开始和结束状态都写出来，我懒得写了，同学们可以尝试一下啊~  
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>parameter</span>   <span class=n>zeroone</span>       <span class=o>=</span>   <span class=mh>3</span><span class=mb>&#39;b00</span><span class=p>,</span>  
+</span></span><span class=line><span class=cl>                <span class=n>twothree</span>      <span class=o>=</span>   <span class=mh>3</span><span class=mb>&#39;b001</span><span class=p>,</span>  
+</span></span><span class=line><span class=cl>                <span class=n>fourfive</span>      <span class=o>=</span>   <span class=mh>3</span><span class=mb>&#39;b010</span><span class=p>,</span>  
+</span></span><span class=line><span class=cl>                <span class=n>sixseven</span>      <span class=o>=</span>   <span class=mh>3</span><span class=mb>&#39;b011</span><span class=p>;</span>  
+</span></span><span class=line><span class=cl>    <span class=c1>//y(i-1),y(i),y(i+1)三个数的判断寄存器，由于有多种情况，也可以看成状态机（也可以改写成状态机形式，大家自己试试吧）  
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>reg</span> <span class=p>[</span><span class=mh>2</span><span class=o>:</span><span class=mh>0</span><span class=p>]</span> <span class=n>temp</span><span class=p>;</span>  
+</span></span><span class=line><span class=cl>  
+</span></span><span class=line><span class=cl>    <span class=c1>//部分积  
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>reg</span> <span class=p>[</span><span class=mh>2</span><span class=o>*</span><span class=no>`size</span><span class=o>-</span><span class=mh>1</span> <span class=o>:</span> <span class=mh>0</span><span class=p>]</span> <span class=n>A</span><span class=p>;</span>  
+</span></span><span class=line><span class=cl> <span class=c1>//每个节拍下把相应位置的数据传给temp寄存器  
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>always</span> <span class=p>@</span> <span class=p>(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>  
+</span></span><span class=line><span class=cl>        <span class=k>case</span><span class=p>(</span><span class=n>clk_cnt</span><span class=p>)</span>  
+</span></span><span class=line><span class=cl>            <span class=n>zeroone</span>  <span class=o>:</span> <span class=n>temp</span> <span class=o>&lt;=</span> <span class=p>{</span><span class=n>mul2</span><span class=p>[</span><span class=mh>1</span><span class=o>:</span><span class=mh>0</span><span class=p>],</span><span class=mh>1</span><span class=mb>&#39;b0</span><span class=p>};</span>  
+</span></span><span class=line><span class=cl>            <span class=n>twothree</span> <span class=o>:</span> <span class=n>temp</span> <span class=o>&lt;=</span> <span class=n>mul2</span><span class=p>[</span><span class=mh>3</span><span class=o>:</span><span class=mh>1</span><span class=p>];</span>  
+</span></span><span class=line><span class=cl>            <span class=n>fourfive</span> <span class=o>:</span> <span class=n>temp</span> <span class=o>&lt;=</span> <span class=n>mul2</span><span class=p>[</span><span class=mh>5</span><span class=o>:</span><span class=mh>3</span><span class=p>];</span>  
+</span></span><span class=line><span class=cl>            <span class=n>sixseven</span> <span class=o>:</span> <span class=n>temp</span> <span class=o>&lt;=</span> <span class=n>mul2</span><span class=p>[</span><span class=mh>7</span><span class=o>:</span><span class=mh>5</span><span class=p>];</span>  
+</span></span><span class=line><span class=cl>            <span class=k>default</span> <span class=o>:</span> <span class=n>temp</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>  
+</span></span><span class=line><span class=cl>        <span class=k>endcase</span>  
+</span></span><span class=line><span class=cl>    <span class=k>end</span>  
+</span></span><span class=line><span class=cl>   
+</span></span><span class=line><span class=cl>    <span class=k>always</span> <span class=p>@(</span><span class=k>posedge</span> <span class=n>clk</span><span class=p>)</span> <span class=k>begin</span>  
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=n>clk_cnt</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b100</span><span class=p>)</span> <span class=k>begin</span><span class=c1>//如果节拍到4就让部分积归0，此时已经完成一次计算了  
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>A</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>  
+</span></span><span class=line><span class=cl>        <span class=k>end</span> <span class=k>else</span> <span class=k>case</span> <span class=p>(</span><span class=n>temp</span><span class=p>)</span>  
+</span></span><span class=line><span class=cl>            <span class=mh>3</span><span class=mb>&#39;b000</span><span class=p>,</span><span class=mh>3</span><span class=mb>&#39;b111</span> <span class=o>:</span>   <span class=k>begin</span><span class=c1>//这些是从高位到低位的判断，别看反了噢  
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>A</span> <span class=o>&lt;=</span> <span class=n>A</span> <span class=o>+</span> <span class=mh>0</span><span class=p>;</span>  
+</span></span><span class=line><span class=cl>            <span class=k>end</span>  
+</span></span><span class=line><span class=cl>            <span class=mh>3</span><span class=mb>&#39;b001</span><span class=p>,</span><span class=mh>3</span><span class=mb>&#39;b010</span> <span class=o>:</span> <span class=k>begin</span><span class=c1>//加法操作使用补码即可，倍数利用左移解决  
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>A</span> <span class=o>&lt;=</span> <span class=n>A</span> <span class=o>+</span> <span class=p>({{</span><span class=mh>8</span><span class=p>{</span><span class=n>mul1</span><span class=p>[</span><span class=no>`size</span><span class=o>-</span><span class=mh>1</span><span class=p>]}},</span><span class=n>mul1</span><span class=p>}</span> <span class=o>&lt;&lt;</span> <span class=mh>2</span><span class=o>*</span><span class=p>(</span><span class=n>clk_cnt</span><span class=o>-</span><span class=mh>1</span><span class=p>));</span>  
+</span></span><span class=line><span class=cl>            <span class=k>end</span>  
+</span></span><span class=line><span class=cl>            <span class=mh>3</span><span class=mb>&#39;b011</span> <span class=o>:</span> <span class=k>begin</span>  
+</span></span><span class=line><span class=cl>                <span class=n>A</span> <span class=o>&lt;=</span> <span class=n>A</span> <span class=o>+</span> <span class=p>({{</span><span class=mh>8</span><span class=p>{</span><span class=n>mul1</span><span class=p>[</span><span class=no>`size</span><span class=o>-</span><span class=mh>1</span><span class=p>]}},</span><span class=n>mul1</span><span class=p>}</span> <span class=o>&lt;&lt;</span> <span class=mh>2</span><span class=o>*</span><span class=p>(</span><span class=n>clk_cnt</span><span class=o>-</span><span class=mh>1</span><span class=p>)</span> <span class=o>+</span> <span class=mh>1</span><span class=p>);</span>  
+</span></span><span class=line><span class=cl>            <span class=k>end</span>  
+</span></span><span class=line><span class=cl>            <span class=mh>3</span><span class=mb>&#39;b100</span><span class=o>:</span> <span class=k>begin</span><span class=c1>//减法操作利用“负补码”改成加法操作，倍数利用左移解决  
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>A</span> <span class=o>&lt;=</span> <span class=n>A</span> <span class=o>+</span> <span class=p>({{</span><span class=mh>8</span><span class=p>{</span><span class=n>bmul1</span><span class=p>[</span><span class=no>`size</span><span class=o>-</span><span class=mh>1</span><span class=p>]}},</span><span class=n>bmul1</span><span class=p>}</span> <span class=o>&lt;&lt;</span> <span class=mh>2</span><span class=o>*</span><span class=p>(</span><span class=n>clk_cnt</span><span class=o>-</span><span class=mh>1</span><span class=p>)</span> <span class=o>+</span> <span class=mh>1</span><span class=p>);</span>  
+</span></span><span class=line><span class=cl>            <span class=k>end</span>  
+</span></span><span class=line><span class=cl>            <span class=mh>3</span><span class=mb>&#39;b101</span><span class=p>,</span><span class=mh>3</span><span class=mb>&#39;b110</span> <span class=o>:</span> <span class=k>begin</span>  
+</span></span><span class=line><span class=cl>                <span class=n>A</span> <span class=o>&lt;=</span> <span class=n>A</span> <span class=o>+</span> <span class=p>({{</span><span class=mh>8</span><span class=p>{</span><span class=n>bmul1</span><span class=p>[</span><span class=no>`size</span><span class=o>-</span><span class=mh>1</span><span class=p>]}},</span><span class=n>bmul1</span><span class=p>}</span> <span class=o>&lt;&lt;</span> <span class=mh>2</span><span class=o>*</span><span class=p>(</span><span class=n>clk_cnt</span><span class=o>-</span><span class=mh>1</span><span class=p>));</span>  
+</span></span><span class=line><span class=cl>            <span class=k>end</span>  
+</span></span><span class=line><span class=cl>            <span class=k>default</span><span class=o>:</span> <span class=n>A</span> <span class=o>&lt;=</span> <span class=mh>0</span><span class=p>;</span>  
+</span></span><span class=line><span class=cl>        <span class=k>endcase</span>  
+</span></span><span class=line><span class=cl>    <span class=k>end</span>  
+</span></span><span class=line><span class=cl> <span class=c1>//当节拍到4的时候写入结果寄存器。  
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>assign</span> <span class=n>res</span> <span class=o>=</span> <span class=p>(</span><span class=n>clk_cnt</span> <span class=o>==</span> <span class=mh>3</span><span class=mb>&#39;b100</span><span class=p>)</span> <span class=o>?</span> <span class=n>A</span> <span class=o>:</span> <span class=mh>0</span><span class=p>;</span>  
+</span></span><span class=line><span class=cl><span class=k>endmodule</span>
+</span></span></code></pre></td></tr></table></div></div><ol start=3><li>请结合自己的实现分析，你是如何处理 Busy 信号带来的周期阻塞的？</li></ol><blockquote><p>[!ANS]
+修改P5中的Stall逻辑，当乘除槽处于start或busy状态，且ID级指令需要使用乘除槽时阻塞</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-verilog data-lang=verilog><span class=line><span class=cl>	<span class=kt>wire</span> <span class=n>Stall_md</span> <span class=o>=</span> <span class=p>((</span><span class=n>busy</span> <span class=o>|</span> <span class=n>start</span><span class=p>)</span> <span class=o>&amp;</span> <span class=p>(</span><span class=n>mult_ID</span> <span class=o>|</span> <span class=n>multu_ID</span> <span class=o>|</span> <span class=n>div_ID</span> <span class=o>|</span> <span class=n>divu_ID</span> <span class=o>|</span> <span class=n>mfhi_ID</span> <span class=o>|</span> <span class=n>mflo_ID</span> <span class=o>|</span> <span class=n>mthi_ID</span> <span class=o>|</span> <span class=n>mtlo_ID</span><span class=p>));</span>
+</span></span><span class=line><span class=cl>	<span class=k>assign</span> <span class=n>Stall</span> <span class=o>=</span> <span class=n>Stall_RS_EX</span> <span class=o>|</span> <span class=n>Stall_RS_MA</span> <span class=o>|</span> <span class=n>Stall_RT_EX</span> <span class=o>|</span> <span class=n>Stall_RT_MA</span> <span class=o>|</span> <span class=n>Stall_md</span><span class=p>;</span>
+</span></span></code></pre></td></tr></table></div></div><ol start=4><li>请问采用字节使能信号的方式处理写指令有什么好处？（提示：从清晰性、统一性等角度考虑）</li></ol><blockquote><p>[!ANS]
+更符合实际CPU电路，在实际电路中这样做更加高效。对于外部存储单元，其只需要读取使能信号然后进行相应存储即可，无需增加其他存储逻辑，使外部设备有较为统一的存储逻辑，便于扩展。</p></blockquote><ol start=5><li>请思考，我们在按字节读和按字节写时，实际从 DM 获得的数据和向 DM 写入的数据是否是一字节？在什么情况下我们按字节读和按字节写的效率会高于按字读和按字写呢？</li></ol><blockquote><p>[!ANS]
+不是一字节。当存储容量较小时按字节读和写会更加高效, 不需要添加多余的逻辑。</p></blockquote><ol start=6><li>为了对抗复杂性你采取了哪些抽象和规范手段？这些手段在译码和处理数据冲突的时候有什么样的特点与帮助？</li></ol><blockquote><p>[!ANS]</p><ol><li>在高层模块的排布中就屏蔽了实现的细节，只保留了此模块的端口，以及端口的功能。</li><li>对于同一类型的指令增加多位宽type信号，功能模块根据不同type信号执行对应操作。例如：涉及乘除槽的指令，我设置一个mdOp信号来区分指令，从而减少了流水寄存器的接口数目，从而降低复杂度。</li><li>是否阻塞全部放到冲突处理模块判断，尽可能遵循“高内聚低耦合”的原则。</li><li>乘除槽与ALU分离，但是输出路径一致。不需要更改转发逻辑。</li></ol></blockquote><ol start=7><li>在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？</li></ol><blockquote><p>[!ANS]
+涉及到HI和LO寄存器的指令与其他读写寄存器指令冲突。通过设置合理的阻塞逻辑解决。</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>ori $2, $0, 128
+</span></span><span class=line><span class=cl>lw $3, 0($0)
+</span></span><span class=line><span class=cl>mult $3, $2
+</span></span></code></pre></td></tr></table></div></div><ol start=8><li>如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证<strong>覆盖</strong>了所有需要测试的情况；如果你是<strong>完全随机</strong>生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了<strong>特殊的策略</strong>，比如构造连续数据冒险序列，请你描述一下你使用的策略如何<strong>结合了随机性</strong>达到强测的效果。</li></ol><blockquote><p>[!ANS]
+我才用的方案是手动构造样例确保新指令的功能正确性，随机生成指令强测确保转发和阻塞的正确性。限制读写寄存器的范围，能够尽可能多的造成数据冒险，再加上大量随机数据，基本可以覆盖全部转发和阻塞情况。</p></blockquote><ol start=9><li>[P5、P6 选做] 请评估我们给出的覆盖率分析模型的合理性，如有更好的方案，可一并提出。</li></ol></section><footer class=article-footer><section class=article-tags><a href=/tags/buaa-co/>BUAA-CO</a>
+<a href=/tags/verilog/>Verilog</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 Dec 10, 2024 22:26 UTC</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".main-article");renderMathInElement(e,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/co_p7/><div class=article-image><img src=/p/co_p7/P7_cover.bdc06a609150e10b68c73b4ba75ae3e4_hu_53ce9d08b382bce0.jpg width=250 height=150 loading=lazy alt="Featured image of post P7_设计文档" data-key=CO_P7 data-hash="md5-vcBqYJFQ4QtoxztLp1rj5A=="></div><div class=article-details><h2 class=article-title>P7_设计文档</h2></div></a></article><article class=has-image><a href=/p/co_p5/><div class=article-image><img src=/p/co_p5/P5_cover.08253d42d84b55ea6f34da88673df9fc_hu_7d2b01ab03f41c54.jpg width=250 height=150 loading=lazy alt="Featured image of post P5_设计文档" data-key=CO_P5 data-hash="md5-CCU9QthLVepvNNqIZz35/A=="></div><div class=article-details><h2 class=article-title>P5_设计文档</h2></div></a></article><article class=has-image><a href=/p/co_p4/><div class=article-image><img src=/p/co_p4/P4_cover.e35cbe683792365d621ee0bca5193222_hu_ab01e330b0af82c1.jpg width=250 height=150 loading=lazy alt="Featured image of post P4_设计文档" data-key=CO_P4 data-hash="md5-41y+aDeSNl1iHuC8pRkyIg=="></div><div class=article-details><h2 class=article-title>P4_设计文档</h2></div></a></article><article class=has-image><a href=/p/verilog_edit/><div class=article-image><img src=/p/verilog_edit/vscode_teros_cover.50a936646666751c04c55ff217d84989_hu_f56521ebdc394b3c.png width=250 height=150 loading=lazy alt="Featured image of post 如何优雅地编写Verilog" data-key=verilog_edit data-hash="md5-UKk2ZGZmdRwExV/yF9hJiQ=="></div><div class=article-details><h2 class=article-title>如何优雅地编写Verilog</h2></div></a></article><article class=has-image><a href=/p/co_p3/><div class=article-image><img src=/p/co_p3/P3_cover.44f04a18e8947ae58695e587af0e52e5_hu_a04db9cc4433ec2c.jpg width=250 height=150 loading=lazy alt="Featured image of post P3_设计文档" data-key=CO_P3 data-hash="md5-RPBKGOiUeuWGleWHrw5S5Q=="></div><div class=article-details><h2 class=article-title>P3_设计文档</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//lhy0424-disqus-com.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2025 Az's Blog</section><section class=powerby>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
